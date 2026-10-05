@@ -13,6 +13,7 @@ import CreateEvent from '@/pages/CreateEvent';
 import Profile from '@/pages/Profile';
 import Clicks from '@/pages/Clicks';
 import ClickDetail from '@/pages/ClickDetail';
+import Messages from '@/pages/Messages';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -46,6 +47,7 @@ const AuthenticatedApp = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/clicks" element={<Clicks />} />
         <Route path="/clicks/:id" element={<ClickDetail />} />
+        <Route path="/messages" element={<Messages />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

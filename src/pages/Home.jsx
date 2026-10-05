@@ -27,9 +27,10 @@ export default function Home() {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    base44.entities.Event.count().then(setCount).catch(() => setCount(0));
+    const publicQuery = { visibility: { $ne: "personal" } };
+    base44.entities.Event.count(publicQuery).then(setCount).catch(() => setCount(0));
     base44.entities.Event
-      .filter({}, { sort: "-created_date", limit: 100 })
+      .filter(publicQuery, { sort: "-created_date", limit: 100 })
       .then((page) => setEvents(page.items))
       .catch(() => setEvents([]));
   }, []);

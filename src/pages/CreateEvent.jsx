@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, X } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ArrowLeft, Plus, X, Globe, Lock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { CATEGORIES, getCategory } from "@/lib/categories";
+import { CATEGORIES } from "@/lib/categories";
 import { makeEventIcon } from "@/lib/mapMarker";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,6 +21,8 @@ function ClickHandler({ onPick }) {
 
 export default function CreateEvent() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const clickId = params.get("click_id") || "";
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("sports");
@@ -30,6 +32,9 @@ export default function CreateEvent() {
   const [tags, setTags] = useState([]);
   const [position, setPosition] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [visibility, setVisibility] = useState(
+    params.get("visibility") === "personal" ? "personal" : "public"
+  );
 
   function addTag() {
     const t = tagInput.trim();
@@ -58,9 +63,11 @@ export default function CreateEvent() {
         dress_code: dressCode.trim(),
         tags,
         start_time: new Date().toISOString(),
-        address: ""
+        address: "",
+        visibility,
+        click_id: clickId
       });
-      navigate("/");
+      navigate(clickId ? `/clicks/${clickId}` : "/");
     } catch (e) {
       toast({ title: "Could not save gathering", description: String(e.message || e) });
     } finally {
@@ -71,10 +78,10 @@ export default function CreateEvent() {
   return (
     <div className="min-h-screen bg-gray-50 pb-28">
       <div className="text-white px-4 py-4 flex items-center gap-3 shadow" style={{ background: FB }}>
-        <button onClick={() => navigate("/")} aria-label="Back">
+        <button onClick={() => navigate(clickId ? `/clicks/${clickId}` : "/")} aria-label="Back">
           <ArrowLeft size={22} color="#ffffff" />
         </button>
-        <h1 className="text-xl font-bold">Create a Gathering</h1>
+        <h1 className="text-xl font-bold">{clickId ? "Host a CliQ Event" : "Create a Gathering"}</h1>
       </div>
 
       <div className="p-4 space-y-5">
@@ -121,6 +128,41 @@ export default function CreateEvent() {
               );
             })}
           </div>
+        </div>
+
+        <div>
+          <label className="text-sm font-semibold text-gray-700">Visibility</label>
+          <div className="grid grid-cols-2 gap-2 mt-1.5">
+            <button
+              type="button"
+              onClick={() => setVisibility("public")}
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold border transition"
+              style={{
+                background: visibility === "public" ? FB : "#ffffff",
+                color: visibility === "public" ? "#ffffff" : "#374151",
+                borderColor: visibility === "public" ? FB : "#e5e7eb"
+              }}
+            >
+              <Globe size={16} /> Public
+            </button>
+            <button
+              type="button"
+              onClick={() => setVisibility("personal")}
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold border transition"
+              style={{
+                background: visibility === "personal" ? FB : "#ffffff",
+                color: visibility === "personal" ? "#ffffff" : "#374151",
+                borderColor: visibility === "personal" ? FB : "#e5e7eb"
+              }}
+            >
+              <Lock size={16} /> Personal
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 mt-1.5">
+            {visibility === "public"
+              ? "Anyone on the map can discover this gathering."
+              : "Only shared with your CliQ — not shown on the public map."}
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">

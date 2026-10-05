@@ -7,6 +7,43 @@
         "admin",
         "user"
       ]
+    },
+    "bio": {
+      "type": "string",
+      "title": "Bio"
+    },
+    "location": {
+      "type": "string",
+      "title": "Location"
+    },
+    "avatar_url": {
+      "type": "string",
+      "title": "Avatar Url"
+    },
+    "cover_url": {
+      "type": "string",
+      "title": "Cover Url"
+    },
+    "traits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Traits"
+    },
+    "hobbies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Hobbies"
+    },
+    "music": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Music"
     }
   },
   "required": [

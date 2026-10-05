@@ -68,6 +68,15 @@
     "image_url": {
       "type": "string",
       "title": "Image Url"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "public",
+        "personal"
+      ],
+      "default": "public",
+      "title": "Visibility"
     }
   },
   "required": [

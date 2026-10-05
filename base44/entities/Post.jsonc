@@ -1,0 +1,36 @@
+{
+  "name": "Post",
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": "string",
+      "title": "Content"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Image Url"
+    },
+    "author_id": {
+      "type": "string",
+      "title": "Author Id"
+    },
+    "author_name": {
+      "type": "string",
+      "title": "Author Name"
+    },
+    "author_avatar": {
+      "type": "string",
+      "title": "Author Avatar"
+    },
+    "likes": {
+      "type": "number",
+      "default": 0,
+      "title": "Likes"
+    }
+  },
+  "required": [
+    "content",
+    "author_id",
+    "author_name"
+  ]
+}

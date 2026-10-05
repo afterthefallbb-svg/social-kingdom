@@ -22,12 +22,12 @@ export default function Clicks() {
         <Link to="/profile" aria-label="Back">
           <ArrowLeft size={22} color="#ffffff" />
         </Link>
-        <h1 className="text-xl font-bold">Clicks</h1>
+        <h1 className="text-xl font-bold">CliQ's</h1>
       </div>
 
       <div className="p-4 space-y-3">
-        <p className="text-sm text-gray-500">Your real-world network groups.</p>
-        {clicks.length === 0 && <p className="text-sm text-gray-400">No Clicks yet.</p>}
+        <p className="text-sm text-gray-500">Your personal groups of friends. Host events, share moments, and stay connected.</p>
+        {clicks.length === 0 && <p className="text-sm text-gray-400">No CliQ's yet.</p>}
         {clicks.map((c) => (
           <Link
             key={c.id}

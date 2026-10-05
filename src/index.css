@@ -90,3 +90,21 @@
     @apply bg-background text-foreground font-body;
   }
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .leaflet-container {
+    font-family: inherit;
+    background: #cfe8ff;
+  }
+  /* Custom stylized aesthetic for the map tiles */
+  .meetme-tiles {
+    filter: saturate(1.18) brightness(1.06) contrast(0.92) hue-rotate(-4deg);
+  }
+}

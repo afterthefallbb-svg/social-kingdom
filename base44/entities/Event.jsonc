@@ -1,0 +1,79 @@
+{
+  "name": "Event",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "sports",
+        "daycare",
+        "professional",
+        "drinks",
+        "kids",
+        "barbecue",
+        "automotive",
+        "resource_fairs",
+        "activities",
+        "parties",
+        "religious",
+        "family"
+      ],
+      "default": "sports",
+      "title": "Category"
+    },
+    "latitude": {
+      "type": "number",
+      "title": "Latitude"
+    },
+    "longitude": {
+      "type": "number",
+      "title": "Longitude"
+    },
+    "address": {
+      "type": "string",
+      "title": "Address"
+    },
+    "age_bracket": {
+      "type": "string",
+      "title": "Age Bracket"
+    },
+    "dress_code": {
+      "type": "string",
+      "title": "Dress Code"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Start Time"
+    },
+    "click_id": {
+      "type": "string",
+      "title": "Click Id"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Image Url"
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "latitude",
+    "longitude"
+  ]
+}

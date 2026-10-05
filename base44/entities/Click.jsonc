@@ -1,0 +1,26 @@
+{
+  "name": "Click",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "avatar_url": {
+      "type": "string",
+      "title": "Avatar Url"
+    },
+    "member_count": {
+      "type": "number",
+      "default": 0,
+      "title": "Member Count"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

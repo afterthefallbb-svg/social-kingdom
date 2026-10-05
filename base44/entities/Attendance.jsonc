@@ -1,0 +1,35 @@
+{
+  "name": "Attendance",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "title": "Event Id"
+    },
+    "user_id": {
+      "type": "string",
+      "title": "User Id"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "User Name"
+    },
+    "user_avatar": {
+      "type": "string",
+      "title": "User Avatar"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "interested"
+      ],
+      "default": "confirmed",
+      "title": "Status"
+    }
+  },
+  "required": [
+    "event_id",
+    "user_id"
+  ]
+}

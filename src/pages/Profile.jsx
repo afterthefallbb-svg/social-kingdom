@@ -8,8 +8,6 @@ import PostsFeed from "@/components/profile/PostsFeed";
 import CliQsCard from "@/components/profile/CliQsCard";
 import GatheringsCard from "@/components/profile/GatheringsCard";
 
-const FB = "#1877f2";
-
 export default function Profile() {
   const navigate = useNavigate();
   const [me, setMe] = useState(null);
@@ -26,17 +24,9 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-gray-100 pb-28">
-      {/* Compact branded top bar */}
-      <div className="text-white px-4 py-4 flex items-center justify-between" style={{ background: FB }}>
-        <h1 className="text-lg font-bold">CliQ</h1>
-        <button onClick={() => navigate("/messages")} className="text-sm font-semibold">
-          Messages
-        </button>
-      </div>
-
-      <div className="space-y-3 p-3">
+      <div className="space-y-3 p-3 pt-4">
         <ProfileHeader me={me} onEdit={() => setEditing(true)} onMessages={() => navigate("/messages")} />
-        <AboutCard me={me} onEdit={() => setEditing(true)} />
+        <AboutCard me={me} onSaved={setMe} />
         <PostsFeed me={me} />
         <CliQsCard clicks={clicks} />
         <GatheringsCard me={me} />

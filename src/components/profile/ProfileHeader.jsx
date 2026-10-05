@@ -1,5 +1,5 @@
 import React from "react";
-import { Pencil, MessageCircle } from "lucide-react";
+import { Pencil, MessageCircle, Camera } from "lucide-react";
 import { Image } from "@/components/ui/image";
 
 const FB = "#1877f2";
@@ -19,7 +19,11 @@ export default function ProfileHeader({ me, onEdit, onMessages }) {
       </div>
       {/* Avatar + name */}
       <div className="px-4 -mt-12 flex items-end gap-4">
-        <div className="w-24 h-24 rounded-full bg-white p-1 shadow shrink-0">
+        <button
+          onClick={onEdit}
+          className="relative w-24 h-24 rounded-full bg-white p-1 shadow shrink-0"
+          aria-label="Add photos"
+        >
           <div className="w-full h-full rounded-full overflow-hidden bg-blue-100 flex items-center justify-center text-3xl font-bold" style={{ color: FB }}>
             {me?.avatar_url ? (
               <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
@@ -27,7 +31,10 @@ export default function ProfileHeader({ me, onEdit, onMessages }) {
               initial
             )}
           </div>
-        </div>
+          <span className="absolute bottom-1 right-1 w-7 h-7 rounded-full bg-white flex items-center justify-center shadow">
+            <Camera size={14} color={FB} />
+          </span>
+        </button>
         <div className="pb-3 min-w-0 flex-1">
           <h2 className="text-xl font-bold text-gray-900 truncate">{name}</h2>
           <p className="text-sm text-gray-500 truncate">{location}</p>

@@ -13,7 +13,8 @@ function Recenter({ center }) {
   return null;
 }
 
-export default function MapView({ events = [], activeId, onSelect }) {
+export default function MapView({ events = [], activeId, onSelect, mode = "events" }) {
+  const isEvents = mode === "events";
   return (
     <MapContainer
       center={WALLA_WALLA}
@@ -23,20 +24,28 @@ export default function MapView({ events = [], activeId, onSelect }) {
       scrollWheelZoom
       style={{ position: "absolute", inset: 0, background: "#aadaff", zIndex: 0 }}
     >
-      <TileLayer
-        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
-        className="meetme-tiles"
-        maxZoom={19}
-      />
-      <Recenter center={WALLA_WALLA} />
-      {events.map((ev) => (
-        <Marker
-          key={ev.id}
-          position={[ev.latitude, ev.longitude]}
-          icon={makeEventIcon(ev.category, ev.id === activeId)}
-          eventHandlers={{ click: () => onSelect && onSelect(ev) }}
+      {isEvents ? (
+        <TileLayer
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+          className="meetme-tiles"
+          maxZoom={19}
         />
-      ))}
+      ) : (
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maxZoom={19}
+        />
+      )}
+      <Recenter center={WALLA_WALLA} />
+      {isEvents &&
+        events.map((ev) => (
+          <Marker
+            key={ev.id}
+            position={[ev.latitude, ev.longitude]}
+            icon={makeEventIcon(ev.category, ev.id === activeId)}
+            eventHandlers={{ click: () => onSelect && onSelect(ev) }}
+          />
+        ))}
     </MapContainer>
   );
 }

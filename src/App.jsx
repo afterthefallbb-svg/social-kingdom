@@ -12,6 +12,7 @@ import Home from '@/pages/Home';
 import CreateEvent from '@/pages/CreateEvent';
 import Profile from '@/pages/Profile';
 import ProfileAbout from '@/pages/ProfileAbout';
+import EventDetail from '@/pages/EventDetail';
 import Clicks from '@/pages/Clicks';
 import ClickDetail from '@/pages/ClickDetail';
 import Messages from '@/pages/Messages';
@@ -49,6 +50,7 @@ const AuthenticatedApp = () => {
         <Route path="/profile/about" element={<ProfileAbout />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/profile/:id/about" element={<ProfileAbout />} />
+        <Route path="/event/:id" element={<EventDetail />} />
         <Route path="/clicks" element={<Clicks />} />
         <Route path="/clicks/:id" element={<ClickDetail />} />
         <Route path="/messages" element={<Messages />} />

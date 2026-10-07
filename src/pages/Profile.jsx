@@ -7,7 +7,6 @@ import EventsAttendedSection from "@/components/profile/EventsAttendedSection";
 import CliQsSection from "@/components/profile/CliQsSection";
 import FriendsSection from "@/components/profile/FriendsSection";
 import EditProfileDialog from "@/components/profile/EditProfileDialog";
-import EventDetailsSheet from "@/components/EventDetailsSheet";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ export default function Profile() {
   const [clicks, setClicks] = useState([]);
   const [friends, setFriends] = useState([]);
   const [editing, setEditing] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -102,8 +100,8 @@ export default function Profile() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-3">
-            <EventsSection events={upcoming} onSelect={setSelectedEvent} />
-            <EventsAttendedSection events={past} onSelect={setSelectedEvent} />
+            <EventsSection events={upcoming} onSelect={(e) => navigate(`/event/${e.id}`)} />
+            <EventsAttendedSection events={past} onSelect={(e) => navigate(`/event/${e.id}`)} />
           </div>
           <div className="space-y-3">
             <CliQsSection clicks={clicks} />
@@ -115,7 +113,6 @@ export default function Profile() {
       {editing && (
         <EditProfileDialog me={me} onClose={() => setEditing(false)} onSaved={(u) => { setMe(u); setUser(u); }} />
       )}
-      <EventDetailsSheet event={selectedEvent} onClose={() => setSelectedEvent(null)} />
     </div>
   );
 }

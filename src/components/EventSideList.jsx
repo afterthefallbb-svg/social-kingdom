@@ -1,15 +1,15 @@
 import React from "react";
 
-// Narrow left-side list of raw event names floating over the map.
-// Sorted by distance (closest first) by the parent. No background boxes.
+// Narrow left-side list of event names floating over the map.
 export default function EventSideList({ events = [], activeId, onSelect }) {
   return (
-    <div className="absolute left-3 z-[500] max-w-[58%]" style={{ top: 150 }}>
+    <div className="absolute left-3 z-[500] max-w-[58%]" style={{ top: 215 }}>
       <h3
-        className="text-[13px] font-bold text-white"
+        className="text-[13px] font-bold"
         style={{
-          textShadow: "0 1px 4px rgba(0,0,0,0.8)",
-          borderBottom: "2px solid #ffffff",
+          color: "#111111",
+          textShadow: "0 1px 4px rgba(255,255,255,0.95)",
+          borderBottom: "2px solid #111111",
           paddingBottom: 2,
           display: "inline-block"
         }}
@@ -21,10 +21,11 @@ export default function EventSideList({ events = [], activeId, onSelect }) {
           <li key={ev.id}>
             <button
               onClick={() => onSelect && onSelect(ev)}
-              className="text-left text-[12px] leading-tight text-white"
+              className="text-left text-[12px] leading-tight"
               style={{
-                textShadow: "0 1px 4px rgba(0,0,0,0.8)",
-                fontWeight: ev.id === activeId ? 700 : 400
+                color: "#111111",
+                textShadow: "0 1px 4px rgba(255,255,255,0.95)",
+                fontWeight: ev.id === activeId ? 800 : 500
               }}
             >
               {ev.title}

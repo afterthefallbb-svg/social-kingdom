@@ -26,6 +26,10 @@
       "type": "number",
       "default": 0,
       "title": "Likes"
+    },
+    "event_id": {
+      "type": "string",
+      "title": "Event Id"
     }
   },
   "required": [

@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
 import CategoryFilter from "@/components/CategoryFilter";
 import EventSideList from "@/components/EventSideList";
-import EventDetailsSheet from "@/components/EventDetailsSheet";
 
 const CENTER = { lat: 46.0646, lng: -118.3425 };
 
@@ -20,11 +20,12 @@ function haversineKm(lat, lng) {
 }
 
 export default function Home() {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [count, setCount] = useState(0);
   const [activeCat, setActiveCat] = useState(null);
-  const [selected, setSelected] = useState(null);
   const [query, setQuery] = useState("");
+  const [mode, setMode] = useState("events"); // 'events' | 'businesses'
 
   useEffect(() => {
     const publicQuery = { visibility: { $ne: "personal" } };
@@ -45,38 +46,74 @@ export default function Home() {
     return [...list].sort((a, b) => haversineKm(a.latitude, a.longitude) - haversineKm(b.latitude, b.longitude));
   }, [events, activeCat, query]);
 
+  const goEvent = (ev) => navigate(`/event/${ev.id}`);
+
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[#aadaff]">
-      <MapView events={filtered} activeId={selected?.id} onSelect={setSelected} />
+      <MapView
+        events={mode === "events" ? filtered : []}
+        activeId={null}
+        onSelect={goEvent}
+        mode={mode}
+      />
 
-      {/* Top stack: search + count + category filters, floating, no header block */}
+      {/* Top stack: search + count + filters + Events/Businesses toggle */}
       <div className="absolute top-0 left-0 right-0 z-[500] px-3 pt-3">
         <div className="flex items-center bg-white rounded-full px-4 py-2.5 shadow-lg">
           <Search size={18} className="text-gray-400 shrink-0" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search Gatherings"
+            placeholder={mode === "events" ? "Search Gatherings" : "Search places"}
             className="ml-2 bg-transparent outline-none flex-1 text-sm text-gray-800 placeholder:text-gray-400"
           />
         </div>
 
         <div
-          className="px-1 mt-2 text-sm font-medium text-white"
-          style={{ textShadow: "0 1px 4px rgba(0,0,0,0.75)" }}
+          className="px-1 mt-2 text-sm font-medium"
+          style={{ color: "#111", textShadow: "0 1px 4px rgba(255,255,255,0.9)" }}
         >
-          <span className="font-bold underline decoration-2 underline-offset-2">{count}</span>{" "}
-          Gatherings in your area
+          {mode === "events" ? (
+            <>
+              <span className="font-bold underline decoration-2 underline-offset-2">{count}</span> Gatherings in your area
+            </>
+          ) : (
+            <span className="font-semibold">Businesses nearby</span>
+          )}
         </div>
 
-        <div className="mt-1">
-          <CategoryFilter active={activeCat} onSelect={setActiveCat} />
+        {mode === "events" && (
+          <div className="mt-1">
+            <CategoryFilter active={activeCat} onSelect={setActiveCat} />
+          </div>
+        )}
+
+        {/* Events | Businesses side-by-side links */}
+        <div className="mt-2 flex gap-2">
+          <button
+            onClick={() => setMode("events")}
+            className={`flex-1 rounded-full py-1.5 text-xs font-bold ${
+              mode === "events" ? "text-white" : "bg-white text-gray-700"
+            }`}
+            style={mode === "events" ? { background: "#1877f2" } : undefined}
+          >
+            Events
+          </button>
+          <button
+            onClick={() => setMode("businesses")}
+            className={`flex-1 rounded-full py-1.5 text-xs font-bold ${
+              mode === "businesses" ? "text-white" : "bg-white text-gray-700"
+            }`}
+            style={mode === "businesses" ? { background: "#1877f2" } : undefined}
+          >
+            Businesses
+          </button>
         </div>
       </div>
 
-      <EventSideList events={filtered} activeId={selected?.id} onSelect={setSelected} />
-
-      <EventDetailsSheet event={selected} onClose={() => setSelected(null)} />
+      {mode === "events" && (
+        <EventSideList events={filtered} activeId={null} onSelect={goEvent} />
+      )}
     </div>
   );
 }

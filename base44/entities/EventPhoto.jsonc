@@ -1,0 +1,36 @@
+{
+  "name": "EventPhoto",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "title": "Event Id"
+    },
+    "url": {
+      "type": "string",
+      "title": "Url"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "image",
+        "video"
+      ],
+      "default": "image",
+      "title": "Type"
+    },
+    "user_id": {
+      "type": "string",
+      "title": "User Id"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "User Name"
+    }
+  },
+  "required": [
+    "event_id",
+    "url",
+    "user_id"
+  ]
+}

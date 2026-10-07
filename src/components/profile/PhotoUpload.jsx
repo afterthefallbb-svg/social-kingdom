@@ -6,7 +6,7 @@ const FB = "#1877f2";
 
 // Uploads a photo via the browser camera or file picker. Files are stored
 // publicly (UploadPublicFile) so profile/event photos are visible to others.
-export default function PhotoUpload({ label = "Upload Photo", onUploaded, onClose }) {
+export default function PhotoUpload({ label = "Upload Photo", onUploaded, onClose, allowVideo = false }) {
   const cameraRef = useRef(null);
   const libraryRef = useRef(null);
   const [busy, setBusy] = useState(false);
@@ -18,7 +18,8 @@ export default function PhotoUpload({ label = "Upload Photo", onUploaded, onClos
     setErr("");
     try {
       const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
-      onUploaded(file_url);
+      const type = (file.type || "").startsWith("video") ? "video" : "image";
+      onUploaded(file_url, type);
     } catch (e) {
       setErr(String(e.message || e));
     } finally {
@@ -80,7 +81,7 @@ export default function PhotoUpload({ label = "Upload Photo", onUploaded, onClos
         <input
           ref={libraryRef}
           type="file"
-          accept="image/*"
+          accept={allowVideo ? "image/*,video/*" : "image/*"}
           className="hidden"
           onChange={(e) => handleFile(e.target.files?.[0])}
         />

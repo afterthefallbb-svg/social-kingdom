@@ -1,4 +1,6 @@
 {
+  "name": "User",
+  "type": "object",
   "properties": {
     "role": {
       "type": "string",
@@ -44,11 +46,45 @@
         "type": "string"
       },
       "title": "Music"
+    },
+    "interests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Interests"
+    },
+    "goals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Goals"
+    },
+    "professional_interests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Professional Interests"
+    },
+    "family_members": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Family Members"
+    },
+    "job": {
+      "type": "string",
+      "title": "Job"
+    },
+    "birthday": {
+      "type": "string",
+      "title": "Birthday"
     }
   },
   "required": [
     "role"
-  ],
-  "name": "User",
-  "type": "object"
+  ]
 }

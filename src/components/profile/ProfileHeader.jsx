@@ -1,62 +1,122 @@
-import React from "react";
-import { Pencil, MessageCircle, Camera } from "lucide-react";
+import React, { useState } from "react";
+import { Camera, FileText, Pencil, MessageCircle } from "lucide-react";
 import { Image } from "@/components/ui/image";
+import { useNavigate } from "react-router-dom";
+import { base44 } from "@/api/base44Client";
+import { toast } from "@/components/ui/use-toast";
+import PhotoUpload from "./PhotoUpload";
 
 const FB = "#1877f2";
 
-export default function ProfileHeader({ me, onEdit, onMessages }) {
-  const name = me?.full_name || me?.email || "CliQ Member";
+export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMessages }) {
+  const navigate = useNavigate();
+  const [uploading, setUploading] = useState(null); // 'avatar' | 'cover' | null
+
+  const name = user?.full_name || user?.friend_name || "CliQ Member";
   const initial = (name || "?").charAt(0).toUpperCase();
-  const location = me?.location || "Walla Walla, WA";
+  const city = user?.location || user?.friend_city || "";
+  const aboutPath = isMe ? "/profile/about" : `/profile/${user?.id}/about`;
+
+  async function handleUploaded(url) {
+    const field = uploading === "avatar" ? "avatar_url" : "cover_url";
+    const which = uploading;
+    setUploading(null);
+    try {
+      const updated = await base44.auth.updateMe({ [field]: url });
+      onUserUpdated?.(updated);
+      toast({ title: `${which === "avatar" ? "Profile" : "Cover"} photo updated` });
+    } catch (e) {
+      toast({ title: "Could not save", description: String(e.message || e) });
+    }
+  }
 
   return (
     <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-      {/* Cover */}
-      <div className="h-36 relative" style={{ background: "linear-gradient(135deg,#1877f2,#42a5f5)" }}>
-        {me?.cover_url && (
-          <Image src={me.cover_url} fittingType="fill" className="absolute inset-0 w-full h-full" />
+      {/* Cover — tap to upload */}
+      <button
+        onClick={() => isMe && setUploading("cover")}
+        className="relative w-full h-36 block"
+        style={{ background: "linear-gradient(135deg,#1877f2,#42a5f5)" }}
+        aria-label="Upload cover photo"
+      >
+        {user?.cover_url && (
+          <Image src={user.cover_url} fittingType="fill" className="absolute inset-0 w-full h-full" />
         )}
-      </div>
-      {/* Avatar + name */}
+        {isMe && (
+          <span className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shadow">
+            <Camera size={15} color={FB} />
+          </span>
+        )}
+      </button>
+
+      {/* Avatar + bio link */}
       <div className="px-4 -mt-12 flex items-end gap-4">
         <button
-          onClick={onEdit}
+          onClick={() => isMe && setUploading("avatar")}
           className="relative w-24 h-24 rounded-full bg-white p-1 shadow shrink-0"
-          aria-label="Add photos"
+          aria-label="Upload profile photo"
         >
-          <div className="w-full h-full rounded-full overflow-hidden bg-blue-100 flex items-center justify-center text-3xl font-bold" style={{ color: FB }}>
-            {me?.avatar_url ? (
-              <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
+          <div
+            className="w-full h-full rounded-full overflow-hidden bg-blue-100 flex items-center justify-center text-3xl font-bold"
+            style={{ color: FB }}
+          >
+            {user?.avatar_url ? (
+              <Image src={user.avatar_url} fittingType="fill" className="w-full h-full" />
             ) : (
               initial
             )}
           </div>
-          <span className="absolute bottom-1 right-1 w-7 h-7 rounded-full bg-white flex items-center justify-center shadow">
-            <Camera size={14} color={FB} />
-          </span>
+          {isMe && (
+            <span className="absolute bottom-1 right-1 w-7 h-7 rounded-full bg-white flex items-center justify-center shadow">
+              <Camera size={14} color={FB} />
+            </span>
+          )}
         </button>
-        <div className="pb-3 min-w-0 flex-1">
-          <h2 className="text-xl font-bold text-gray-900 truncate">{name}</h2>
-          <p className="text-sm text-gray-500 truncate">{location}</p>
+
+        <div className="pb-3 flex-1 flex justify-end">
+          <button
+            onClick={() => navigate(aboutPath)}
+            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-white"
+            style={{ background: FB }}
+          >
+            <FileText size={15} /> Bio
+          </button>
         </div>
       </div>
-      {/* Actions */}
-      <div className="px-4 py-3 flex gap-2">
-        <button
-          onClick={onEdit}
-          className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-2 text-sm font-semibold text-white"
-          style={{ background: FB }}
-        >
-          <Pencil size={15} /> Edit Profile
-        </button>
-        <button
-          onClick={onMessages}
-          className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-2 text-sm font-semibold border"
-          style={{ borderColor: FB, color: FB }}
-        >
-          <MessageCircle size={15} /> Messages
-        </button>
+
+      {/* Name + city/state */}
+      <div className="px-4 pt-2">
+        <h2 className="text-xl font-bold text-gray-900">{name}</h2>
+        {city && <p className="text-sm text-gray-500">{city}</p>}
       </div>
+
+      {/* Slim actions (current user only) */}
+      {isMe && (
+        <div className="px-4 py-3 flex gap-2">
+          <button
+            onClick={onEdit}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-2 text-sm font-semibold text-white"
+            style={{ background: FB }}
+          >
+            <Pencil size={15} /> Edit Profile
+          </button>
+          <button
+            onClick={onMessages}
+            className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-2 text-sm font-semibold border"
+            style={{ borderColor: FB, color: FB }}
+          >
+            <MessageCircle size={15} /> Messages
+          </button>
+        </div>
+      )}
+
+      {uploading && (
+        <PhotoUpload
+          label={uploading === "avatar" ? "Profile Photo" : "Cover Photo"}
+          onUploaded={handleUploaded}
+          onClose={() => setUploading(null)}
+        />
+      )}
     </div>
   );
 }

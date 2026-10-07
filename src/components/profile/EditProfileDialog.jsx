@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import PhotoUpload from "./PhotoUpload";
 
 const FB = "#1877f2";
 
@@ -19,6 +20,7 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
   const [hobbies, setHobbies] = useState((me?.hobbies || []).join(", "));
   const [music, setMusic] = useState((me?.music || []).join(", "));
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(null);
 
   async function save() {
     setSaving(true);
@@ -68,11 +70,21 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
           </div>
           <div>
             <label className="text-sm font-semibold text-gray-700">Avatar Image URL</label>
-            <Input value={avatar} onChange={(e) => setAvatar(e.target.value)} className="mt-1.5" placeholder="https://..." />
+            <div className="flex gap-2 mt-1.5">
+              <Input value={avatar} onChange={(e) => setAvatar(e.target.value)} placeholder="https://..." />
+              <button type="button" onClick={() => setUploading("avatar")} className="shrink-0 inline-flex items-center gap-1 rounded-md px-3 text-xs font-semibold text-white" style={{ background: FB }}>
+                Upload
+              </button>
+            </div>
           </div>
           <div>
             <label className="text-sm font-semibold text-gray-700">Cover Image URL</label>
-            <Input value={cover} onChange={(e) => setCover(e.target.value)} className="mt-1.5" placeholder="https://..." />
+            <div className="flex gap-2 mt-1.5">
+              <Input value={cover} onChange={(e) => setCover(e.target.value)} placeholder="https://..." />
+              <button type="button" onClick={() => setUploading("cover")} className="shrink-0 inline-flex items-center gap-1 rounded-md px-3 text-xs font-semibold text-white" style={{ background: FB }}>
+                Upload
+              </button>
+            </div>
           </div>
           <div>
             <label className="text-sm font-semibold text-gray-700">Personal Traits (comma separated)</label>
@@ -90,6 +102,17 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
             {saving ? "Saving…" : "Save"}
           </Button>
         </div>
+        {uploading && (
+          <PhotoUpload
+            label={uploading === "avatar" ? "Profile Photo" : "Cover Photo"}
+            onUploaded={(url) => {
+              if (uploading === "avatar") setAvatar(url);
+              else setCover(url);
+              setUploading(null);
+            }}
+            onClose={() => setUploading(null)}
+          />
+        )}
       </div>
     </div>
   );

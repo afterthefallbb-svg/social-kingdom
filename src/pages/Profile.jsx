@@ -1,40 +1,121 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import ProfileHeader from "@/components/profile/ProfileHeader";
-import AboutCard from "@/components/profile/AboutCard";
+import EventsSection from "@/components/profile/EventsSection";
+import EventsAttendedSection from "@/components/profile/EventsAttendedSection";
+import CliQsSection from "@/components/profile/CliQsSection";
+import FriendsSection from "@/components/profile/FriendsSection";
 import EditProfileDialog from "@/components/profile/EditProfileDialog";
-import PostsFeed from "@/components/profile/PostsFeed";
-import CliQsCard from "@/components/profile/CliQsCard";
-import GatheringsCard from "@/components/profile/GatheringsCard";
+import EventDetailsSheet from "@/components/EventDetailsSheet";
 
 export default function Profile() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [me, setMe] = useState(null);
+  const [user, setUser] = useState(null);
+  const [isMe, setIsMe] = useState(true);
+  const [events, setEvents] = useState([]);
   const [clicks, setClicks] = useState([]);
+  const [friends, setFriends] = useState([]);
   const [editing, setEditing] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(setMe).catch(() => setMe(null));
-    base44.entities.Click
-      .filter({}, { limit: 20 })
-      .then((page) => setClicks(page.items))
-      .catch(() => setClicks([]));
-  }, []);
+    let active = true;
+    (async () => {
+      const current = await base44.auth.me().catch(() => null);
+      if (!active) return;
+      setMe(current);
+      const targetId = id || current?.id;
+      const viewingMe = !id || id === current?.id;
+      setIsMe(viewingMe);
+
+      if (viewingMe) {
+        setUser(current);
+      } else {
+        // The User entity can't be read by id, so fall back to the
+        // denormalized info stored on a Friendship record if available.
+        let u = null;
+        try {
+          u = await base44.entities.User.get(targetId);
+        } catch {
+          u = null;
+        }
+        if (!u) {
+          const fr = await base44.entities.Friendship.filter({ friend_id: targetId }, { limit: 1 });
+          const f = fr.items[0];
+          u = f
+            ? { id: targetId, friend_name: f.friend_name, avatar_url: f.friend_avatar, location: f.friend_city }
+            : { id: targetId, friend_name: "CliQ Member" };
+        }
+        setUser(u);
+      }
+
+      const att = await base44.entities.Attendance.filter({ user_id: targetId }, { limit: 100 });
+      const ids = att.items.map((a) => a.event_id).filter(Boolean);
+      let evs = [];
+      if (ids.length) {
+        const res = await base44.entities.Event.filter({ id: { $in: ids } }, { limit: 100 });
+        evs = res.items;
+      }
+      if (active) setEvents(evs);
+
+      const mem = await base44.entities.ClickMembership.filter({ user_id: targetId }, { limit: 50 });
+      const cids = mem.items.map((m) => m.click_id).filter(Boolean);
+      let cls = [];
+      if (cids.length) {
+        const res = await base44.entities.Click.filter({ id: { $in: cids } }, { limit: 50 });
+        cls = res.items;
+      }
+      if (active) setClicks(cls);
+
+      const frres = await base44.entities.Friendship.filter(
+        { user_id: targetId, status: "accepted" },
+        { limit: 50 }
+      );
+      if (active) setFriends(frres.items);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  const now = new Date();
+  const upcoming = events
+    .filter((e) => !e.start_time || new Date(e.start_time) >= now)
+    .sort((a, b) => new Date(a.start_time || 0) - new Date(b.start_time || 0));
+  const past = events
+    .filter((e) => e.start_time && new Date(e.start_time) < now)
+    .sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
 
   return (
     <div className="min-h-screen bg-gray-100 pb-28">
-      <div className="space-y-3 p-3 pt-4">
-        <ProfileHeader me={me} onEdit={() => setEditing(true)} onMessages={() => navigate("/messages")} />
-        <AboutCard me={me} onSaved={setMe} />
-        <PostsFeed me={me} />
-        <CliQsCard clicks={clicks} />
-        <GatheringsCard me={me} />
+      <div className="p-3 pt-4 space-y-3 max-w-2xl mx-auto">
+        <ProfileHeader
+          user={user}
+          isMe={isMe}
+          onUserUpdated={setUser}
+          onEdit={() => setEditing(true)}
+          onMessages={() => navigate("/messages")}
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="space-y-3">
+            <EventsSection events={upcoming} onSelect={setSelectedEvent} />
+            <EventsAttendedSection events={past} onSelect={setSelectedEvent} />
+          </div>
+          <div className="space-y-3">
+            <CliQsSection clicks={clicks} />
+            <FriendsSection friends={friends} />
+          </div>
+        </div>
       </div>
 
       {editing && (
-        <EditProfileDialog me={me} onClose={() => setEditing(false)} onSaved={setMe} />
+        <EditProfileDialog me={me} onClose={() => setEditing(false)} onSaved={(u) => { setMe(u); setUser(u); }} />
       )}
+      <EventDetailsSheet event={selectedEvent} onClose={() => setSelectedEvent(null)} />
     </div>
   );
 }

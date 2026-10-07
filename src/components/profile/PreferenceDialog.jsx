@@ -6,20 +6,21 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 
 const FB = "#1877f2";
+const TEXT_FIELDS = ["bio", "job", "birthday", "location"];
 
 const toArray = (s) => s.split(",").map((x) => x.trim()).filter(Boolean);
 
 export default function PreferenceDialog({ field, label, placeholder, me, onClose, onSaved }) {
-  const isBio = field === "bio";
+  const isText = TEXT_FIELDS.includes(field);
   const [value, setValue] = useState(
-    isBio ? me?.bio || "" : (me?.[field] || []).join(", ")
+    isText ? me?.[field] || "" : (me?.[field] || []).join(", ")
   );
   const [saving, setSaving] = useState(false);
 
   async function save() {
     setSaving(true);
     try {
-      const payload = isBio ? { bio: value.trim() } : { [field]: toArray(value) };
+      const payload = isText ? { [field]: value.trim() } : { [field]: toArray(value) };
       const updated = await base44.auth.updateMe(payload);
       onSaved(updated);
       onClose();
@@ -54,7 +55,7 @@ export default function PreferenceDialog({ field, label, placeholder, me, onClos
             autoFocus
             placeholder={placeholder}
           />
-          {!isBio && <p className="text-xs text-gray-400 mt-1.5">Separate each with a comma.</p>}
+          {!isText && <p className="text-xs text-gray-400 mt-1.5">Separate each with a comma.</p>}
           <div className="flex gap-2 mt-3">
             <Button variant="outline" className="flex-1" onClick={onClose}>
               Cancel

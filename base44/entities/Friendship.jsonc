@@ -1,0 +1,43 @@
+{
+  "name": "Friendship",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "User Id"
+    },
+    "friend_id": {
+      "type": "string",
+      "title": "Friend Id"
+    },
+    "friend_name": {
+      "type": "string",
+      "title": "Friend Name"
+    },
+    "friend_avatar": {
+      "type": "string",
+      "title": "Friend Avatar"
+    },
+    "friend_city": {
+      "type": "string",
+      "title": "Friend City"
+    },
+    "friend_bio": {
+      "type": "string",
+      "title": "Friend Bio"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted"
+      ],
+      "default": "accepted",
+      "title": "Status"
+    }
+  },
+  "required": [
+    "user_id",
+    "friend_id"
+  ]
+}

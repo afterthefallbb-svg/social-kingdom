@@ -95,7 +95,7 @@ export default function Profile() {
         {bg ? (
           <Image src={bg} fittingType="fill" className="w-full h-full" />
         ) : (
-          <div className="w-full h-full" style={{ background: "linear-gradient(135deg,#1877f2,#42a5f5)" }} />
+          <div className="w-full h-full bg-white" />
         )}
       </div>
 

@@ -37,17 +37,14 @@ export default function EventsAttendedSection({ events, onSelect }) {
                     onClick={() => onSelect(e)}
                     className="flex flex-col items-center gap-1 shrink-0 w-16"
                   >
-                    <span
-                      className="w-14 h-14 rounded-full overflow-hidden border-2 flex items-center justify-center text-xl"
-                      style={{ borderColor: cat.color, background: cat.color + "22" }}
-                    >
+                    <span className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center text-xl shrink-0">
                       {e.image_url ? (
                         <Image src={e.image_url} fittingType="fill" className="w-full h-full" />
                       ) : (
                         cat.emoji
                       )}
                     </span>
-                    <span className="text-[10px] text-gray-600 text-center leading-tight truncate w-full">
+                    <span className="text-[10px] text-center leading-tight truncate w-full" style={{ color: FB }}>
                       {e.title}
                     </span>
                   </button>

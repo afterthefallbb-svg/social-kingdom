@@ -4,6 +4,26 @@ import { getCategory } from "@/lib/categories";
 
 const FB = "#1877f2";
 
+function DateChip({ date }) {
+  if (!date) {
+    return (
+      <div className="shrink-0 w-11 text-center rounded-lg overflow-hidden border" style={{ borderColor: "#eef0f3" }}>
+        <div className="text-[9px] font-bold text-white py-0.5" style={{ background: "#94a3b8" }}>TBD</div>
+        <div className="text-sm font-bold text-gray-500 py-0.5 bg-white">—</div>
+      </div>
+    );
+  }
+  const d = new Date(date);
+  const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+  const day = d.getDate();
+  return (
+    <div className="shrink-0 w-11 text-center rounded-lg overflow-hidden border" style={{ borderColor: "#eef0f3" }}>
+      <div className="text-[9px] font-bold text-white py-0.5" style={{ background: FB }}>{month}</div>
+      <div className="text-sm font-bold text-gray-900 py-0.5 bg-white">{day}</div>
+    </div>
+  );
+}
+
 export default function EventsSection({ events, onSelect }) {
   const [open, setOpen] = useState(true);
 
@@ -31,12 +51,13 @@ export default function EventsSection({ events, onSelect }) {
               <button
                 key={e.id}
                 onClick={() => onSelect(e)}
-                className="w-full flex items-center justify-between rounded-xl border p-2.5 hover:bg-gray-50"
+                className="w-full flex items-center gap-2.5 rounded-xl border p-2.5 hover:bg-gray-50"
                 style={{ borderColor: "#eef0f3" }}
               >
-                <span className="text-sm font-medium text-gray-800 truncate text-left">{e.title}</span>
+                <DateChip date={e.start_time} />
+                <span className="text-sm font-medium text-gray-800 truncate text-left flex-1">{e.title}</span>
                 <span
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-lg shrink-0 ml-2"
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-lg shrink-0"
                   style={{ background: cat.color + "22" }}
                   title={cat.label}
                 >

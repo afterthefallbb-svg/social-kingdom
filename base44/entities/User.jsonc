@@ -26,6 +26,10 @@
       "type": "string",
       "title": "Cover Url"
     },
+    "background_photo": {
+      "type": "string",
+      "title": "Background Photo"
+    },
     "traits": {
       "type": "array",
       "items": {

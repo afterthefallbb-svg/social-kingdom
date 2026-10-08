@@ -10,7 +10,7 @@ const FB = "#1877f2";
 
 export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMessages }) {
   const navigate = useNavigate();
-  const [uploading, setUploading] = useState(null); // 'avatar' | 'cover' | null
+  const [uploading, setUploading] = useState(null); // 'avatar' | 'cover' | 'background' | null
 
   const name = user?.full_name || user?.friend_name || "CliQ Member";
   const initial = (name || "?").charAt(0).toUpperCase();
@@ -18,13 +18,14 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
   const aboutPath = isMe ? "/profile/about" : `/profile/${user?.id}/about`;
 
   async function handleUploaded(url) {
-    const field = uploading === "avatar" ? "avatar_url" : "cover_url";
+    const fieldMap = { avatar: "avatar_url", cover: "cover_url", background: "background_photo" };
+    const labelMap = { avatar: "Profile", cover: "Cover", background: "Background" };
     const which = uploading;
     setUploading(null);
     try {
-      const updated = await base44.auth.updateMe({ [field]: url });
+      const updated = await base44.auth.updateMe({ [fieldMap[which]]: url });
       onUserUpdated?.(updated);
-      toast({ title: `${which === "avatar" ? "Profile" : "Cover"} photo updated` });
+      toast({ title: `${labelMap[which]} photo updated` });
     } catch (e) {
       toast({ title: "Could not save", description: String(e.message || e) });
     }
@@ -107,12 +108,20 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
           >
             <MessageCircle size={15} /> Messages
           </button>
+          <button
+            onClick={() => setUploading("background")}
+            className="w-9 h-9 shrink-0 rounded-lg border flex items-center justify-center"
+            style={{ borderColor: FB, color: FB }}
+            aria-label="Upload background photo"
+          >
+            <Camera size={16} />
+          </button>
         </div>
       )}
 
       {uploading && (
         <PhotoUpload
-          label={uploading === "avatar" ? "Profile Photo" : "Cover Photo"}
+          label={uploading === "avatar" ? "Profile Photo" : uploading === "cover" ? "Cover Photo" : "Background Photo"}
           onUploaded={handleUploaded}
           onClose={() => setUploading(null)}
         />

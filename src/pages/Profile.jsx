@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { Image } from "@/components/ui/image";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import EventsSection from "@/components/profile/EventsSection";
 import EventsAttendedSection from "@/components/profile/EventsAttendedSection";
@@ -32,8 +33,6 @@ export default function Profile() {
       if (viewingMe) {
         setUser(current);
       } else {
-        // The User entity can't be read by id, so fall back to the
-        // denormalized info stored on a Friendship record if available.
         let u = null;
         try {
           u = await base44.entities.User.get(targetId);
@@ -87,9 +86,20 @@ export default function Profile() {
     .filter((e) => e.start_time && new Date(e.start_time) < now)
     .sort((a, b) => new Date(b.start_time) - new Date(a.start_time));
 
+  const bg = user?.background_photo;
+
   return (
-    <div className="min-h-screen bg-gray-100 pb-28">
-      <div className="p-3 pt-4 space-y-3 max-w-2xl mx-auto">
+    <div className="min-h-screen relative pb-28">
+      {/* Fixed full-screen background photo — stays in place while content scrolls */}
+      <div className="fixed inset-0 z-0">
+        {bg ? (
+          <Image src={bg} fittingType="fill" className="w-full h-full" />
+        ) : (
+          <div className="w-full h-full" style={{ background: "linear-gradient(135deg,#1877f2,#42a5f5)" }} />
+        )}
+      </div>
+
+      <div className="relative z-10 p-3 pt-4 space-y-3 max-w-2xl mx-auto">
         <ProfileHeader
           user={user}
           isMe={isMe}
@@ -98,7 +108,7 @@ export default function Profile() {
           onMessages={() => navigate("/messages")}
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <div className="space-y-3">
             <EventsSection events={upcoming} onSelect={(e) => navigate(`/event/${e.id}`)} />
             <EventsAttendedSection events={past} onSelect={(e) => navigate(`/event/${e.id}`)} />
@@ -111,7 +121,11 @@ export default function Profile() {
       </div>
 
       {editing && (
-        <EditProfileDialog me={me} onClose={() => setEditing(false)} onSaved={(u) => { setMe(u); setUser(u); }} />
+        <EditProfileDialog
+          me={me}
+          onClose={() => setEditing(false)}
+          onSaved={(u) => { setMe(u); setUser(u); }}
+        />
       )}
     </div>
   );

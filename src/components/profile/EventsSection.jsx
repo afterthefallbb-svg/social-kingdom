@@ -8,7 +8,7 @@ export default function EventsSection({ events, onSelect }) {
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-4">
+    <div className="p-4" style={{ textShadow: "0 1px 4px rgba(255,255,255,0.95)" }}>
       <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center justify-between">
         <span className="font-bold text-gray-900 flex items-center gap-2">
           <span

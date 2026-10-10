@@ -18,6 +18,8 @@ import ClickDetail from '@/pages/ClickDetail';
 import Messages from '@/pages/Messages';
 import SocialHub from '@/pages/SocialHub';
 import CategoryBrowse from '@/pages/CategoryBrowse';
+import Support from '@/pages/Support';
+import ContactUs from '@/pages/ContactUs';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -58,6 +60,8 @@ const AuthenticatedApp = () => {
         <Route path="/messages" element={<Messages />} />
         <Route path="/browse" element={<SocialHub />} />
         <Route path="/browse/:category" element={<CategoryBrowse />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/contact" element={<ContactUs />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

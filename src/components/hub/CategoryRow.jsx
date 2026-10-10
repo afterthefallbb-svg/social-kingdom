@@ -14,7 +14,7 @@ export default function CategoryRow({ title, onTitle, items = [], emptyText = "N
       {items.length === 0 ? (
         <p className="text-xs text-gray-400">{emptyText}</p>
       ) : (
-        <div className="flex gap-3 overflow-x-auto no-scrollbar justify-center pb-1">
+        <div className="flex gap-3 overflow-x-auto no-scrollbar justify-start pb-1">
           {items.map((it) => (
             <button
               key={it.id}

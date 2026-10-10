@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
@@ -121,25 +121,27 @@ export default function SocialHub() {
 
   return (
     <div className="min-h-screen bg-white pb-28">
-      {/* Header: profile photo + name (tap → your profile), search box */}
+      {/* Header: profile photo with name under it, search bar fills the rest */}
       <div className="flex items-center gap-3 px-4 pt-6">
-        <button onClick={() => navigate("/profile")} className="shrink-0">
-          <span className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center text-xl bg-gray-100">
-            {me?.avatar_url ? (
-              <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
-            ) : (
-              "🙂"
-            )}
-          </span>
-        </button>
-        <button onClick={() => navigate("/profile")} className="text-left">
-          <span className="font-bold text-gray-900 text-sm block">
-            {me?.full_name || me?.email || "You"}
-          </span>
-        </button>
+        <div className="flex flex-col items-center gap-1 shrink-0 w-16">
+          <button onClick={() => navigate("/profile")}>
+            <span className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center text-xl bg-gray-100">
+              {me?.avatar_url ? (
+                <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
+              ) : (
+                "🙂"
+              )}
+            </span>
+          </button>
+          <button onClick={() => navigate("/profile")} className="w-full">
+            <span className="text-[11px] font-semibold text-gray-700 truncate w-full block text-center">
+              {me?.full_name || me?.email || "You"}
+            </span>
+          </button>
+        </div>
         <button
           onClick={() => navigate("/")}
-          className="flex-1 flex items-center bg-gray-100 rounded-full px-3 py-2 ml-2"
+          className="flex-1 flex items-center bg-gray-100 rounded-full px-3 h-12"
         >
           <Search size={16} className="text-gray-400 shrink-0" />
           <span className="ml-2 text-sm text-gray-400">search</span>
@@ -186,6 +188,12 @@ export default function SocialHub() {
           items={clickItems}
           emptyText="No CliQs yet."
         />
+      </div>
+
+      {/* Footer links */}
+      <div className="mt-10 flex justify-center gap-8 pb-4 text-xs">
+        <Link to="/support" className="font-medium" style={{ color: FB }}>Support</Link>
+        <Link to="/contact" className="font-medium" style={{ color: FB }}>Contact Us</Link>
       </div>
     </div>
   );

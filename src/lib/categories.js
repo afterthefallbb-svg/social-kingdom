@@ -10,7 +10,9 @@ export const CATEGORIES = [
   { id: "activities", label: "Activities", emoji: "🎨", color: "#06b6d4" },
   { id: "parties", label: "Parties", emoji: "🎉", color: "#d946ef" },
   { id: "religious", label: "Religious", emoji: "⛪", color: "#f59e0b" },
-  { id: "family", label: "Family", emoji: "👨‍👩‍👧", color: "#10b981" }
+  { id: "family", label: "Family", emoji: "👨‍👩‍👧", color: "#10b981" },
+  { id: "artists", label: "Artists", emoji: "🎤", color: "#9333ea" },
+  { id: "local_sale", label: "Local Sale", emoji: "🏷️", color: "#0ea5e9" }
 ];
 
 export const CATEGORY_MAP = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]));

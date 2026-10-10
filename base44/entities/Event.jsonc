@@ -24,7 +24,9 @@
         "activities",
         "parties",
         "religious",
-        "family"
+        "family",
+        "artists",
+        "local_sale"
       ],
       "default": "sports",
       "title": "Category"

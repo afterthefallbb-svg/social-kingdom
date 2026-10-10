@@ -12,6 +12,7 @@ export default function SocialHub() {
   const navigate = useNavigate();
   const [me, setMe] = useState(null);
   const [events, setEvents] = useState([]);
+  const [artists, setArtists] = useState([]);
   const [videos, setVideos] = useState([]);
   const [clicks, setClicks] = useState([]);
 
@@ -52,6 +53,17 @@ export default function SocialHub() {
         setEvents([]);
       }
 
+      // Artists — local musician events
+      try {
+        const res = await base44.entities.Event.filter(
+          { category: "artists", visibility: { $ne: "personal" } },
+          { sort: "-created_date", limit: 10 }
+        );
+        if (active) setArtists(res.items);
+      } catch {
+        setArtists([]);
+      }
+
       // Videos — recent video media on the platform
       try {
         const res = await base44.entities.EventPhoto.filter(
@@ -76,13 +88,15 @@ export default function SocialHub() {
     };
   }, []);
 
-  const eventItems = events.map((e) => ({
+  const mapEvent = (e) => ({
     id: e.id,
     label: e.title,
     image: e.image_url,
     emoji: getCategory(e.category).emoji,
     onClick: () => navigate(`/event/${e.id}`),
-  }));
+  });
+  const eventItems = events.map(mapEvent);
+  const artistItems = artists.map(mapEvent);
   const videoItems = videos.map((v) => ({
     id: v.id,
     label: v.user_name,
@@ -132,16 +146,14 @@ export default function SocialHub() {
         </button>
       </div>
 
-      {/* Top text links */}
-      <div
-        className="flex gap-4 px-4 mt-3 overflow-x-auto no-scrollbar text-sm font-medium"
-        style={{ color: FB }}
-      >
+      {/* Top text links as blue bubbles */}
+      <div className="flex gap-2 px-4 mt-3 overflow-x-auto no-scrollbar">
         {topLinks.map((l) => (
           <button
             key={l.label}
             onClick={() => navigate(l.to)}
-            className="shrink-0 whitespace-nowrap hover:underline"
+            className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
+            style={{ background: FB, color: "#e8edf3" }}
           >
             {l.label}
           </button>
@@ -165,8 +177,8 @@ export default function SocialHub() {
         <CategoryRow
           title="Artist's"
           onTitle={() => navigate("/browse/artists")}
-          items={[]}
-          emptyText="Artist features coming soon."
+          items={artistItems}
+          emptyText="No local artists yet."
         />
         <CategoryRow
           title="Cliq's"

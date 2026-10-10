@@ -1,19 +1,20 @@
 import React from "react";
 import { Image } from "@/components/ui/image";
 
-// A single browse category row: heading with an underline (clickable to open
-// the full category page) and a horizontally scrollable strip of circles.
+const FB = "#1877f2";
+
+// A single browse category row: centered blue heading (no underline, clickable
+// to open the full category page) and a horizontally scrollable strip of circles.
 export default function CategoryRow({ title, onTitle, items = [], emptyText = "Nothing here yet." }) {
   return (
-    <div className="px-4">
-      <button onClick={onTitle} className="mb-1.5">
-        <span className="font-bold text-gray-900 text-base">{title}</span>
+    <div className="px-4 text-center">
+      <button onClick={onTitle} className="mb-3">
+        <span className="font-bold text-base" style={{ color: FB }}>{title}</span>
       </button>
-      <div className="h-[3px] w-12 bg-gray-900 mb-3 rounded-full" />
       {items.length === 0 ? (
         <p className="text-xs text-gray-400">{emptyText}</p>
       ) : (
-        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+        <div className="flex gap-3 overflow-x-auto no-scrollbar justify-center pb-1">
           {items.map((it) => (
             <button
               key={it.id}

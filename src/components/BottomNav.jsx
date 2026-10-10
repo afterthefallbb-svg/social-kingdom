@@ -10,7 +10,7 @@ export default function BottomNav() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-[600] flex justify-around items-center pb-6 pt-2 pointer-events-none">
       {/* Left — person silhouette in a circular badge */}
-      <NavLink to="/profile" className="pointer-events-auto" aria-label="Profile">
+      <NavLink to="/browse" className="pointer-events-auto" aria-label="Browse">
         {({ isActive }) => (
           <span
             className={`${BOX} rounded-full border-2`}

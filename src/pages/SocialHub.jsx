@@ -113,10 +113,10 @@ export default function SocialHub() {
   }));
 
   const topLinks = [
-    { label: "Music", to: "/browse/music" },
-    { label: "Videos", to: "/browse/videos" },
-    { label: "Shop-online", to: "/browse/shop" },
-    { label: "Local Sale", to: "/browse/local-sale" },
+    { label: "Notifications", to: "/notifications" },
+    { label: "Groups", to: "/groups" },
+    { label: "Buy/Sell", to: "/buy-sell" },
+    { label: "Music", to: "/music" },
   ];
 
   return (

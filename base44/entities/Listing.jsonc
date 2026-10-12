@@ -1,0 +1,97 @@
+{
+  "name": "Listing",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "price": {
+      "type": "number",
+      "title": "Price"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "electronics",
+        "clothing",
+        "furniture",
+        "vehicles",
+        "home_garden",
+        "sports",
+        "toys",
+        "baby_kids",
+        "tools",
+        "musical_instruments",
+        "health_beauty",
+        "books_media",
+        "pet_supplies",
+        "jewelry",
+        "appliances",
+        "real_estate",
+        "free"
+      ],
+      "default": "electronics",
+      "title": "Category"
+    },
+    "condition": {
+      "type": "string",
+      "enum": [
+        "new",
+        "like_new",
+        "good",
+        "fair"
+      ],
+      "default": "good",
+      "title": "Condition"
+    },
+    "image_url": {
+      "type": "string",
+      "title": "Image Url"
+    },
+    "image_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Image Urls"
+    },
+    "video_url": {
+      "type": "string",
+      "title": "Video Url"
+    },
+    "latitude": {
+      "type": "number",
+      "title": "Latitude"
+    },
+    "longitude": {
+      "type": "number",
+      "title": "Longitude"
+    },
+    "location_label": {
+      "type": "string",
+      "title": "Location Label"
+    },
+    "seller_id": {
+      "type": "string",
+      "title": "Seller Id"
+    },
+    "seller_name": {
+      "type": "string",
+      "title": "Seller Name"
+    },
+    "seller_avatar": {
+      "type": "string",
+      "title": "Seller Avatar"
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "price"
+  ]
+}

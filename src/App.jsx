@@ -20,6 +20,12 @@ import SocialHub from '@/pages/SocialHub';
 import CategoryBrowse from '@/pages/CategoryBrowse';
 import Support from '@/pages/Support';
 import ContactUs from '@/pages/ContactUs';
+import Notifications from '@/pages/Notifications';
+import Groups from '@/pages/Groups';
+import Music from '@/pages/Music';
+import BuySell from '@/pages/BuySell';
+import CreateListing from '@/pages/CreateListing';
+import ListingDetail from '@/pages/ListingDetail';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -62,6 +68,12 @@ const AuthenticatedApp = () => {
         <Route path="/browse/:category" element={<CategoryBrowse />} />
         <Route path="/support" element={<Support />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/groups" element={<Groups />} />
+        <Route path="/music" element={<Music />} />
+        <Route path="/buy-sell" element={<BuySell />} />
+        <Route path="/sell" element={<CreateListing />} />
+        <Route path="/listing/:id" element={<ListingDetail />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

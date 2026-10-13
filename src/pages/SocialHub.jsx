@@ -162,7 +162,7 @@ export default function SocialHub() {
       </div>
 
       {/* Projects | Planner toggles */}
-      <div className="flex justify-center gap-1 px-4 pt-2">
+      <div className="flex justify-center gap-1 px-4 pt-2.5">
         {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
           <button
             key={t.l}

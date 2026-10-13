@@ -99,17 +99,6 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
     <div className="relative inline-flex items-center gap-1.5" ref={ref}>
       <button
         type="button"
-        onClick={() => setBreakdown(true)}
-        className={`inline-flex items-center gap-1.5 ${txt} font-bold text-gray-800`}
-        title="View reactions"
-      >
-        <span>👍</span>
-        <span>{total}</span>
-        <span>👑</span>
-      </button>
-
-      <button
-        type="button"
         onClick={() => setMenuOpen((v) => !v)}
         className={`inline-flex items-center gap-1 rounded-full ${pad} bg-gray-100 border border-gray-200 ${txt} font-semibold text-gray-700`}
       >
@@ -120,6 +109,16 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
         ) : (
           <>👍 Like</>
         )}
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setBreakdown(true)}
+        className={`inline-flex items-center gap-1.5 ${txt} font-bold text-gray-800`}
+        title="View reactions"
+      >
+        <span>{total}</span>
+        <span>👑</span>
       </button>
 
       {menuOpen && (

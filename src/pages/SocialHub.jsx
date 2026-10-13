@@ -150,9 +150,9 @@ export default function SocialHub() {
 
       {/* Header: profile photo with first + last name stacked under it, search bar fills the rest */}
       <div className="flex items-end gap-3 px-4 pt-3">
-        <div className="flex flex-col items-center gap-1 shrink-0 w-24 pb-1">
+        <div className="flex flex-col items-center gap-1 shrink-0 w-28 pb-1">
           <button onClick={() => navigate("/profile")}>
-            <span className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center text-3xl bg-gray-100">
+            <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
               {me?.avatar_url ? (
                 <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
               ) : (
@@ -168,8 +168,8 @@ export default function SocialHub() {
               const last = parts.slice(1).join(" ");
               return (
                 <span className="block leading-tight">
-                  <span className="block text-[13px] font-semibold text-gray-800 break-words">{first}</span>
-                  {last && <span className="block text-[13px] font-semibold text-gray-700 break-words">{last}</span>}
+                  <span className="block text-[15px] font-semibold text-gray-800 break-words">{first}</span>
+                  {last && <span className="block text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
                 </span>
               );
             })()}
@@ -177,7 +177,7 @@ export default function SocialHub() {
         </div>
         <button
           onClick={() => navigate("/")}
-          className="flex-1 flex items-center bg-gray-100 rounded-full px-3 h-12 mb-7"
+          className="flex-1 flex items-center bg-gray-100 rounded-full px-3 h-12 mb-11"
         >
           <Search size={16} className="text-gray-400 shrink-0" />
           <span className="ml-2 text-sm text-gray-400">search</span>

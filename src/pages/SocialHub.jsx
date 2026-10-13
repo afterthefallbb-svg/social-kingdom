@@ -135,7 +135,7 @@ export default function SocialHub() {
   return (
     <div className="min-h-screen bg-white pb-36">
       {/* Header: profile photo with first + last name to the right */}
-      <div className="flex items-end gap-3 px-4 pt-5">
+      <div className="flex items-end gap-1 px-4 pt-5">
         <button onClick={() => navigate("/profile")}>
           <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
             {me?.avatar_url ? (
@@ -162,7 +162,7 @@ export default function SocialHub() {
       </div>
 
       {/* Projects | Planner toggles */}
-      <div className="flex justify-center gap-1 px-4 pt-3">
+      <div className="flex justify-center gap-1 px-4 pt-2">
         {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
           <button
             key={t.l}

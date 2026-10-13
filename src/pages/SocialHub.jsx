@@ -133,7 +133,7 @@ export default function SocialHub() {
   ];
 
   return (
-    <div className="min-h-screen bg-white pb-28">
+    <div className="min-h-screen bg-white pb-36">
       {/* Header: profile photo with first + last name to the right */}
       <div className="flex items-center gap-3 px-4 pt-5">
         <button onClick={() => navigate("/profile")}>
@@ -201,7 +201,7 @@ export default function SocialHub() {
       </div>
 
       {/* Category rows — Stream first, then Events */}
-      <div className="mt-3 space-y-2">
+      <div className="mt-4 space-y-3">
         <CategoryRow
           title="Stream"
           onTitle={() => navigate("/stream")}

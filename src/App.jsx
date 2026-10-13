@@ -30,6 +30,7 @@ import GroupList from '@/pages/GroupList';
 import CreateGroup from '@/pages/CreateGroup';
 import Projects from '@/pages/Projects';
 import Planner from '@/pages/Planner';
+import Stream from '@/pages/Stream';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -78,6 +79,7 @@ const AuthenticatedApp = () => {
         <Route path="/create-group" element={<CreateGroup />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/planner" element={<Planner />} />
+        <Route path="/stream" element={<Stream />} />
         <Route path="/music" element={<Music />} />
         <Route path="/buy-sell" element={<BuySell />} />
         <Route path="/sell" element={<CreateListing />} />

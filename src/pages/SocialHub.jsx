@@ -134,17 +134,18 @@ export default function SocialHub() {
 
   return (
     <div className="min-h-screen bg-white pb-28">
-      {/* Projects | Planner toggles */}
+      {/* Projects | Planner toggles — bubbles hug the words, words stay centered */}
       <div className="flex gap-2 px-4 pt-5">
         {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
-          <button
-            key={t.l}
-            onClick={() => navigate(t.to)}
-            className="flex-1 rounded-full py-0.5 text-lg font-semibold text-white"
-            style={{ background: FB }}
-          >
-            {t.l}
-          </button>
+          <div key={t.l} className="flex-1 flex justify-center">
+            <button
+              onClick={() => navigate(t.to)}
+              className="rounded-full px-4 py-0.5 text-lg font-semibold text-white"
+              style={{ background: FB }}
+            >
+              {t.l}
+            </button>
+          </div>
         ))}
       </div>
 
@@ -202,7 +203,7 @@ export default function SocialHub() {
       <div className="mt-6 space-y-5">
         <CategoryRow
           title="Stream"
-          onTitle={() => navigate("/browse/videos")}
+          onTitle={() => navigate("/stream")}
           items={videoItemsP}
           emptyText="No videos yet."
         />

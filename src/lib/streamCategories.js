@@ -1,0 +1,72 @@
+// Streaming categories (from the whiteboard list) with sample bubble tiles.
+const u = (id) => `https://images.unsplash.com/photo-${id}?w=300&h=300&fit=crop&q=80`;
+
+// Reusable pool of known-good photo ids so every row looks populated.
+const POOL = [
+  "1470229722913-7c0e2dbbafd3",
+  "1514525253161-7a46d19cd819",
+  "1516450360452-9312f5e86fc7",
+  "1493225457124-a3eb161ffa5f",
+  "1517649763962-0c623066013b",
+  "1461896836934-ffe607ba8211",
+  "1530549387789-4c1017266635",
+  "1504711434969-e33886168f5c",
+  "1504674900247-0877df9cc836",
+  "1492144534655-ae79c964c9d7",
+  "1546519638-68e109498ffc",
+  "1488459716781-31db52582fe9",
+  "1511671782779-c97d327a1d4",
+  "1555939594-58d7cb561ad1",
+  "1492684223066-81342ee5ff30",
+  "1540575467063-178a50c2df87",
+  "1551632811-561732d1e306",
+  "1574629810360-7efbbe195018",
+  "1414235077428-338989a2e8c0",
+  "1533174072545-7a4b6ad7a6c3",
+  "1460661419201-fd4cecdf8a8b",
+  "1513364776144-60967b0f800f",
+  "1541701494587-cb58502866ab",
+  "1510915361894-db8b60106cb1",
+  "1511379938547-c1f69419868d",
+  "1498038432885-c6f3f1b912ee",
+  "1542038784456-1ea8e935640e",
+  "1501386761578-eac5c94b800a",
+  "1529156069898-49953e39b3ac",
+  "1511632765486-a01980e01a18",
+  "1522202176988-66273c2fd55f",
+  "1517457373958-b7bdd4587205",
+  "1515187029135-18ee286d815b",
+  "1556761175-b413da4baf72",
+  "1478131143081-80f7f84ca84d",
+  "1506905925346-21bda4d32df4",
+  "1503454537195-1dcabb73ffb9",
+  "1494976388531-d1058494cdd8",
+];
+
+const CATS = [
+  { name: "Life Hacks", emoji: "💡", labels: ["5-Min Fix", "Closet Hack", "Kitchen Tip", "Phone Trick", "Car Hack", "Budget Tip"] },
+  { name: "Talent", emoji: "🎤", labels: ["Singing", "Dance Move", "Beat Box", "Spoken Word", "Sketch Art", "Cover Song"] },
+  { name: "Foodies", emoji: "🍜", labels: ["Street Tacos", "Pasta Pull", "Brunch", "Late Bite", "Bake Off", "Coffee Art"] },
+  { name: "music clips", emoji: "🎵", labels: ["Live Set", "Studio Jam", "Acoustic", "Beat Drop", "Vinyl Spin", "Cover Track"] },
+  { name: "Fashion/Thrift", emoji: "👗", labels: ["Thrift Haul", "Outfit Fit", "Style Tip", "Closet Tour", "Vintage Find", "Lookbook"] },
+  { name: "Fitness", emoji: "💪", labels: ["HIIT", "Yoga Flow", "Lift Day", "Run Club", "Stretch", "Form Check"] },
+  { name: "Comedy/Laughs", emoji: "😂", labels: ["Skit", "One Liner", "Prank", "Crowd Work", "Story Time", "Hot Take"] },
+  { name: "Self-care/Health", emoji: "🧖", labels: ["Wind Down", "Skin Routine", "Breath Work", "Journal", "Stretch Break", "Reset Day"] },
+  { name: "Paranormal", emoji: "👻", labels: ["Ghost Hunt", "UFO Watch", "True Story", "Night Walk", "Old House", "Weird Find"] },
+  { name: "Tech/Science", emoji: "🔬", labels: ["Gadget Test", "Space Watch", "DIY Build", "Code Tip", "Lab Demo", "Future Tech"] },
+  { name: "Pets/animals", emoji: "🐾", labels: ["Pup Play", "Kitten Cuddle", "Trail Dog", "Bird Watch", "Farm Life", "Aquarium"] },
+  { name: "Transformations", emoji: "✨", labels: ["Room Flip", "Glow Up", "Before/After", "Garden Revamp", "Renovation", "Style Change"] },
+  { name: "make up", emoji: "💄", labels: ["Soft Glam", "No-Makeup", "Bold Lip", "Smokey Eye", "Festival Look", "Tutorial"] },
+  { name: "Qoutes/Affirmations", emoji: "💭", labels: ["Daily Word", "Mindset", "Gratitude", "Reflection", "Motivation", "Calm"] },
+  { name: "all other", emoji: "📦", labels: ["Random", "Try This", "Watch This", "Found This", "Quick Clip", "Mashup"] },
+];
+
+export const STREAM_CATEGORIES = CATS.map((c, i) => ({
+  name: c.name,
+  emoji: c.emoji,
+  items: c.labels.map((label, j) => ({
+    id: `${c.name}-${j}`,
+    label,
+    image: u(POOL[(i * 3 + j) % POOL.length]),
+  })),
+}));

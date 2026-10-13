@@ -3,7 +3,7 @@ import React from "react";
 // Narrow left-side list of event names floating over the map.
 export default function EventSideList({ events = [], activeId, onSelect }) {
   return (
-    <div className="absolute left-3 z-[500] max-w-[58%]" style={{ top: 215 }}>
+    <div className="absolute left-3 z-[500] max-w-[58%]" style={{ top: 125 }}>
       <h3
         className="text-[13px] font-bold"
         style={{

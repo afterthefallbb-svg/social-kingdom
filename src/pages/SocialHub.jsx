@@ -134,7 +134,34 @@ export default function SocialHub() {
 
   return (
     <div className="min-h-screen bg-white pb-28">
-      {/* Projects | Planner toggles — near full width, trimmed a decent amount, closer together */}
+      {/* Header: profile photo with first + last name to the right */}
+      <div className="flex items-center gap-3 px-4 pt-5">
+        <button onClick={() => navigate("/profile")}>
+          <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
+            {me?.avatar_url ? (
+              <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
+            ) : (
+              "🙂"
+            )}
+          </span>
+        </button>
+        <button onClick={() => navigate("/profile")} className="text-left">
+          {(() => {
+            const full = me?.full_name || me?.email || "You";
+            const parts = full.split(" ");
+            const first = parts[0];
+            const last = parts.slice(1).join(" ");
+            return (
+              <span className="block leading-tight">
+                <span className="block text-[15px] font-semibold text-gray-800 break-words">{first}</span>
+                {last && <span className="block text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
+              </span>
+            );
+          })()}
+        </button>
+      </div>
+
+      {/* Projects | Planner toggles */}
       <div className="flex justify-center gap-1 px-4 pt-3">
         {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
           <button
@@ -148,44 +175,8 @@ export default function SocialHub() {
         ))}
       </div>
 
-      {/* Header: profile photo with first + last name stacked under it, search bar fills the rest */}
-      <div className="flex items-end gap-3 px-4 pt-3">
-        <div className="flex flex-col items-center gap-1 shrink-0 w-28 pb-1">
-          <button onClick={() => navigate("/profile")}>
-            <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
-              {me?.avatar_url ? (
-                <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
-              ) : (
-                "🙂"
-              )}
-            </span>
-          </button>
-          <button onClick={() => navigate("/profile")} className="w-full text-center">
-            {(() => {
-              const full = me?.full_name || me?.email || "You";
-              const parts = full.split(" ");
-              const first = parts[0];
-              const last = parts.slice(1).join(" ");
-              return (
-                <span className="block leading-tight">
-                  <span className="block text-[15px] font-semibold text-gray-800 break-words">{first}</span>
-                  {last && <span className="block text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
-                </span>
-              );
-            })()}
-          </button>
-        </div>
-        <button
-          onClick={() => navigate("/")}
-          className="flex-1 flex items-center bg-gray-100 rounded-full px-3 h-12 mb-11"
-        >
-          <Search size={16} className="text-gray-400 shrink-0" />
-          <span className="ml-2 text-sm text-gray-400">search</span>
-        </button>
-      </div>
-
-      {/* Top text links as blue bubbles */}
-      <div className="flex gap-2 px-4 mt-3 overflow-x-auto no-scrollbar">
+      {/* Top text links as blue bubbles — four whole bubbles, no protruding sliver */}
+      <div className="flex flex-wrap justify-center gap-2 px-4 mt-3">
         {topLinks.map((l) => (
           <button
             key={l.label}
@@ -196,6 +187,17 @@ export default function SocialHub() {
             {l.label}
           </button>
         ))}
+      </div>
+
+      {/* Search bar — sits just above the Stream row */}
+      <div className="px-4 mt-3">
+        <button
+          onClick={() => navigate("/")}
+          className="w-full flex items-center bg-gray-100 rounded-full px-3 h-12"
+        >
+          <Search size={16} className="text-gray-400 shrink-0" />
+          <span className="ml-2 text-sm text-gray-400">search</span>
+        </button>
       </div>
 
       {/* Category rows — Stream first, then Events */}

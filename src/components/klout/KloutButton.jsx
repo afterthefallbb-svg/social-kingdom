@@ -100,10 +100,12 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
       <button
         type="button"
         onClick={() => setBreakdown(true)}
-        className={`inline-flex items-center gap-1 rounded-full ${pad} bg-amber-50 border border-amber-200 ${txt} font-semibold text-amber-700`}
-        title="View Klout"
+        className={`inline-flex items-center gap-1.5 ${txt} font-bold text-gray-800`}
+        title="View reactions"
       >
-        👑 <span>{total}</span>
+        <span>👍</span>
+        <span>{total}</span>
+        <span>👑</span>
       </button>
 
       <button
@@ -116,7 +118,7 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
             {myReaction.emoji} {myReaction.label}
           </>
         ) : (
-          <>👍 Klout</>
+          <>👍 Like</>
         )}
       </button>
 

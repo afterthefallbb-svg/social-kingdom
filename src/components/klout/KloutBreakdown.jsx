@@ -9,6 +9,7 @@ const REACTIONS = [
   { id: "horns", emoji: "🤘", label: "Rock on" },
   { id: "crown", emoji: "👑", label: "Crowns" },
 ];
+const reactionEmoji = (rid) => (REACTIONS.find((r) => r.id === rid) || {}).emoji || "👍";
 
 export default function KloutBreakdown({ target_type, target_id, counts, total, onClose }) {
   const navigate = useNavigate();
@@ -32,38 +33,44 @@ export default function KloutBreakdown({ target_type, target_id, counts, total, 
     };
   }, [target_id, target_type]);
 
+  const listTitle = target_type === "profile" ? "People who like me" : "People who like us";
+
   return (
     <div className="fixed inset-0 z-[800] flex items-end sm:items-center justify-center bg-black/40" onClick={onClose}>
       <div
-        className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[80vh] flex flex-col"
+        className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[85vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-4 border-b">
-          <div>
-            <h3 className="font-bold text-gray-900 flex items-center gap-1.5">👑 Klout</h3>
-            <p className="text-xs text-gray-400">
-              {total} total from {voters.length} {voters.length === 1 ? "person" : "people"}
-            </p>
+          <div className="inline-flex items-center gap-1.5 text-lg font-bold text-gray-900">
+            <span>👍</span>
+            <span>{total}</span>
+            <span>👑</span>
           </div>
           <button onClick={onClose} className="p-1" aria-label="Close">
             <X size={20} />
           </button>
         </div>
 
-        <div className="flex justify-around py-3 border-b">
+        {/* Stacked reaction counts — top of the page, going downwards */}
+        <div className="px-4 py-3 space-y-2 border-b">
           {REACTIONS.map((r) => (
-            <div key={r.id} className="text-center">
-              <div className="text-2xl">{r.emoji}</div>
-              <div className="text-lg font-bold text-gray-900">{counts[r.id] || 0}</div>
-              <div className="text-[11px] text-gray-400">{r.label}</div>
+            <div key={r.id} className="flex items-center gap-3">
+              <span className="text-xl w-7 text-center">{r.emoji}</span>
+              <span className="text-lg font-bold text-gray-900 w-8">{counts[r.id] || 0}</span>
+              <span className="text-sm text-gray-500">{r.label}</span>
             </div>
           ))}
         </div>
 
-        <div className="overflow-y-auto p-3 space-y-1">
+        <div className="px-4 pt-3 pb-1">
+          <h4 className="text-sm font-bold text-gray-900">{listTitle}</h4>
+        </div>
+
+        <div className="overflow-y-auto px-2 pb-3 space-y-1">
           {loading && <p className="text-sm text-gray-400 text-center py-4">Loading…</p>}
           {!loading && voters.length === 0 && (
-            <p className="text-sm text-gray-400 text-center py-4">No Klout yet. Be the first to give some!</p>
+            <p className="text-sm text-gray-400 text-center py-4">No reactions yet. Be the first!</p>
           )}
           {voters.map((v) => (
             <button
@@ -81,7 +88,7 @@ export default function KloutBreakdown({ target_type, target_id, counts, total, 
               <span className="flex-1 text-sm font-medium text-gray-800 truncate">
                 {v.user_name || "Someone"}
               </span>
-              <span className="text-lg">{REACTIONS.find((r) => r.id === v.reaction)?.emoji}</span>
+              <span className="text-lg">{reactionEmoji(v.reaction)}</span>
             </button>
           ))}
         </div>

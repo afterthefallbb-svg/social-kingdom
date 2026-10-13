@@ -9,8 +9,8 @@ const FB = "#1877f2";
 export default function CategoryRow({ title, onTitle, items = [], emptyText = "Nothing here yet." }) {
   return (
     <div className="px-4 text-center">
-      <button onClick={onTitle} className="mb-2">
-        <span className="font-bold text-lg" style={{ color: FB }}>{title}</span>
+      <button onClick={onTitle} className="block mx-auto mb-1 leading-tight">
+        <span className="font-bold text-lg leading-tight" style={{ color: FB }}>{title}</span>
       </button>
       {items.length === 0 ? (
         <p className="text-sm text-gray-400">{emptyText}</p>
@@ -35,7 +35,7 @@ export default function CategoryRow({ title, onTitle, items = [], emptyText = "N
                 )}
               </span>
               {it.label && (
-                <span className="text-sm text-gray-700 text-center leading-tight break-words w-full">
+                <span className="text-sm text-gray-700 text-center leading-tight truncate w-full">
                   {it.label}
                 </span>
               )}

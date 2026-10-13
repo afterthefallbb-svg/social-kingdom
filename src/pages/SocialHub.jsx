@@ -201,7 +201,7 @@ export default function SocialHub() {
       </div>
 
       {/* Category rows — Stream first, then Events */}
-      <div className="mt-3 space-y-2">
+      <div className="mt-2 space-y-1">
         <CategoryRow
           title="Stream"
           onTitle={() => navigate("/stream")}

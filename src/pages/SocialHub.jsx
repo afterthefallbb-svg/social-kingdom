@@ -135,12 +135,12 @@ export default function SocialHub() {
   return (
     <div className="min-h-screen bg-white pb-28">
       {/* Projects | Planner toggles — near full width, trimmed a decent amount, closer together */}
-      <div className="flex gap-1 px-4 pt-5">
+      <div className="flex justify-center gap-1 px-4 pt-3">
         {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
           <button
             key={t.l}
             onClick={() => navigate(t.to)}
-            className="flex-1 rounded-full py-0.5 mx-6 text-lg font-semibold text-white"
+            className="w-40 rounded-full py-1 text-lg font-semibold text-white"
             style={{ background: FB }}
           >
             {t.l}

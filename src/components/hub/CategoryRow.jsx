@@ -15,12 +15,12 @@ export default function CategoryRow({ title, onTitle, items = [], emptyText = "N
       {items.length === 0 ? (
         <p className="text-sm text-gray-400">{emptyText}</p>
       ) : (
-        <div className="flex gap-3 overflow-x-auto no-scrollbar justify-start pb-1">
+        <div className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory pb-1">
           {items.map((it) => (
             <button
               key={it.id}
               onClick={it.onClick}
-              className="flex flex-col items-center gap-1 shrink-0 w-20"
+              className="flex flex-col items-center gap-1 shrink-0 w-1/4 px-1.5 snap-start"
             >
               <span className="relative w-16 h-16 rounded-full overflow-hidden flex items-center justify-center text-2xl bg-gray-100">
                 {it.image ? (

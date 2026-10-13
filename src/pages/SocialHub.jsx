@@ -112,6 +112,35 @@ export default function SocialHub() {
     onClick: () => navigate(`/clicks/${c.id}`),
   }));
 
+  // Sample tiles pad each row so the hub looks alive before content exists.
+  const pad = (items, samples) => (items.length >= 4 ? items : [...items, ...samples].slice(0, 5));
+  const streamSamples = [
+    { id: "s1", label: "Live: Downtown", emoji: "🎥", onClick: () => navigate("/browse/videos") },
+    { id: "s2", label: "Concert Clip", emoji: "🎸", onClick: () => navigate("/browse/videos") },
+    { id: "s3", label: "Game Highlights", emoji: "🏆", onClick: () => navigate("/browse/videos") },
+    { id: "s4", label: "Local News", emoji: "📰", onClick: () => navigate("/browse/videos") },
+  ];
+  const eventSamples = [
+    { id: "e1", label: "Pickup Basketball", emoji: "🏀", onClick: () => navigate("/browse/events") },
+    { id: "e2", label: "Farmers Market", emoji: "🥕", onClick: () => navigate("/browse/events") },
+    { id: "e3", label: "Open Mic Night", emoji: "🎤", onClick: () => navigate("/browse/events") },
+    { id: "e4", label: "Sunday BBQ", emoji: "🍖", onClick: () => navigate("/browse/events") },
+  ];
+  const artistSamples = [
+    { id: "a1", label: "Indie Sessions", emoji: "🎹", onClick: () => navigate("/browse/artists") },
+    { id: "a2", label: "Street Art Walk", emoji: "🎨", onClick: () => navigate("/browse/artists") },
+    { id: "a3", label: "Local Bands", emoji: "🥁", onClick: () => navigate("/browse/artists") },
+  ];
+  const cliqSamples = [
+    { id: "c1", label: "Weekend Warriors", emoji: "💪", onClick: () => navigate("/browse/cliqs") },
+    { id: "c2", label: "Foodie Friends", emoji: "🍜", onClick: () => navigate("/browse/cliqs") },
+    { id: "c3", label: "Trail Crew", emoji: "🥾", onClick: () => navigate("/browse/cliqs") },
+  ];
+  const videoItemsP = pad(videoItems, streamSamples);
+  const eventItemsP = pad(eventItems, eventSamples);
+  const artistItemsP = pad(artistItems, artistSamples);
+  const clickItemsP = pad(clickItems, cliqSamples);
+
   const topLinks = [
     { label: "Notifications", to: "/notifications" },
     { label: "Groups", to: "/groups" },
@@ -162,30 +191,30 @@ export default function SocialHub() {
         ))}
       </div>
 
-      {/* Category rows */}
+      {/* Category rows — Stream first, then Events */}
       <div className="mt-6 space-y-5">
-        <CategoryRow
-          title="Events"
-          onTitle={() => navigate("/browse/events")}
-          items={eventItems}
-          emptyText="No events in your area yet."
-        />
         <CategoryRow
           title="Stream"
           onTitle={() => navigate("/browse/videos")}
-          items={videoItems}
+          items={videoItemsP}
           emptyText="No videos yet."
+        />
+        <CategoryRow
+          title="Events"
+          onTitle={() => navigate("/browse/events")}
+          items={eventItemsP}
+          emptyText="No events in your area yet."
         />
         <CategoryRow
           title="Artist's"
           onTitle={() => navigate("/browse/artists")}
-          items={artistItems}
+          items={artistItemsP}
           emptyText="No local artists yet."
         />
         <CategoryRow
           title="Cliq's"
           onTitle={() => navigate("/browse/cliqs")}
-          items={clickItems}
+          items={clickItemsP}
           emptyText="No CliQs yet."
         />
       </div>

@@ -5,9 +5,9 @@ import { Image } from "@/components/ui/image";
 import { X } from "lucide-react";
 
 const REACTIONS = [
-  { id: "thumbs", emoji: "👍", label: "Likes" },
-  { id: "horns", emoji: "🤘", label: "Rock on" },
-  { id: "crown", emoji: "👑", label: "Crowns" },
+  { id: "thumbs", emoji: "👍", label: "Like" },
+  { id: "horns", emoji: "🤘", label: "Super like" },
+  { id: "crown", emoji: "👑", label: "Crown" },
 ];
 const reactionEmoji = (rid) => (REACTIONS.find((r) => r.id === rid) || {}).emoji || "👍";
 
@@ -43,7 +43,6 @@ export default function KloutBreakdown({ target_type, target_id, counts, total, 
       >
         <div className="flex items-center justify-between p-4 border-b">
           <div className="inline-flex items-center gap-1.5 text-lg font-bold text-gray-900">
-            <span>👍</span>
             <span>{total}</span>
             <span>👑</span>
           </div>

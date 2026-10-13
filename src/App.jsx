@@ -26,6 +26,8 @@ import Music from '@/pages/Music';
 import BuySell from '@/pages/BuySell';
 import CreateListing from '@/pages/CreateListing';
 import ListingDetail from '@/pages/ListingDetail';
+import GroupList from '@/pages/GroupList';
+import CreateGroup from '@/pages/CreateGroup';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -70,6 +72,8 @@ const AuthenticatedApp = () => {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/groups" element={<Groups />} />
+        <Route path="/groups/:category" element={<GroupList />} />
+        <Route path="/create-group" element={<CreateGroup />} />
         <Route path="/music" element={<Music />} />
         <Route path="/buy-sell" element={<BuySell />} />
         <Route path="/sell" element={<CreateListing />} />

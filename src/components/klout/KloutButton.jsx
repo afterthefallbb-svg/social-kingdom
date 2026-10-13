@@ -4,7 +4,7 @@ import KloutBreakdown from "./KloutBreakdown";
 
 const REACTIONS = [
   { id: "thumbs", emoji: "👍", label: "Like", value: 1 },
-  { id: "horns", emoji: "🤘", label: "Rock on", value: 2 },
+  { id: "horns", emoji: "🤘", label: "Super like", value: 2 },
   { id: "crown", emoji: "👑", label: "Crown", value: 5 },
 ];
 const valueOf = (r) => (REACTIONS.find((x) => x.id === r) || {}).value || 0;

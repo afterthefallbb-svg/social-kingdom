@@ -1,0 +1,51 @@
+{
+  "name": "Group",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "category": {
+      "type": "string",
+      "title": "Category"
+    },
+    "category_label": {
+      "type": "string",
+      "title": "Category Label"
+    },
+    "subcategory": {
+      "type": "string",
+      "title": "Subcategory"
+    },
+    "header_image": {
+      "type": "string",
+      "title": "Header Image"
+    },
+    "creator_id": {
+      "type": "string",
+      "title": "Creator Id"
+    },
+    "creator_name": {
+      "type": "string",
+      "title": "Creator Name"
+    },
+    "location": {
+      "type": "string",
+      "title": "Location"
+    },
+    "member_count": {
+      "type": "number",
+      "default": 0,
+      "title": "Member Count"
+    }
+  },
+  "required": [
+    "name",
+    "category"
+  ]
+}

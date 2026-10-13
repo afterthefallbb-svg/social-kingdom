@@ -140,7 +140,7 @@ export default function SocialHub() {
           <button
             key={t.l}
             onClick={() => navigate(t.to)}
-            className="flex-1 rounded-full py-1.5 text-2xl font-semibold text-white"
+            className="flex-1 rounded-full py-1 text-lg font-semibold text-white"
             style={{ background: FB }}
           >
             {t.l}

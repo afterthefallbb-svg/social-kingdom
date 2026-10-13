@@ -134,31 +134,39 @@ export default function SocialHub() {
 
   return (
     <div className="min-h-screen bg-white pb-36">
-      {/* Header: profile photo with first + last name to the right */}
-      <div className="flex items-end gap-1 px-4 pt-5">
-        <button onClick={() => navigate("/profile")}>
-          <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
-            {me?.avatar_url ? (
-              <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
-            ) : (
-              "🙂"
-            )}
-          </span>
-        </button>
-        <button onClick={() => navigate("/profile")} className="text-left mb-1">
-          {(() => {
-            const full = me?.full_name || me?.email || "You";
-            const parts = full.split(" ");
-            const first = parts[0];
-            const last = parts.slice(1).join(" ");
-            return (
-              <span className="flex flex-wrap items-baseline gap-x-1.5 leading-tight">
-                <span className="text-[15px] font-semibold text-gray-800 break-words">{first}</span>
-                {last && <span className="text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
-              </span>
-            );
-          })()}
-        </button>
+      {/* Header: profile photo with centered name below, Social Kingdom logo to the right */}
+      <div className="flex items-start justify-between px-4 pt-5">
+        <div className="flex flex-col items-center">
+          <button onClick={() => navigate("/profile")}>
+            <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
+              {me?.avatar_url ? (
+                <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
+              ) : (
+                "🙂"
+              )}
+            </span>
+          </button>
+          <button onClick={() => navigate("/profile")} className="mt-1 text-center">
+            {(() => {
+              const full = me?.full_name || me?.email || "You";
+              const parts = full.split(" ");
+              const first = parts[0];
+              const last = parts.slice(1).join(" ");
+              return (
+                <span className="flex flex-col items-center leading-tight">
+                  <span className="text-[15px] font-semibold text-gray-800 break-words">{first}</span>
+                  {last && <span className="text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
+                </span>
+              );
+            })()}
+          </button>
+        </div>
+        <Image
+          src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/237bd4549_social-kingdom-wordmark.png"
+          alt="Social Kingdom"
+          fittingType="fit"
+          className="h-14 w-auto object-contain"
+        />
       </div>
 
       {/* Projects | Planner toggles */}

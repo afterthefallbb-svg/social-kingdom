@@ -8,6 +8,7 @@ import EventsAttendedSection from "@/components/profile/EventsAttendedSection";
 import CliQsSection from "@/components/profile/CliQsSection";
 import FriendsSection from "@/components/profile/FriendsSection";
 import EditProfileDialog from "@/components/profile/EditProfileDialog";
+import KloutButton from "@/components/klout/KloutButton";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -107,6 +108,12 @@ export default function Profile() {
           onEdit={() => setEditing(true)}
           onMessages={() => navigate("/messages")}
         />
+
+        {user?.id && (
+          <div className="flex justify-center">
+            <KloutButton target_type="profile" target_id={user.id} />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-3">

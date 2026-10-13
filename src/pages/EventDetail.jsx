@@ -7,6 +7,7 @@ import { Image } from "@/components/ui/image";
 import EventAttending from "@/components/event/EventAttending";
 import EventPhotos from "@/components/event/EventPhotos";
 import EventPosts from "@/components/event/EventPosts";
+import KloutButton from "@/components/klout/KloutButton";
 
 const FB = "#1877f2";
 
@@ -76,6 +77,10 @@ export default function EventDetail() {
               <MapPin size={14} /> {event.address}
             </div>
           )}
+
+          <div className="mt-2">
+            <KloutButton target_type="event" target_id={event.id} />
+          </div>
 
           {click && (
             <Link

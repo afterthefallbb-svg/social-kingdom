@@ -35,7 +35,7 @@ export default function CategoryRow({ title, onTitle, items = [], emptyText = "N
                 )}
               </span>
               {it.label && (
-                <span className="text-sm text-gray-700 text-center leading-tight truncate w-full">
+                <span className="text-sm text-gray-700 text-center leading-tight line-clamp-2 w-full">
                   {it.label}
                 </span>
               )}

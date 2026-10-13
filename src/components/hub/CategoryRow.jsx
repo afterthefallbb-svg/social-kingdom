@@ -1,5 +1,6 @@
 import React from "react";
 import { Image } from "@/components/ui/image";
+import { Play } from "lucide-react";
 
 const FB = "#1877f2";
 
@@ -21,11 +22,16 @@ export default function CategoryRow({ title, onTitle, items = [], emptyText = "N
               onClick={it.onClick}
               className="flex flex-col items-center gap-1 shrink-0 w-16"
             >
-              <span className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center text-2xl bg-gray-100">
+              <span className="relative w-14 h-14 rounded-full overflow-hidden flex items-center justify-center text-2xl bg-gray-100">
                 {it.image ? (
                   <Image src={it.image} fittingType="fill" className="w-full h-full" />
                 ) : (
                   it.emoji || "•"
+                )}
+                {it.isVideo && (
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/20">
+                    <Play size={16} className="text-white fill-white" />
+                  </span>
                 )}
               </span>
               {it.label && (

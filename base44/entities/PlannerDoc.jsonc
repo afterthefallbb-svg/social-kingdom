@@ -1,0 +1,22 @@
+{
+  "name": "PlannerDoc",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "User Id"
+    },
+    "key": {
+      "type": "string",
+      "title": "Key"
+    },
+    "data": {
+      "type": "object",
+      "title": "Data"
+    }
+  },
+  "required": [
+    "user_id",
+    "key"
+  ]
+}

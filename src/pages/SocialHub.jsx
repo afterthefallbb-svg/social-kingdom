@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import { Image } from "@/components/ui/image";
 import CategoryRow from "@/components/hub/CategoryRow";
+import { STREAM_SAMPLES, EVENT_SAMPLES, ARTIST_SAMPLES, CLIQ_SAMPLES } from "@/lib/hubSamples";
 
 const FB = "#1877f2";
 
@@ -112,34 +113,17 @@ export default function SocialHub() {
     onClick: () => navigate(`/clicks/${c.id}`),
   }));
 
-  // Sample tiles pad each row so the hub looks alive before content exists.
-  const pad = (items, samples) => (items.length >= 4 ? items : [...items, ...samples].slice(0, 5));
-  const streamSamples = [
-    { id: "s1", label: "Live: Downtown", emoji: "🎥", onClick: () => navigate("/browse/videos") },
-    { id: "s2", label: "Concert Clip", emoji: "🎸", onClick: () => navigate("/browse/videos") },
-    { id: "s3", label: "Game Highlights", emoji: "🏆", onClick: () => navigate("/browse/videos") },
-    { id: "s4", label: "Local News", emoji: "📰", onClick: () => navigate("/browse/videos") },
+  // Sample tiles with realistic photos fill each row so the hub looks fully populated.
+  const pad = (items, samples, to, prefix, isVideo = false) => [
+    ...items.map((i) => ({ ...i, isVideo })),
+    ...samples
+      .slice(0, Math.max(0, 10 - items.length))
+      .map((s, i) => ({ ...s, id: `${prefix}-${i}`, isVideo, onClick: () => navigate(to) })),
   ];
-  const eventSamples = [
-    { id: "e1", label: "Pickup Basketball", emoji: "🏀", onClick: () => navigate("/browse/events") },
-    { id: "e2", label: "Farmers Market", emoji: "🥕", onClick: () => navigate("/browse/events") },
-    { id: "e3", label: "Open Mic Night", emoji: "🎤", onClick: () => navigate("/browse/events") },
-    { id: "e4", label: "Sunday BBQ", emoji: "🍖", onClick: () => navigate("/browse/events") },
-  ];
-  const artistSamples = [
-    { id: "a1", label: "Indie Sessions", emoji: "🎹", onClick: () => navigate("/browse/artists") },
-    { id: "a2", label: "Street Art Walk", emoji: "🎨", onClick: () => navigate("/browse/artists") },
-    { id: "a3", label: "Local Bands", emoji: "🥁", onClick: () => navigate("/browse/artists") },
-  ];
-  const cliqSamples = [
-    { id: "c1", label: "Weekend Warriors", emoji: "💪", onClick: () => navigate("/browse/cliqs") },
-    { id: "c2", label: "Foodie Friends", emoji: "🍜", onClick: () => navigate("/browse/cliqs") },
-    { id: "c3", label: "Trail Crew", emoji: "🥾", onClick: () => navigate("/browse/cliqs") },
-  ];
-  const videoItemsP = pad(videoItems, streamSamples);
-  const eventItemsP = pad(eventItems, eventSamples);
-  const artistItemsP = pad(artistItems, artistSamples);
-  const clickItemsP = pad(clickItems, cliqSamples);
+  const videoItemsP = pad(videoItems, STREAM_SAMPLES, "/browse/videos", "s", true);
+  const eventItemsP = pad(eventItems, EVENT_SAMPLES, "/browse/events", "e");
+  const artistItemsP = pad(artistItems, ARTIST_SAMPLES, "/browse/artists", "a");
+  const clickItemsP = pad(clickItems, CLIQ_SAMPLES, "/browse/cliqs", "c");
 
   const topLinks = [
     { label: "Notifications", to: "/notifications" },
@@ -150,8 +134,22 @@ export default function SocialHub() {
 
   return (
     <div className="min-h-screen bg-white pb-28">
+      {/* Projects | Planner toggles */}
+      <div className="flex gap-2 px-4 pt-5">
+        {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
+          <button
+            key={t.l}
+            onClick={() => navigate(t.to)}
+            className="flex-1 rounded-full py-2 text-sm font-semibold text-white"
+            style={{ background: FB }}
+          >
+            {t.l}
+          </button>
+        ))}
+      </div>
+
       {/* Header: profile photo with name under it, search bar fills the rest */}
-      <div className="flex items-center gap-3 px-4 pt-6">
+      <div className="flex items-center gap-3 px-4 pt-3">
         <div className="flex flex-col items-center gap-1 shrink-0 w-16">
           <button onClick={() => navigate("/profile")}>
             <span className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center text-xl bg-gray-100">

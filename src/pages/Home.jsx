@@ -25,7 +25,7 @@ export default function Home() {
   const [count, setCount] = useState(0);
   const [activeCat, setActiveCat] = useState(null);
   const [query, setQuery] = useState("");
-  const [mode, setMode] = useState("events"); // 'events' | 'businesses'
+  const mode = "events";
 
   useEffect(() => {
     const publicQuery = { visibility: { $ne: "personal" } };
@@ -57,7 +57,7 @@ export default function Home() {
         mode={mode}
       />
 
-      {/* Top stack: search + count + filters + Events/Businesses toggle */}
+      {/* Top stack: search + count + filters */}
       <div className="absolute top-0 left-0 right-0 z-[500] px-3 pt-3">
         <div className="flex items-center bg-white rounded-full px-4 py-2.5 shadow-lg">
           <Search size={18} className="text-gray-400 shrink-0" />
@@ -88,27 +88,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Events | Businesses side-by-side links */}
-        <div className="mt-2 flex gap-2">
-          <button
-            onClick={() => setMode("events")}
-            className={`flex-1 rounded-full py-1.5 text-xs font-bold ${
-              mode === "events" ? "text-white" : "bg-white text-gray-700"
-            }`}
-            style={mode === "events" ? { background: "#1877f2" } : undefined}
-          >
-            Events
-          </button>
-          <button
-            onClick={() => setMode("businesses")}
-            className={`flex-1 rounded-full py-1.5 text-xs font-bold ${
-              mode === "businesses" ? "text-white" : "bg-white text-gray-700"
-            }`}
-            style={mode === "businesses" ? { background: "#1877f2" } : undefined}
-          >
-            Businesses
-          </button>
-        </div>
       </div>
 
       {mode === "events" && (

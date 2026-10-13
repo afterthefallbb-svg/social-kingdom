@@ -152,9 +152,9 @@ export default function SocialHub() {
             const first = parts[0];
             const last = parts.slice(1).join(" ");
             return (
-              <span className="block leading-tight">
-                <span className="block text-[15px] font-semibold text-gray-800 break-words">{first}</span>
-                {last && <span className="block text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
+              <span className="flex flex-wrap items-baseline gap-x-1.5 leading-tight">
+                <span className="text-[15px] font-semibold text-gray-800 break-words">{first}</span>
+                {last && <span className="text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
               </span>
             );
           })()}

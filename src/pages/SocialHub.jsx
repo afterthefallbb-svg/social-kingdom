@@ -145,7 +145,7 @@ export default function SocialHub() {
             )}
           </span>
         </button>
-        <button onClick={() => navigate("/profile")} className="text-left">
+        <button onClick={() => navigate("/profile")} className="text-left mb-1">
           {(() => {
             const full = me?.full_name || me?.email || "You";
             const parts = full.split(" ");
@@ -162,7 +162,7 @@ export default function SocialHub() {
       </div>
 
       {/* Projects | Planner toggles */}
-      <div className="flex justify-center gap-1 px-4 pt-2.5">
+      <div className="flex justify-center gap-1 px-4 pt-2">
         {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
           <button
             key={t.l}

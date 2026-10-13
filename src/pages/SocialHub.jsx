@@ -134,9 +134,9 @@ export default function SocialHub() {
 
   return (
     <div className="min-h-screen bg-white pb-36">
-      {/* Header: profile photo with centered name below, Social Kingdom logo to the right */}
-      <div className="flex items-start justify-between px-4 pt-5">
-        <div className="flex flex-col items-center">
+      {/* Header: photo + name on the left, logo filling the remaining space to the right edge, from the top of the screen down to the toggles */}
+      <div className="flex items-stretch pl-4">
+        <div className="flex items-end gap-1 shrink-0 pt-5">
           <button onClick={() => navigate("/profile")}>
             <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
               {me?.avatar_url ? (
@@ -146,14 +146,14 @@ export default function SocialHub() {
               )}
             </span>
           </button>
-          <button onClick={() => navigate("/profile")} className="mt-1 text-center">
+          <button onClick={() => navigate("/profile")} className="text-left mb-1">
             {(() => {
               const full = me?.full_name || me?.email || "You";
               const parts = full.split(" ");
               const first = parts[0];
               const last = parts.slice(1).join(" ");
               return (
-                <span className="flex flex-col items-center leading-tight">
+                <span className="flex flex-wrap items-baseline gap-x-1.5 leading-tight">
                   <span className="text-[15px] font-semibold text-gray-800 break-words">{first}</span>
                   {last && <span className="text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
                 </span>
@@ -161,12 +161,14 @@ export default function SocialHub() {
             })()}
           </button>
         </div>
-        <Image
-          src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/237bd4549_social-kingdom-wordmark.png"
-          alt="Social Kingdom"
-          fittingType="fit"
-          className="h-14 w-auto object-contain"
-        />
+        <div className="flex-1 min-w-0 ml-2">
+          <Image
+            src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/237bd4549_social-kingdom-wordmark.png"
+            alt="Social Kingdom"
+            fittingType="fit"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
 
       {/* Projects | Planner toggles */}

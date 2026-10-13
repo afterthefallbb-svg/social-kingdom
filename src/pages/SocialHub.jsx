@@ -201,7 +201,7 @@ export default function SocialHub() {
       </div>
 
       {/* Category rows — Stream first, then Events */}
-      <div className="mt-6 space-y-5">
+      <div className="mt-3 space-y-2">
         <CategoryRow
           title="Stream"
           onTitle={() => navigate("/stream")}
@@ -229,7 +229,7 @@ export default function SocialHub() {
       </div>
 
       {/* Footer links */}
-      <div className="mt-10 flex justify-center gap-8 pb-4 text-xs">
+      <div className="mt-4 flex justify-center gap-8 pb-4 text-xs">
         <Link to="/support" className="font-medium" style={{ color: FB }}>Support</Link>
         <Link to="/contact" className="font-medium" style={{ color: FB }}>Contact Us</Link>
       </div>

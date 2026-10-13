@@ -30,6 +30,11 @@
       "type": "string",
       "title": "Background Photo"
     },
+    "public_profile": {
+      "type": "boolean",
+      "default": true,
+      "title": "Public Profile"
+    },
     "traits": {
       "type": "array",
       "items": {

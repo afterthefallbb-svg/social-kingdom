@@ -1,0 +1,68 @@
+{
+  "name": "Invite",
+  "type": "object",
+  "properties": {
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "event",
+        "click"
+      ],
+      "default": "event",
+      "title": "Target Type"
+    },
+    "target_id": {
+      "type": "string",
+      "title": "Target Id"
+    },
+    "target_name": {
+      "type": "string",
+      "title": "Target Name"
+    },
+    "target_image": {
+      "type": "string",
+      "title": "Target Image"
+    },
+    "target_category": {
+      "type": "string",
+      "title": "Target Category"
+    },
+    "target_address": {
+      "type": "string",
+      "title": "Target Address"
+    },
+    "inviter_id": {
+      "type": "string",
+      "title": "Inviter Id"
+    },
+    "inviter_name": {
+      "type": "string",
+      "title": "Inviter Name"
+    },
+    "invitee_id": {
+      "type": "string",
+      "title": "Invitee Id"
+    },
+    "invitee_name": {
+      "type": "string",
+      "title": "Invitee Name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "rejected",
+        "joined"
+      ],
+      "default": "pending",
+      "title": "Status"
+    }
+  },
+  "required": [
+    "target_type",
+    "target_id",
+    "inviter_id",
+    "invitee_id"
+  ]
+}

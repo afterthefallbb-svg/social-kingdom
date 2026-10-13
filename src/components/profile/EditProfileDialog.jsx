@@ -19,6 +19,7 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
   const [traits, setTraits] = useState((me?.traits || []).join(", "));
   const [hobbies, setHobbies] = useState((me?.hobbies || []).join(", "));
   const [music, setMusic] = useState((me?.music || []).join(", "));
+  const [publicProfile, setPublicProfile] = useState(me?.public_profile !== false);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(null);
 
@@ -32,7 +33,8 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
         cover_url: cover.trim(),
         traits: toArray(traits),
         hobbies: toArray(hobbies),
-        music: toArray(music)
+        music: toArray(music),
+        public_profile: publicProfile
       });
       onSaved(updated);
       onClose();
@@ -97,6 +99,20 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
           <div>
             <label className="text-sm font-semibold text-gray-700">Music (comma separated)</label>
             <Input value={music} onChange={(e) => setMusic(e.target.value)} className="mt-1.5" placeholder="Hip-hop, Jazz, Indie" />
+          </div>
+          <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200">
+            <div>
+              <p className="text-sm font-semibold text-gray-700">Public profile</p>
+              <p className="text-[11px] text-gray-400">When on, anyone can discover and invite you. Off, only friends and friends-of-friends can invite you.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setPublicProfile((v) => !v)}
+              className="relative w-11 h-6 rounded-full transition"
+              style={{ background: publicProfile ? FB : "#cbd5e1" }}
+            >
+              <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all" style={{ left: publicProfile ? "22px" : "2px" }} />
+            </button>
           </div>
           <Button onClick={save} disabled={saving} className="w-full text-white font-semibold" style={{ background: FB }}>
             {saving ? "Saving…" : "Save"}

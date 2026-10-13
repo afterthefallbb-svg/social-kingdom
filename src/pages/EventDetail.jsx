@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Navigation, MapPin, Globe, Lock } from "lucide-react";
+import { ArrowLeft, Navigation, MapPin, Globe, Lock, UserPlus } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import { Image } from "@/components/ui/image";
+import { useToast } from "@/components/ui/use-toast";
 import EventAttending from "@/components/event/EventAttending";
 import EventPhotos from "@/components/event/EventPhotos";
 import EventPosts from "@/components/event/EventPosts";
 import KloutButton from "@/components/klout/KloutButton";
+import InviteDialog from "@/components/invite/InviteDialog";
 
 const FB = "#1877f2";
 
@@ -16,6 +18,10 @@ export default function EventDetail() {
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
   const [click, setClick] = useState(null);
+  const [me, setMe] = useState(null);
+  const [attending, setAttending] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!id) return;
@@ -29,6 +35,24 @@ export default function EventDetail() {
       setClick(null);
     }
   }, [event]);
+
+  useEffect(() => {
+    base44.auth.me().then(setMe).catch(() => setMe(null));
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      if (!me || !event) return;
+      const a = await base44.entities.Attendance
+        .filter({ event_id: event.id, user_id: me.id }, { limit: 1 })
+        .catch(() => ({ items: [] }));
+      if (active) setAttending(a.items.length > 0);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [me, event]);
 
   if (!event) {
     return (
@@ -113,6 +137,21 @@ export default function EventDetail() {
           >
             <Navigation size={18} /> Get Directions
           </a>
+
+          <button
+            onClick={() => {
+              const canInvite = event.created_by_id === me?.id || attending;
+              if (canInvite) {
+                setInviteOpen(true);
+              } else {
+                toast({ title: "You must first be attending the event before you can invite someone." });
+              }
+            }}
+            className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold border"
+            style={{ borderColor: FB, color: FB }}
+          >
+            <UserPlus size={16} /> Invite
+          </button>
         </div>
       </div>
 
@@ -121,6 +160,8 @@ export default function EventDetail() {
         <EventPhotos eventId={event.id} />
         <EventPosts eventId={event.id} />
       </div>
+
+      {inviteOpen && <InviteDialog event={event} onClose={() => setInviteOpen(false)} />}
     </div>
   );
 }

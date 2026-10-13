@@ -13,8 +13,8 @@ export default function YearView({ date }) {
         const total = getDaysInMonth(first);
         return (
           <div key={m} className="rounded-lg border border-gray-200 p-2">
-            <p className="text-xs font-bold text-gray-900 text-center mb-1">{format(first, "MMMM")}</p>
-            <div className="grid grid-cols-7 gap-px text-[9px] text-center">
+            <p className="text-sm font-bold text-gray-900 text-center mb-1">{format(first, "MMMM")}</p>
+            <div className="grid grid-cols-7 gap-px text-[11px] text-center">
               {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
                 <span key={i} className="text-gray-400 font-semibold">{d}</span>
               ))}

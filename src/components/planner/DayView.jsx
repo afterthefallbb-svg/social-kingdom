@@ -23,16 +23,16 @@ export default function DayView({ date }) {
     <>
       <div className="grid grid-cols-2 gap-5">
         <div className="space-y-2">
-          <h3 className="font-bold text-gray-900 mb-1">Schedule</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-1">Schedule</h3>
           {HOURS.map((h) => (
             <div key={h} className="flex items-end gap-1.5">
-              <span className="text-[11px] text-gray-500 w-14 shrink-0 leading-6">{h}</span>
+              <span className="text-sm text-gray-500 w-20 shrink-0 leading-7">{h}</span>
               <LinedText value={doc.hours[h]} onChange={(v) => set({ hours: { ...doc.hours, [h]: v } })} />
             </div>
           ))}
         </div>
         <div>
-          <h3 className="font-bold text-gray-900 mb-3 text-center">To-Do List</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-3 text-center">To-Do List</h3>
           <NumberedList items={doc.todos} onChange={(todos) => set({ todos })} addLabel="add item" />
         </div>
       </div>

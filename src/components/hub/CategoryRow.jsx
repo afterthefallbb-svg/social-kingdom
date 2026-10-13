@@ -10,19 +10,19 @@ export default function CategoryRow({ title, onTitle, items = [], emptyText = "N
   return (
     <div className="px-4 text-center">
       <button onClick={onTitle} className="mb-3">
-        <span className="font-bold text-base" style={{ color: FB }}>{title}</span>
+        <span className="font-bold text-lg" style={{ color: FB }}>{title}</span>
       </button>
       {items.length === 0 ? (
-        <p className="text-xs text-gray-400">{emptyText}</p>
+        <p className="text-sm text-gray-400">{emptyText}</p>
       ) : (
         <div className="flex gap-3 overflow-x-auto no-scrollbar justify-start pb-1">
           {items.map((it) => (
             <button
               key={it.id}
               onClick={it.onClick}
-              className="flex flex-col items-center gap-1 shrink-0 w-16"
+              className="flex flex-col items-center gap-1 shrink-0 w-20"
             >
-              <span className="relative w-14 h-14 rounded-full overflow-hidden flex items-center justify-center text-2xl bg-gray-100">
+              <span className="relative w-16 h-16 rounded-full overflow-hidden flex items-center justify-center text-2xl bg-gray-100">
                 {it.image ? (
                   <Image src={it.image} fittingType="fill" className="w-full h-full" />
                 ) : (
@@ -35,7 +35,7 @@ export default function CategoryRow({ title, onTitle, items = [], emptyText = "N
                 )}
               </span>
               {it.label && (
-                <span className="text-[10px] text-gray-600 text-center leading-tight truncate w-full">
+                <span className="text-sm text-gray-700 text-center leading-tight break-words w-full">
                   {it.label}
                 </span>
               )}

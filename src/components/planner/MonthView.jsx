@@ -18,7 +18,7 @@ export default function MonthView({ date }) {
     <div>
       <div className="grid grid-cols-7 gap-1 mb-1">
         {DOW.map((d, i) => (
-          <div key={i} className="text-center text-xs font-semibold text-gray-500">{d}</div>
+          <div key={i} className="text-center text-sm font-semibold text-gray-500">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1">
@@ -28,13 +28,13 @@ export default function MonthView({ date }) {
           const isToday = isSameDay(new Date(first.getFullYear(), first.getMonth(), n), today);
           return (
             <div key={n} className="border border-gray-200 rounded-md p-1 min-h-[70px] flex flex-col">
-              <span className={`text-[11px] font-bold ${isToday ? "text-white bg-[#1877f2] rounded-full w-5 h-5 flex items-center justify-center" : "text-gray-700"}`}>
+              <span className={`text-sm font-bold ${isToday ? "text-white bg-[#1877f2] rounded-full w-6 h-6 flex items-center justify-center" : "text-gray-700"}`}>
                 {n}
               </span>
               <textarea
                 value={doc.days[n] || ""}
                 onChange={(e) => setDoc({ ...doc, days: { ...doc.days, [n]: e.target.value } })}
-                className="flex-1 w-full resize-none bg-transparent outline-none text-[10px] leading-tight mt-0.5"
+                className="flex-1 w-full resize-none bg-transparent outline-none text-xs leading-tight mt-0.5"
               />
             </div>
           );

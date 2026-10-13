@@ -25,7 +25,7 @@ export default function WeekView({ date }) {
         const lines = doc.days[k] || Array(LINES).fill("");
         return (
           <div key={k}>
-            <h3 className="font-bold text-gray-900 text-sm">
+            <h3 className="font-bold text-gray-900 text-base">
               {format(day, "EEEE")} <span className="font-normal text-gray-400">{format(day, "MMM d")}</span>
             </h3>
             <div className="space-y-1 mt-1">

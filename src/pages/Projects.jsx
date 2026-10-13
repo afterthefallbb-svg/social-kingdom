@@ -20,9 +20,9 @@ export default function Projects() {
         <button onClick={() => navigate("/browse")} className="p-1">
           <ChevronLeft size={24} style={{ color: FB }} />
         </button>
-        <span className="font-bold text-gray-900 text-lg">Projects</span>
+        <span className="font-bold text-gray-900 text-xl">Projects</span>
       </div>
-      <div className="h-[3px] w-12 bg-gray-900 ml-4 mt-2 rounded-full" />
+      <div className="h-[3px] w-14 bg-gray-900 ml-4 mt-2 rounded-full" />
 
       {!loaded ? (
         <div className="px-4 mt-6 w-6 h-6 border-2 border-gray-200 border-t-gray-400 rounded-full animate-spin" />
@@ -32,15 +32,15 @@ export default function Projects() {
             value={doc.title}
             onChange={(e) => set({ title: e.target.value })}
             placeholder="Project name"
-            className="w-full text-xl font-bold outline-none border-b border-gray-200 pb-1 mb-6"
+            className="w-full text-2xl font-bold outline-none border-b border-gray-200 pb-1 mb-6"
           />
           <div className="grid grid-cols-2 gap-5">
             <div>
-              <h3 className="font-bold text-gray-900 mb-3">Goals</h3>
+              <h3 className="font-bold text-gray-900 text-lg mb-3">Goals</h3>
               <NumberedList items={doc.goals} onChange={(goals) => set({ goals })} addLabel="add goal" withDate />
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 mb-3 text-center">To-Do List</h3>
+              <h3 className="font-bold text-gray-900 text-lg mb-3 text-center">To-Do List</h3>
               <NumberedList items={doc.todos} onChange={(todos) => set({ todos })} addLabel="add item" />
             </div>
           </div>

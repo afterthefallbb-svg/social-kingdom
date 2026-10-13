@@ -8,21 +8,21 @@ export default function NumberedList({ items, onChange, addLabel, withDate = fal
     <div className="space-y-2">
       {items.map((it, i) => (
         <div key={i} className="flex items-end gap-1.5">
-          <span className="text-sm font-semibold text-gray-700 w-5 shrink-0 leading-6">{i + 1}</span>
+          <span className="text-base font-semibold text-gray-700 w-6 shrink-0 leading-7">{i + 1}</span>
           <LinedText value={it.text} onChange={(v) => set(i, { text: v })} />
           {withDate && (
             <input
               value={it.date || ""}
               onChange={(e) => set(i, { date: e.target.value })}
               placeholder="date"
-              className="w-12 shrink-0 bg-transparent outline-none text-[10px] text-gray-500 border-b-2 border-dotted border-gray-300 leading-6"
+              className="w-16 shrink-0 bg-transparent outline-none text-sm text-gray-500 border-b-2 border-dotted border-gray-300 leading-7"
             />
           )}
         </div>
       ))}
       <button
         onClick={() => onChange([...items, { text: "" }])}
-        className="text-xs font-medium ml-6"
+        className="text-sm font-medium ml-7"
         style={{ color: "#1877f2" }}
       >
         {addLabel}

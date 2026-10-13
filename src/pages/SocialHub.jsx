@@ -134,18 +134,17 @@ export default function SocialHub() {
 
   return (
     <div className="min-h-screen bg-white pb-28">
-      {/* Projects | Planner toggles — bubbles hug the words, words stay centered */}
-      <div className="flex gap-2 px-4 pt-5">
+      {/* Projects | Planner toggles — near full width, trimmed a decent amount, closer together */}
+      <div className="flex gap-1 px-4 pt-5">
         {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
-          <div key={t.l} className="flex-1 flex justify-center">
-            <button
-              onClick={() => navigate(t.to)}
-              className="rounded-full px-4 py-0.5 text-lg font-semibold text-white"
-              style={{ background: FB }}
-            >
-              {t.l}
-            </button>
-          </div>
+          <button
+            key={t.l}
+            onClick={() => navigate(t.to)}
+            className="flex-1 rounded-full py-0.5 mx-6 text-lg font-semibold text-white"
+            style={{ background: FB }}
+          >
+            {t.l}
+          </button>
         ))}
       </div>
 

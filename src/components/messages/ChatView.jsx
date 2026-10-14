@@ -20,6 +20,8 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
   const [pendingImage, setPendingImage] = useState(null);
   const scrollRef = useRef(null);
   const fileRef = useRef(null);
+  const inputRef = useRef(null);
+  const menuRef = useRef(null);
 
   const title = conversation?.is_group ? (conversation.name || "Group chat") : peer?.full_name || "Chat";
   const avatar = conversation?.is_group ? conversation.avatar : peer?.avatar_url;
@@ -38,13 +40,25 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
   useEffect(() => {
     load();
     setText(getDraft(conversation?.id) || "");
+    // Focus the composer so the keyboard opens immediately on chat open
+    const t = setTimeout(() => inputRef.current?.focus(), 120);
     const unsub = base44.entities.Message.subscribe((event) => {
       if (event.data?.conversation_id !== conversation?.id) return;
       load();
     });
-    return () => { unsub && unsub(); };
+    return () => { clearTimeout(t); unsub && unsub(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversation?.id]);
+
+  // Close the three-dot menu when tapping outside it
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onDown(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [menuOpen]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -121,7 +135,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
           <p className="font-bold truncate">{title}</p>
           <p className="text-[11px] text-white/80">{conversation?.is_group ? `${conversation.member_ids?.length} members` : online ? "Active now" : "Offline"}</p>
         </div>
-        <div className="relative">
+        <div className="relative" ref={menuRef}>
           <button onClick={() => setMenuOpen((o) => !o)} aria-label="More"><MoreVertical size={20} /></button>
           {menuOpen && (
             <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1 w-40 z-50">
@@ -183,6 +197,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
           <Smile size={20} />
         </button>
         <input
+          ref={inputRef}
           value={text}
           onChange={(e) => onTextChange(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") { send(); setEmojiOpen(false); } }}

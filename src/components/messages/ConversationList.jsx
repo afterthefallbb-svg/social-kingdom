@@ -110,11 +110,15 @@ export default function ConversationList({ me, onOpen, refreshKey, scope = "all"
 
   if (loading) return <div className="p-6 text-center text-sm text-gray-400">Loading chats…</div>;
   if (filtered.length === 0) {
+    const scopeLabel = scope === "clicks" ? "CliQs"
+      : scope === "friends" ? "friends"
+      : scope === "other" ? "other people"
+      : scope;
     const msg = direction === "drafts"
       ? "No drafts."
       : direction === "sent"
-        ? `No sent messages${scope === "all" ? "" : ` in ${scope}`}.`
-        : `No incoming messages${scope === "all" ? "" : ` from ${scope}`}.`;
+        ? `No sent messages${scope === "all" ? "" : ` in ${scopeLabel}`}.`
+        : `No incoming messages${scope === "all" ? "" : ` from ${scopeLabel}`}.`;
     return <div className="p-6 text-center text-sm text-gray-400">{msg}</div>;
   }
 

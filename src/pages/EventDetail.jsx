@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Navigation, MapPin, Globe, Lock, UserPlus } from "lucide-react";
+import { ArrowLeft, Navigation, MapPin, Globe, Lock, UserPlus, Camera } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
+import { eventDirectionsUrl } from "@/lib/directions";
 import { Image } from "@/components/ui/image";
 import { useToast } from "@/components/ui/use-toast";
 import EventAttending from "@/components/event/EventAttending";
@@ -10,6 +11,7 @@ import EventPhotos from "@/components/event/EventPhotos";
 import EventPosts from "@/components/event/EventPosts";
 import KloutButton from "@/components/klout/KloutButton";
 import InviteDialog from "@/components/invite/InviteDialog";
+import PhotoEditor from "@/components/compose/PhotoEditor";
 
 const FB = "#1877f2";
 
@@ -21,6 +23,8 @@ export default function EventDetail() {
   const [me, setMe] = useState(null);
   const [attending, setAttending] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [host, setHost] = useState(null);
+  const [uploadingMain, setUploadingMain] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -39,6 +43,14 @@ export default function EventDetail() {
   useEffect(() => {
     base44.auth.me().then(setMe).catch(() => setMe(null));
   }, []);
+
+  useEffect(() => {
+    if (!event?.created_by_id) {
+      setHost(null);
+      return;
+    }
+    base44.entities.User.get(event.created_by_id).then(setHost).catch(() => setHost(null));
+  }, [event]);
 
   useEffect(() => {
     let active = true;
@@ -64,6 +76,7 @@ export default function EventDetail() {
 
   const cat = getCategory(event.category);
   const isPersonal = event.visibility === "personal";
+  const isCreator = event.created_by_id === me?.id;
 
   return (
     <div className="min-h-screen bg-gray-100 pb-28">
@@ -76,13 +89,83 @@ export default function EventDetail() {
         </div>
 
         <div
-          className="h-40 relative flex items-center justify-center text-7xl"
+          className="h-40 relative flex items-center justify-center text-7xl overflow-hidden"
           style={{ background: `linear-gradient(135deg, ${cat.color}, ${cat.color}cc)` }}
         >
-          {cat.emoji}
+          {event.image_url ? (
+            <Image src={event.image_url} fittingType="fill" className="absolute inset-0 w-full h-full" />
+          ) : (
+            cat.emoji
+          )}
+          {isCreator && !event.image_url && (
+            <button
+              onClick={() => setUploadingMain(true)}
+              className="absolute bottom-2 right-2 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center shadow"
+              aria-label="Upload event photo"
+            >
+              <Camera size={18} color={FB} />
+            </button>
+          )}
         </div>
+        {uploadingMain && (
+          <PhotoEditor
+            label="Event Photo"
+            aspect="16 / 9"
+            onUploaded={async (url) => {
+              setUploadingMain(false);
+              try {
+                const updated = await base44.entities.Event.update(event.id, { image_url: url });
+                setEvent(updated);
+                toast({ title: "Event photo updated" });
+              } catch (e) {
+                toast({ title: "Could not save", description: String(e.message || e) });
+              }
+            }}
+            onClose={() => setUploadingMain(false)}
+          />
+        )}
 
         <div className="p-4">
+          {host && (
+            <div className="flex items-center gap-3 mb-4">
+              <Link
+                to={`/profile/${host.id}`}
+                className="relative shrink-0"
+                aria-label={`Host ${host.full_name}`}
+              >
+                <div
+                  className="w-16 h-16 rounded-full overflow-hidden border-2 bg-blue-100 flex items-center justify-center text-xl font-bold"
+                  style={{ borderColor: FB, color: FB }}
+                >
+                  {host.avatar_url ? (
+                    <Image src={host.avatar_url} fittingType="fill" className="w-full h-full" />
+                  ) : (
+                    (host.full_name || "?").charAt(0).toUpperCase()
+                  )}
+                </div>
+                <span
+                  className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white shadow flex items-center justify-center text-base border"
+                  style={{ borderColor: cat.color }}
+                  aria-hidden="true"
+                >
+                  {cat.emoji}
+                </span>
+              </Link>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span
+                    className="text-[10px] font-bold uppercase tracking-wide rounded px-1.5 py-0.5 text-white"
+                    style={{ background: FB }}
+                  >
+                    Host
+                  </span>
+                  <span className="font-bold text-gray-900 truncate">{host.full_name}</span>
+                </div>
+                {host.location && <p className="text-sm text-gray-500 truncate">{host.location}</p>}
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: cat.color }}>
               {cat.label}
@@ -129,7 +212,7 @@ export default function EventDetail() {
           {event.description && <p className="text-sm text-gray-600 mt-3">{event.description}</p>}
 
           <a
-            href={`https://www.google.com/maps/dir/?api=1&destination=${event.latitude},${event.longitude}`}
+            href={eventDirectionsUrl(event)}
             target="_blank"
             rel="noreferrer"
             className="mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-white font-semibold"

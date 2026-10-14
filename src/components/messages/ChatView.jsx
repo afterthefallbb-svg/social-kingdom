@@ -196,7 +196,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
       )}
 
       {/* Composer */}
-      <div className="shrink-0 border-t bg-white p-2 pb-[calc(0.5rem+104px)] flex items-end gap-1.5">
+      <div className="shrink-0 border-t bg-white p-2 pb-[max(7.375rem,calc(env(safe-area-inset-bottom)_+_70px))] flex items-end gap-1.5">
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPickPhoto} />
         <button onClick={() => { setAttachOpen((o) => !o); setEmojiOpen(false); }} className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: FB + "22", color: FB }} aria-label="Attach">
           <Plus size={20} />

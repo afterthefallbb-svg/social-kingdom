@@ -18,9 +18,11 @@ function timeAgo(iso) {
   return `${d}d`;
 }
 
-export default function ConversationList({ me, onOpen, refreshKey, tab = "all" }) {
+export default function ConversationList({ me, onOpen, refreshKey, scope = "all", direction = "incoming" }) {
   const [convs, setConvs] = useState([]);
   const [peers, setPeers] = useState({});
+  const [friendIds, setFriendIds] = useState(new Set());
+  const [clickmateIds, setClickmateIds] = useState(new Set());
   const [drafts, setDrafts] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -36,19 +38,16 @@ export default function ConversationList({ me, onOpen, refreshKey, tab = "all" }
       mine.forEach((c) => { if (!c.is_group) c.member_ids.forEach((id) => id !== me.id && ids.add(id)); });
 
       const peerMap = {};
-      // 1) real user records (have live last_seen / status)
       if (ids.size) {
         const u = await base44.entities.User.filter({ id: { $in: [...ids] } }, { limit: 200 }).catch(() => ({ items: [] }));
         (u.items || []).forEach((x) => { peerMap[x.id] = x; });
       }
-      // 2) friendship snapshot fallback
       const fr = await base44.entities.Friendship.filter({ user_id: me.id, status: "accepted" }, { limit: 200 }).catch(() => ({ items: [] }));
       (fr.items || []).forEach((f) => {
         if (!peerMap[f.friend_id]) {
           peerMap[f.friend_id] = { id: f.friend_id, full_name: f.friend_name, avatar_url: f.friend_avatar, location: f.friend_city, last_seen: null, show_online: true, status_emoji: "👑" };
         }
       });
-      // 3) CliQ membership fallback
       const mem = await base44.entities.ClickMembership.filter({ user_id: me.id }, { limit: 200 }).catch(() => ({ items: [] }));
       (mem.items || []).forEach((m) => {
         if (!peerMap[m.user_id]) {
@@ -57,6 +56,8 @@ export default function ConversationList({ me, onOpen, refreshKey, tab = "all" }
       });
       if (!active) return;
       setPeers(peerMap);
+      setFriendIds(new Set(fr.items.map((f) => f.friend_id)));
+      setClickmateIds(new Set(mem.items.map((m) => m.user_id).filter((id) => id !== me.id)));
 
       const withUnread = await Promise.all(mine.map(async (c) => {
         const cnt = await base44.entities.Message.count({
@@ -87,17 +88,33 @@ export default function ConversationList({ me, onOpen, refreshKey, tab = "all" }
     if (c.is_group) return c.avatar || "";
     return peerFor(c)?.avatar_url || "";
   }
+  function scopeOf(c) {
+    if (c.is_group) return "clicks";
+    const pid = c.member_ids?.find((id) => id !== me.id);
+    if (friendIds.has(pid)) return "friends";
+    if (clickmateIds.has(pid)) return "clicks";
+    return "other";
+  }
 
   const filtered = convs.filter((c) => {
-    if (tab === "received") return c.last_sender_id && c.last_sender_id !== me.id;
-    if (tab === "sent") return c.last_sender_id === me.id;
-    if (tab === "drafts") return !!drafts[c.id];
+    if (scope !== "all" && scopeOf(c) !== scope) return false;
+    if (direction === "incoming") {
+      if (c.last_sender_id === me.id) return false;
+    } else if (direction === "sent") {
+      if (c.last_sender_id !== me.id) return false;
+    } else if (direction === "drafts") {
+      if (!drafts[c.id]) return false;
+    }
     return true;
   });
 
   if (loading) return <div className="p-6 text-center text-sm text-gray-400">Loading chats…</div>;
   if (filtered.length === 0) {
-    const msg = tab === "drafts" ? "No drafts." : tab === "received" ? "No received messages." : tab === "sent" ? "No sent messages." : "No conversations yet. Tap a friend above to start chatting.";
+    const msg = direction === "drafts"
+      ? "No drafts."
+      : direction === "sent"
+        ? `No sent messages${scope === "all" ? "" : ` in ${scope}`}.`
+        : `No incoming messages${scope === "all" ? "" : ` from ${scope}`}.`;
     return <div className="p-6 text-center text-sm text-gray-400">{msg}</div>;
   }
 
@@ -121,7 +138,7 @@ export default function ConversationList({ me, onOpen, refreshKey, tab = "all" }
                 {draftText ? <span className="text-amber-600">Draft: {draftText}</span> : (c.last_message || "Say hello 👋")}
               </p>
             </div>
-            {c.unread > 0 && tab !== "sent" && tab !== "drafts" && (
+            {c.unread > 0 && direction !== "sent" && direction !== "drafts" && (
               <span className="text-[10px] font-bold text-white rounded-full px-2 py-0.5" style={{ background: FB }}>{c.unread}</span>
             )}
           </button>

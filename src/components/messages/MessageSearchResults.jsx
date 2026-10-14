@@ -43,7 +43,7 @@ export default function MessageSearchResults({ me, query, scope, filters, onSele
         const merged = ids.map((id) => map[id] || { id, full_name: fr.items.find((f) => f.friend_id === id)?.friend_name, avatar_url: fr.items.find((f) => f.friend_id === id)?.friend_avatar, location: fr.items.find((f) => f.friend_id === id)?.friend_city });
         setPeople(merged.filter((u) => matchesFilters(u, filters)));
         setCliqs([]);
-      } else if (scope === "cliqs") {
+      } else if (scope === "clicks") {
         const mem = await base44.entities.ClickMembership.filter({ user_id: me.id }, { limit: 200 }).catch(() => ({ items: [] }));
         const ids = mem.items.map((m) => m.click_id).filter(Boolean);
         let all = [];
@@ -55,7 +55,14 @@ export default function MessageSearchResults({ me, query, scope, filters, onSele
         setPeople([]);
       } else {
         const u = await base44.entities.User.filter({ full_name: rx }, { limit: 100 }).catch(() => ({ items: [] }));
-        setPeople((u.items || []).filter((x) => x.id !== me.id && matchesFilters(x, filters)));
+        let list = (u.items || []).filter((x) => x.id !== me.id && matchesFilters(x, filters));
+        if (scope === "other") {
+          const fr = await base44.entities.Friendship.filter({ user_id: me.id, status: "accepted" }, { limit: 200 }).catch(() => ({ items: [] }));
+          const mem = await base44.entities.ClickMembership.filter({ user_id: me.id }, { limit: 200 }).catch(() => ({ items: [] }));
+          const exclude = new Set([...fr.items.map((f) => f.friend_id), ...mem.items.map((m) => m.user_id)]);
+          list = list.filter((x) => !exclude.has(x.id));
+        }
+        setPeople(list);
         setCliqs([]);
       }
       if (active) setLoading(false);

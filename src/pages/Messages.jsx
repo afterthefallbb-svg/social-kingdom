@@ -12,9 +12,8 @@ import { getOrCreateDirectConversation, createGroupConversation } from "@/lib/me
 import { toast } from "@/components/ui/use-toast";
 
 const FB = "#1877f2";
-const TABS = [
-  { key: "all", label: "All" },
-  { key: "received", label: "Received" },
+const DIRECTIONS = [
+  { key: "incoming", label: "Incoming" },
   { key: "sent", label: "Sent" },
   { key: "drafts", label: "Drafts" },
 ];
@@ -25,9 +24,9 @@ export default function Messages() {
   const [activeConv, setActiveConv] = useState(null);
   const [activePeer, setActivePeer] = useState(null);
   const [query, setQuery] = useState("");
-  const [scope, setScope] = useState("friends");
+  const [scope, setScope] = useState("all");
   const [filters, setFilters] = useState({ city: "", job: "", company: "" });
-  const [tab, setTab] = useState("all");
+  const [direction, setDirection] = useState("incoming");
   const [selecting, setSelecting] = useState(false);
   const [selected, setSelected] = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -152,18 +151,24 @@ export default function Messages() {
         ) : (
           <>
             <div className="flex gap-1 px-2 pt-3 pb-1 overflow-x-auto no-scrollbar">
-              {TABS.map((t) => (
+              {DIRECTIONS.map((d) => (
                 <button
-                  key={t.key}
-                  onClick={() => setTab(t.key)}
+                  key={d.key}
+                  onClick={() => setDirection(d.key)}
                   className="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"
-                  style={tab === t.key ? { background: FB, color: "#fff" } : { background: FB + "14", color: FB }}
+                  style={direction === d.key ? { background: FB, color: "#fff" } : { background: FB + "14", color: FB }}
                 >
-                  {t.label}
+                  {d.label}
                 </button>
               ))}
             </div>
-            <ConversationList me={me} onOpen={(c, peer) => { setActiveConv(c); setActivePeer(peer); }} refreshKey={refreshKey} tab={tab} />
+            <ConversationList
+              me={me}
+              onOpen={(c, peer) => { setActiveConv(c); setActivePeer(peer); }}
+              refreshKey={refreshKey}
+              scope={scope}
+              direction={direction}
+            />
           </>
         )}
       </div>

@@ -4,9 +4,10 @@ import { Search, SlidersHorizontal } from "lucide-react";
 const FB = "#1877f2";
 
 const SCOPES = [
+  { id: "all", label: "All" },
   { id: "friends", label: "Friends" },
-  { id: "cliqs", label: "CliQs" },
-  { id: "public", label: "Public" },
+  { id: "clicks", label: "Clicks" },
+  { id: "other", label: "Other" },
 ];
 
 export default function MessageSearchBar({ query, setQuery, scope, setScope, filters, setFilters }) {

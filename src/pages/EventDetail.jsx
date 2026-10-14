@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Navigation, MapPin, Globe, Lock, UserPlus, Camera } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
-import { eventDirectionsUrl } from "@/lib/directions";
+import { openDirections } from "@/lib/directions";
 import { Image } from "@/components/ui/image";
 import { useToast } from "@/components/ui/use-toast";
 import EventAttending from "@/components/event/EventAttending";
@@ -211,15 +211,14 @@ export default function EventDetail() {
 
           {event.description && <p className="text-sm text-gray-600 mt-3">{event.description}</p>}
 
-          <a
-            href={eventDirectionsUrl(event)}
-            target="_blank"
-            rel="noreferrer"
+          <button
+            type="button"
+            onClick={() => openDirections(event)}
             className="mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-white font-semibold"
             style={{ background: FB }}
           >
             <Navigation size={18} /> Get Directions
-          </a>
+          </button>
 
           <button
             onClick={() => {

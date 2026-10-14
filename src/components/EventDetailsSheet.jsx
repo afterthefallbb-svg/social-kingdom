@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Navigation, MapPin } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
-import { eventDirectionsUrl } from "@/lib/directions";
+import { openDirections } from "@/lib/directions";
 import { Image } from "@/components/ui/image";
 
 function Tag({ children, color }) {
@@ -117,16 +117,15 @@ export default function EventDetailsSheet({ event, onClose }) {
                 </div>
               </div>
 
-              <a
-                href={eventDirectionsUrl(event)}
-                target="_blank"
-                rel="noreferrer"
+              <button
+                type="button"
+                onClick={() => openDirections(event)}
                 className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3.5 text-white font-semibold text-base"
                 style={{ background: "#1877f2" }}
               >
                 <Navigation size={18} color="#ffffff" fill="#ffffff" />
                 Get Directions
-              </a>
+              </button>
             </div>
           </motion.div>
         </>

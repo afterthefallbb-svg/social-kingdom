@@ -10,3 +10,12 @@ export function eventDirectionsUrl(event) {
   if (!destination) return "https://www.google.com/maps/dir/";
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
 }
+
+// Opens Google Maps directions to the event. Tries a new tab first; if the
+// preview iframe blocks the popup, falls back to navigating the current window
+// so Google Maps still opens.
+export function openDirections(event) {
+  const url = eventDirectionsUrl(event);
+  const w = window.open(url, "_blank", "noopener,noreferrer");
+  if (!w) window.location.href = url;
+}

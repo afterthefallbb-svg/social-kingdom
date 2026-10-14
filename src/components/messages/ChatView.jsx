@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Send, Ban, MoreVertical, Plus, Smile, Image as ImageIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, Send, Ban, MoreVertical, Plus, Smile, Image as ImageIcon, User } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { isOnline, statusEmoji } from "@/lib/presence";
@@ -22,6 +23,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
   const fileRef = useRef(null);
   const inputRef = useRef(null);
   const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   const title = conversation?.is_group ? (conversation.name || "Group chat") : peer?.full_name || "Chat";
   const avatar = conversation?.is_group ? conversation.avatar : peer?.avatar_url;
@@ -135,14 +137,20 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
       {/* Header */}
       <div className="flex items-center gap-2 px-3 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))] text-white shrink-0" style={{ background: FB }}>
         <button onClick={onBack} aria-label="Back"><ArrowLeft size={22} /></button>
-        <span className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white flex items-center justify-center text-base font-bold" style={{ background: FB + "55" }}>
-          {avatar ? <Image src={avatar} fittingType="fill" className="w-full h-full" /> : title.charAt(0)}
-          {!conversation?.is_group && <span className="absolute -bottom-1 -right-1 text-xs bg-white rounded-full px-0.5">{online ? statusEmoji(peer) : "⚫"}</span>}
-        </span>
-        <div className="flex-1 min-w-0">
-          <p className="font-bold truncate">{title}</p>
-          <p className="text-[11px] text-white/80">{conversation?.is_group ? `${conversation.member_ids?.length} members` : online ? "Active now" : "Offline"}</p>
+        <div className="flex flex-col items-center gap-1 shrink-0">
+          <span className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white flex items-center justify-center text-base font-bold" style={{ background: FB + "55" }}>
+            {avatar ? <Image src={avatar} fittingType="fill" className="w-full h-full" /> : title.charAt(0)}
+            {!conversation?.is_group && <span className="absolute -bottom-1 -right-1 text-xs bg-white rounded-full px-0.5">{online ? statusEmoji(peer) : "⚫"}</span>}
+          </span>
+          <p className="text-xs font-bold truncate max-w-[140px] leading-tight">{title}</p>
+          {conversation?.is_group && <p className="text-[10px] text-white/80 -mt-0.5">{conversation.member_ids?.length} members</p>}
         </div>
+        <div className="flex-1" />
+        {!conversation?.is_group && peer?.id && (
+          <button onClick={() => navigate(`/profile/${peer.id}`)} className="shrink-0 flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1.5 rounded-full border border-white/70 bg-white/10 active:bg-white/20">
+            <User size={13} /> Profile
+          </button>
+        )}
         <div className="relative" ref={menuRef}>
           <button onClick={() => setMenuOpen((o) => !o)} aria-label="More"><MoreVertical size={20} /></button>
           {menuOpen && (

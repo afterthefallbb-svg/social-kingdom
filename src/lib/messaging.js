@@ -1,5 +1,7 @@
 import { base44 } from "@/api/base44Client";
 
+const DRAFT_KEY = "meetme_drafts";
+
 // Find an existing direct (non-group) conversation between me and a peer, or create one.
 export async function getOrCreateDirectConversation(me, peer) {
   if (!me?.id || !peer?.id) return null;
@@ -40,6 +42,24 @@ export async function sendMessage(conversation, me, content) {
   await base44.entities.Conversation.update(conversation.id, {
     last_message: content,
     last_message_at: new Date().toISOString(),
+    last_sender_id: me.id,
+  }).catch(() => {});
+  return msg;
+}
+
+export async function sendMessageWithImage(conversation, me, imageUrl, caption = "") {
+  const msg = await base44.entities.Message.create({
+    conversation_id: conversation.id,
+    sender_id: me.id,
+    sender_name: me.full_name || "",
+    sender_avatar: me.avatar_url || "",
+    content: caption,
+    image_url: imageUrl,
+  });
+  await base44.entities.Conversation.update(conversation.id, {
+    last_message: caption || "📷 Photo",
+    last_message_at: new Date().toISOString(),
+    last_sender_id: me.id,
   }).catch(() => {});
   return msg;
 }
@@ -53,4 +73,23 @@ export async function markConversationRead(conversationId, meId) {
   await base44.entities.Message.bulkUpdate(
     unread.items.map((m) => ({ id: m.id, read: true }))
   ).catch(() => {});
+}
+
+// ---- Drafts (local, per conversation) ----
+function readDrafts() {
+  try { return JSON.parse(localStorage.getItem(DRAFT_KEY) || "{}"); } catch { return {}; }
+}
+export function getDraft(conversationId) {
+  return readDrafts()[conversationId] || "";
+}
+export function setDraft(conversationId, text) {
+  const all = readDrafts();
+  if (text) all[conversationId] = text; else delete all[conversationId];
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(all));
+}
+export function clearDraft(conversationId) {
+  setDraft(conversationId, "");
+}
+export function getAllDrafts() {
+  return readDrafts();
 }

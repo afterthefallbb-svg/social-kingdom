@@ -72,7 +72,7 @@ export default function FriendMessageActions({ targetId, friendName, friendAvata
       </button>
       <button
         type="button"
-        onClick={() => navigate("/messages")}
+        onClick={() => navigate(`/messages?chat=${targetId}`)}
         className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-2 text-sm font-semibold text-white"
         style={{ background: FB }}
       >

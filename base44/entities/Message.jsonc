@@ -22,6 +22,10 @@
       "type": "string",
       "title": "Content"
     },
+    "image_url": {
+      "type": "string",
+      "title": "Image Url"
+    },
     "read": {
       "type": "boolean",
       "default": false,

@@ -39,6 +39,10 @@
       "type": "string",
       "format": "date-time",
       "title": "Last Message At"
+    },
+    "last_sender_id": {
+      "type": "string",
+      "title": "Last Sender Id"
     }
   },
   "required": [

@@ -79,6 +79,13 @@
       ],
       "default": "public",
       "title": "Visibility"
+    },
+    "visible_to": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Visible To"
     }
   },
   "required": [
@@ -95,6 +102,9 @@
         },
         {
           "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.visible_to": "{{user.id}}"
         },
         {
           "user_condition": {

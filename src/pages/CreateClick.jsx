@@ -81,7 +81,7 @@ export default function CreateClick() {
     <div className="min-h-screen bg-gray-100 pb-28">
       <div className="text-white px-4 py-4 flex items-center gap-3 shadow" style={{ background: FB }}>
         <button onClick={() => navigate(-1)} aria-label="Back">
-          <ArrowLeft size={22} color="#fff" />
+          <ArrowLeft size={22} color="#000000" />
         </button>
         <h1 className="text-xl font-bold flex-1">Create a CliQ</h1>
       </div>

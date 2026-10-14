@@ -43,7 +43,7 @@ export default function Announcements() {
     <div className="min-h-screen bg-gray-50 pb-28">
       <div className="text-white px-4 py-4 flex items-center gap-3 shadow" style={{ background: FB }}>
         <button onClick={() => navigate(-1)} aria-label="Back" className="p-1">
-          <ChevronLeft size={24} color="#fff" />
+          <ChevronLeft size={24} color="#000000" />
         </button>
         <h1 className="text-xl font-bold">Announcements</h1>
       </div>

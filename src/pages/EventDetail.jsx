@@ -83,7 +83,7 @@ export default function EventDetail() {
       <div className="bg-white">
         <div className="flex items-center gap-3 px-4 py-3">
           <button onClick={() => navigate(-1)} aria-label="Back">
-            <ArrowLeft size={20} className="text-gray-700" />
+            <ArrowLeft size={20} className="text-black" />
           </button>
           <h1 className="font-bold text-gray-900 truncate">Event</h1>
         </div>

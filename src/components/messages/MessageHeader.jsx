@@ -14,7 +14,7 @@ export default function MessageHeader({ me, onOpenSettings }) {
   const online = isOnline(me);
   return (
     <div className="px-4 py-3 flex items-center gap-3" style={{ background: FB }}>
-      <button onClick={() => navigate(-1)} aria-label="Back" className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white shrink-0">
+      <button onClick={() => navigate(-1)} aria-label="Back" className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-black shrink-0">
         <ChevronLeft size={20} />
       </button>
       <div className="relative shrink-0">

@@ -12,7 +12,7 @@ export default function Music() {
   return (
     <div className="min-h-screen bg-background pb-28 font-body">
       <div className="flex items-center gap-2 px-4 pt-6">
-        <button type="button" onClick={() => navigate("/browse")} aria-label="Back to browse" className="p-1 text-brand">
+        <button type="button" onClick={() => navigate("/browse")} aria-label="Back to browse" className="p-1 text-black">
           <ChevronLeft size={24} />
         </button>
         <h1 className="text-lg font-bold text-foreground">Music</h1>

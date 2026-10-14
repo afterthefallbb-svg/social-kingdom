@@ -23,7 +23,7 @@ export default function Clicks() {
     <div className="min-h-screen bg-gray-100 pb-28">
       <div className="text-white px-4 py-4 flex items-center gap-3 shadow" style={{ background: FB }}>
         <Link to="/profile" aria-label="Back">
-          <ArrowLeft size={22} color="#ffffff" />
+          <ArrowLeft size={22} color="#000000" />
         </Link>
         <h1 className="text-xl font-bold">CliQ's</h1>
       </div>

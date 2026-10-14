@@ -139,7 +139,7 @@ export default function SocialHub() {
   return (
     <div className="min-h-screen bg-white pb-36">
       <div className="flex items-center justify-between px-3 pt-3">
-        <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold" style={{ color: FB }}>
+        <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold" style={{ color: "#000000" }}>
           <ChevronLeft size={22} /> Back
         </button>
         <button

@@ -137,7 +137,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
     <div className="fixed inset-0 z-40 bg-white flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-2 px-3 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))] text-white shrink-0" style={{ background: FB }}>
-        <button onClick={onBack} aria-label="Back"><ArrowLeft size={22} /></button>
+        <button onClick={onBack} aria-label="Back"><ArrowLeft size={22} color="#000000" /></button>
         <div className="flex flex-col items-center gap-1 shrink-0">
           <span className="relative w-12 h-12 shrink-0">
             <span className="w-full h-full rounded-full overflow-hidden border-2 border-white flex items-center justify-center text-base font-bold" style={{ background: FB + "55" }}>

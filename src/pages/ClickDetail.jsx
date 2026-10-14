@@ -120,7 +120,7 @@ export default function ClickDetail() {
     <div className="min-h-screen bg-gray-100 pb-28">
       <div className="text-white px-4 py-4 flex items-center gap-3 shadow" style={{ background: FB }}>
         <Link to="/clicks" aria-label="Back">
-          <ArrowLeft size={22} color="#ffffff" />
+          <ArrowLeft size={22} color="#000000" />
         </Link>
         <h1 className="text-xl font-bold flex-1">CliQ</h1>
       </div>

@@ -120,7 +120,7 @@ export default function Profile() {
       </div>
 
       <div className="relative z-10 p-3 pt-4 space-y-3 max-w-2xl mx-auto">
-        <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold text-white drop-shadow">
+        <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold text-black drop-shadow">
           <ChevronLeft size={22} /> Back
         </button>
         <ProfileHeader

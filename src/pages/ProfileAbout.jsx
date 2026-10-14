@@ -42,7 +42,7 @@ export default function ProfileAbout() {
         style={{ borderColor: "#eef0f3" }}
       >
         <button onClick={() => navigate(back)} aria-label="Back">
-          <ArrowLeft size={20} className="text-gray-700" />
+          <ArrowLeft size={20} className="text-black" />
         </button>
         <h1 className="font-bold text-gray-900">About</h1>
       </div>

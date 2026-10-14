@@ -60,7 +60,7 @@ export default function Feed() {
       {/* Header */}
       <div className="sticky top-0 z-20 bg-white border-b border-gray-100">
         <div className="flex items-center gap-2 px-3 py-3">
-          <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold" style={{ color: FB }}>
+          <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold" style={{ color: "#000000" }}>
             <ChevronLeft size={22} /> Back
           </button>
           <h1 className="text-lg font-bold text-gray-900 flex-1 text-center">Feed</h1>

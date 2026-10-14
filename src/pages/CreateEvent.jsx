@@ -121,7 +121,7 @@ export default function CreateEvent() {
     <div className="min-h-screen bg-gray-50 pb-28">
       <div className="text-white px-4 py-4 flex items-center gap-3 shadow" style={{ background: FB }}>
         <button onClick={() => navigate(clickId ? `/clicks/${clickId}` : "/")} aria-label="Back">
-          <ArrowLeft size={22} color="#ffffff" />
+          <ArrowLeft size={22} color="#000000" />
         </button>
         <h1 className="text-xl font-bold">{clickId ? "Host a CliQ Event" : "Create a Gathering"}</h1>
       </div>

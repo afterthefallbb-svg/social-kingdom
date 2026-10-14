@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import PhotoEditor from "@/components/compose/PhotoEditor";
 import { MARKETPLACE_CATEGORIES } from "@/lib/marketplaceCategories";
 
 const FB = "#1877f2";
@@ -29,6 +30,7 @@ export default function CreateListing() {
   const [videoUrl, setVideoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
 
   const uploadFiles = async (files, kind) => {
     if (!files || !files.length) return;
@@ -137,17 +139,28 @@ export default function CreateListing() {
 
         <div className="space-y-2">
           <Label>Photos</Label>
-          <label className="flex items-center gap-2 p-3 rounded-xl border border-dashed border-gray-300 cursor-pointer">
+          <button
+            type="button"
+            onClick={() => setShowEditor(true)}
+            className="flex items-center gap-2 p-3 rounded-xl border border-dashed border-gray-300 w-full"
+          >
             <ImageIcon size={18} style={{ color: FB }} />
             <span className="text-sm text-gray-600">Add photos (stored publicly — anyone with the link can open them)</span>
-            <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => uploadFiles(e.target.files, "image")} />
-          </label>
+          </button>
           {imageUrls.length > 0 && (
             <div className="flex gap-2 overflow-x-auto no-scrollbar">
               {imageUrls.map((u, i) => (
                 <img key={i} src={u} alt="" className="w-16 h-16 rounded-lg object-cover shrink-0" />
               ))}
             </div>
+          )}
+          {showEditor && (
+            <PhotoEditor
+              label="Listing Photo"
+              aspect="1 / 1"
+              onUploaded={(url) => { setImageUrls((prev) => [...prev, url]); toast({ title: "Photo added" }); }}
+              onClose={() => setShowEditor(false)}
+            />
           )}
         </div>
 

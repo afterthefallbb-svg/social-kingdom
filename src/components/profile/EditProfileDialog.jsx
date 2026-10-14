@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import PhotoUpload from "./PhotoUpload";
+import PhotoEditor from "@/components/compose/PhotoEditor";
 
 const FB = "#1877f2";
 
@@ -119,8 +119,9 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
           </Button>
         </div>
         {uploading && (
-          <PhotoUpload
+          <PhotoEditor
             label={uploading === "avatar" ? "Profile Photo" : "Cover Photo"}
+            aspect={uploading === "avatar" ? "1 / 1" : "16 / 9"}
             onUploaded={(url) => {
               if (uploading === "avatar") setAvatar(url);
               else setCover(url);

@@ -4,7 +4,7 @@ import { Image } from "@/components/ui/image";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
-import PhotoUpload from "./PhotoUpload";
+import PhotoEditor from "@/components/compose/PhotoEditor";
 
 const FB = "#1877f2";
 
@@ -120,8 +120,9 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
       )}
 
       {uploading && (
-        <PhotoUpload
+        <PhotoEditor
           label={uploading === "avatar" ? "Profile Photo" : uploading === "cover" ? "Cover Photo" : "Background Photo"}
+          aspect={uploading === "avatar" ? "1 / 1" : "16 / 9"}
           onUploaded={handleUploaded}
           onClose={() => setUploading(null)}
         />

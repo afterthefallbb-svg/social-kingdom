@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import PhotoEditor from "@/components/compose/PhotoEditor";
 import { GROUP_CATEGORIES, getCategory } from "@/lib/groupCategories";
 
 const FB = "#1877f2";
@@ -23,22 +24,9 @@ export default function CreateGroup() {
   const [headerImage, setHeaderImage] = useState("");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
 
   const cat = getCategory(category);
-
-  async function uploadFile(file) {
-    if (!file) return;
-    setUploading(true);
-    try {
-      const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
-      setHeaderImage(file_url);
-      toast({ title: "Header uploaded" });
-    } catch {
-      toast({ title: "Upload failed", variant: "destructive" });
-    } finally {
-      setUploading(false);
-    }
-  }
 
   async function submit(e) {
     e.preventDefault();
@@ -125,12 +113,23 @@ export default function CreateGroup() {
 
         <div className="space-y-2">
           <Label>Header photo</Label>
-          <label className="flex items-center gap-2 p-3 rounded-xl border border-dashed border-gray-300 cursor-pointer">
+          <button
+            type="button"
+            onClick={() => setShowEditor(true)}
+            className="flex items-center gap-2 p-3 rounded-xl border border-dashed border-gray-300 w-full"
+          >
             <ImageIcon size={18} style={{ color: FB }} />
             <span className="text-sm text-gray-600">Upload header (stored publicly — anyone with the link can open them)</span>
-            <input type="file" accept="image/*" className="hidden" onChange={(e) => uploadFile(e.target.files?.[0])} />
-          </label>
+          </button>
           {headerImage && <img src={headerImage} alt="" className="w-full h-28 rounded-lg object-cover" />}
+          {showEditor && (
+            <PhotoEditor
+              label="Group Header"
+              aspect="16 / 9"
+              onUploaded={(url) => { setHeaderImage(url); toast({ title: "Header uploaded" }); }}
+              onClose={() => setShowEditor(false)}
+            />
+          )}
         </div>
 
         <Button type="submit" disabled={saving || uploading} className="w-full h-12 text-white" style={{ background: FB }}>

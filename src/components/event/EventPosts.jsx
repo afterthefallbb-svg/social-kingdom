@@ -3,7 +3,7 @@ import { Image as ImageIcon, Send } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { toast } from "@/components/ui/use-toast";
-import PhotoUpload from "@/components/profile/PhotoUpload";
+import PhotoEditor from "@/components/compose/PhotoEditor";
 import PostCard from "./PostCard";
 
 const FB = "#1877f2";
@@ -13,6 +13,7 @@ export default function EventPosts({ eventId }) {
   const [posts, setPosts] = useState([]);
   const [text, setText] = useState("");
   const [imgUrl, setImgUrl] = useState("");
+  const [music, setMusic] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -39,10 +40,15 @@ export default function EventPosts({ eventId }) {
         author_name: me.full_name,
         author_avatar: me.avatar_url,
         event_id: eventId,
-        likes: 0
+        likes: 0,
+        music_url: music?.previewUrl || "",
+        music_title: music?.trackName || "",
+        music_artist: music?.artistName || "",
+        music_artwork: music?.artworkUrl || ""
       });
       setText("");
       setImgUrl("");
+      setMusic(null);
       await loadPosts();
     } catch (e) {
       toast({ title: "Could not post", description: String(e.message || e) });
@@ -76,7 +82,7 @@ export default function EventPosts({ eventId }) {
           <div className="relative mt-2">
             <Image src={imgUrl} fittingType="fill" className="w-full h-32 rounded-lg" />
             <button
-              onClick={() => setImgUrl("")}
+              onClick={() => { setImgUrl(""); setMusic(null); }}
               className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 text-white text-xs"
               aria-label="Remove image"
             >
@@ -111,9 +117,10 @@ export default function EventPosts({ eventId }) {
       </div>
 
       {uploading && (
-        <PhotoUpload
+        <PhotoEditor
           label="Post Photo"
-          onUploaded={(url) => { setImgUrl(url); setUploading(false); }}
+          enableMusic
+          onUploaded={(url, type, m) => { setImgUrl(url); setMusic(m); setUploading(false); }}
           onClose={() => setUploading(false)}
         />
       )}

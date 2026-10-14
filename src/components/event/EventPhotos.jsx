@@ -3,7 +3,7 @@ import { Camera } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { toast } from "@/components/ui/use-toast";
-import PhotoUpload from "@/components/profile/PhotoUpload";
+import PhotoEditor from "@/components/compose/PhotoEditor";
 
 const FB = "#1877f2";
 
@@ -67,7 +67,7 @@ export default function EventPhotos({ eventId }) {
       )}
 
       {uploading && (
-        <PhotoUpload
+        <PhotoEditor
           label="Event Photo"
           allowVideo
           onUploaded={onUploaded}

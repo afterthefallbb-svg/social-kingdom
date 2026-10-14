@@ -125,7 +125,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
   return (
     <div className="fixed inset-0 z-40 bg-white flex flex-col">
       {/* Header */}
-      <div className="flex items-center gap-2 px-3 py-3 text-white shrink-0" style={{ background: FB }}>
+      <div className="flex items-center gap-2 px-3 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))] text-white shrink-0" style={{ background: FB }}>
         <button onClick={onBack} aria-label="Back"><ArrowLeft size={22} /></button>
         <span className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white flex items-center justify-center text-base font-bold" style={{ background: FB + "55" }}>
           {avatar ? <Image src={avatar} fittingType="fill" className="w-full h-full" /> : title.charAt(0)}
@@ -188,7 +188,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
       )}
 
       {/* Composer */}
-      <div className="shrink-0 border-t bg-white p-2 flex items-center gap-1.5">
+      <div className="shrink-0 border-t bg-white p-2 pb-[calc(0.6rem+env(safe-area-inset-bottom))] flex items-center gap-1.5">
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPickPhoto} />
         <button onClick={() => { setAttachOpen((o) => !o); setEmojiOpen(false); }} className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: FB + "22", color: FB }} aria-label="Attach">
           <Plus size={20} />

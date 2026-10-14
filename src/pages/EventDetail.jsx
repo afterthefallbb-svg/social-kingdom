@@ -217,7 +217,7 @@ export default function EventDetail() {
             className="mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-white font-semibold"
             style={{ background: FB }}
           >
-            <Navigation size={18} /> Get Directions
+            <Navigation size={18} /> Start Directions
           </button>
 
           <button

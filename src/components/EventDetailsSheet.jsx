@@ -124,7 +124,7 @@ export default function EventDetailsSheet({ event, onClose }) {
                 style={{ background: "#1877f2" }}
               >
                 <Navigation size={18} color="#ffffff" fill="#ffffff" />
-                Get Directions
+                Start Directions
               </button>
             </div>
           </motion.div>

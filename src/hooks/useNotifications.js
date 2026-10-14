@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
+import { addFriendToMyPersonalEvents } from "@/lib/eventVisibility";
 
 export function useNotifications() {
   const { toast } = useToast();
@@ -50,6 +51,7 @@ export function useNotifications() {
     setActing(r.id);
     try {
       await base44.entities.Friendship.update(r.id, { status: "accepted" });
+      addFriendToMyPersonalEvents(r.friend_id, r.user_id);
       setFriends((x) => x.filter((i) => i.id !== r.id));
       toast({ title: "Friend request accepted" });
     } catch {

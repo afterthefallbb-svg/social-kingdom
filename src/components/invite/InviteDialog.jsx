@@ -114,6 +114,9 @@ export default function InviteDialog({ event, onClose }) {
         invitee_name: inviteeName || ""
       });
       setSent((s) => new Set([...s, inviteeId]));
+      if (event?.visibility === "personal") {
+        await base44.functions.invoke("addEventViewer", { event_id: event.id, user_ids: [inviteeId] }).catch(() => {});
+      }
     } catch {
       /* ignore duplicates */
     }

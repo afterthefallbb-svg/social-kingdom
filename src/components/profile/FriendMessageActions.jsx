@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { UserPlus, MessageCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
+import { addFriendToMyPersonalEvents } from "@/lib/eventVisibility";
 
 const FB = "#1877f2";
 
@@ -41,6 +42,7 @@ export default function FriendMessageActions({ targetId, friendName, friendAvata
         status: "accepted",
       });
       setIsFriend(true);
+      addFriendToMyPersonalEvents(me.id, targetId);
       toast({ title: "You are now friends" });
     } catch (e) {
       toast({ title: "Could not add friend", description: String(e.message || e) });

@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import InvitePicker from "@/components/invite/InvitePicker";
+import { getFriendIdsBothDirections } from "@/lib/eventVisibility";
 
 const WALLA_WALLA = [46.0646, -118.3425];
 const FB = "#1877f2";
@@ -74,7 +75,15 @@ export default function CreateEvent() {
         visibility,
         click_id: clickId
       });
-      await sendInvites(ev);
+      const invitedIds = await sendInvites(ev);
+      if (visibility === "personal") {
+        const friendIds = await getFriendIdsBothDirections(me.id);
+        const viewerIds = Array.from(new Set([...friendIds, ...invitedIds]))
+          .filter((id) => id && id !== me.id);
+        if (viewerIds.length) {
+          await base44.functions.invoke("addEventViewer", { event_id: ev.id, user_ids: viewerIds }).catch(() => {});
+        }
+      }
       navigate(clickId ? `/clicks/${clickId}` : `/event/${ev.id}`);
     } catch (e) {
       toast({ title: "Could not save gathering", description: String(e.message || e) });
@@ -115,6 +124,7 @@ export default function CreateEvent() {
         .catch(() => ({ items: [] }));
       for (const a of att.items) await inviteUser(a.user_id, a.user_name);
     }
+    return [...invited];
   }
 
   return (

@@ -22,6 +22,8 @@ export default function EventDetail() {
   const [click, setClick] = useState(null);
   const [me, setMe] = useState(null);
   const [attending, setAttending] = useState(false);
+  const [myAttendanceId, setMyAttendanceId] = useState(null);
+  const [attendingVersion, setAttendingVersion] = useState(0);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [host, setHost] = useState(null);
   const [uploadingMain, setUploadingMain] = useState(false);
@@ -59,7 +61,10 @@ export default function EventDetail() {
       const a = await base44.entities.Attendance
         .filter({ event_id: event.id, user_id: me.id }, { limit: 1 })
         .catch(() => ({ items: [] }));
-      if (active) setAttending(a.items.length > 0);
+      if (active) {
+        setAttending(a.items.length > 0);
+        setMyAttendanceId(a.items[0]?.id || null);
+      }
     })();
     return () => {
       active = false;
@@ -77,6 +82,19 @@ export default function EventDetail() {
   const cat = getCategory(event.category);
   const isPersonal = event.visibility === "personal";
   const isCreator = event.created_by_id === me?.id;
+
+  async function removeAttendance() {
+    if (!myAttendanceId) return;
+    try {
+      await base44.entities.Attendance.delete(myAttendanceId);
+      setAttending(false);
+      setMyAttendanceId(null);
+      setAttendingVersion((v) => v + 1);
+      toast({ title: "You're no longer attending" });
+    } catch (e) {
+      toast({ title: "Could not remove", description: String(e.message || e) });
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 pb-28">
@@ -228,11 +246,21 @@ export default function EventDetail() {
           >
             <UserPlus size={16} /> Invite
           </button>
+
+          {attending && !isCreator && (
+            <button
+              onClick={removeAttendance}
+              className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold border"
+              style={{ borderColor: "#e11d48", color: "#e11d28" }}
+            >
+              Remove attendance
+            </button>
+          )}
         </div>
       </div>
 
       <div className="p-3 space-y-3 max-w-2xl mx-auto">
-        <EventAttending eventId={event.id} hostId={event.created_by_id} />
+        <EventAttending eventId={event.id} hostId={event.created_by_id} refreshKey={attendingVersion} />
         <EventPhotos eventId={event.id} />
         <EventPosts eventId={event.id} />
       </div>

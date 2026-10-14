@@ -6,7 +6,7 @@ import { Crown } from "lucide-react";
 
 const FB = "#1877f2";
 
-export default function EventAttending({ eventId, hostId }) {
+export default function EventAttending({ eventId, hostId, refreshKey }) {
   const [attendees, setAttendees] = useState([]);
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export default function EventAttending({ eventId, hostId }) {
     base44.entities.Attendance.filter({ event_id: eventId }, { limit: 100 })
       .then((p) => setAttendees(p.items))
       .catch(() => setAttendees([]));
-  }, [eventId]);
+  }, [eventId, refreshKey]);
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-4">

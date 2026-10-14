@@ -1,20 +1,19 @@
 import React, { useRef, useState } from "react";
 import { Navigation } from "lucide-react";
 import { eventDirectionsUrl } from "@/lib/directions";
+import useDirectionsEditMode from "@/components/event/useDirectionsEditMode";
 
 export default function EventDirectionsLink({ event, className = "", filledIcon = false }) {
   const href = eventDirectionsUrl(event);
   const touchStart = useRef(null);
   const lastLaunch = useRef(0);
   const [message, setMessage] = useState("");
+  const isEditing = useDirectionsEditMode();
   const classes = `relative z-[601] pointer-events-auto touch-manipulation min-h-12 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand text-brand-foreground font-semibold ${className}`;
   function launchMaps(e) {
     if (e.type === "click" && (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey)) return;
     e.preventDefault();
-    if (document.documentElement.hasAttribute("data-visual-edit-active")) {
-      setMessage("Leave Edit mode at the top of the editor, then tap Start Directions.");
-      return;
-    }
+    if (isEditing) return;
     if (Date.now() - lastLaunch.current < 750) return;
     lastLaunch.current = Date.now();
     setMessage("");
@@ -42,7 +41,7 @@ export default function EventDirectionsLink({ event, className = "", filledIcon 
         <Navigation size={18} aria-hidden="true" fill={filledIcon ? "currentColor" : "none"} />
         Start Directions
       </a>
-      {message && <p role="status" className="mt-2 text-sm text-muted-foreground">{message}</p>}
+      {(isEditing || message) && <p role="status" className="mt-2 text-sm text-muted-foreground">{isEditing ? "Leave Edit mode at the top of the editor, then tap Start Directions." : message}</p>}
     </>
   );
 }

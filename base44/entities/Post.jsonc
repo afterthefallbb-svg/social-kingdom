@@ -30,6 +30,22 @@
     "event_id": {
       "type": "string",
       "title": "Event Id"
+    },
+    "music_url": {
+      "type": "string",
+      "title": "Music Url"
+    },
+    "music_title": {
+      "type": "string",
+      "title": "Music Title"
+    },
+    "music_artist": {
+      "type": "string",
+      "title": "Music Artist"
+    },
+    "music_artwork": {
+      "type": "string",
+      "title": "Music Artwork"
     }
   },
   "required": [

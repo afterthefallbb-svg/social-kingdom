@@ -1,6 +1,6 @@
 import React from "react";
 import { Image } from "@/components/ui/image";
-import { Camera } from "lucide-react";
+import { Camera, Music2 } from "lucide-react";
 
 const FB = "#1877f2";
 
@@ -30,6 +30,7 @@ export default function FeedPhotoNotice({ post, onOpen }) {
           <Camera size={11} /> {post.created_date ? new Date(post.created_date).toLocaleDateString() : ""}
         </p>
       </div>
+      {post.music_url && <Music2 size={13} className="text-gray-400 shrink-0" />}
       {post.image_url && (
         <div className="w-12 h-12 rounded-lg overflow-hidden border border-gray-100 shrink-0">
           <Image src={post.image_url} fittingType="fill" className="w-full h-full" />

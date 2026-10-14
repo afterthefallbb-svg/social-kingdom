@@ -1,9 +1,51 @@
 import React, { useState } from "react";
-import { ThumbsUp, MessageCircle, Share } from "lucide-react";
+import { ThumbsUp, MessageCircle, Share, Play, Pause, Music2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 
 const FB = "#1877f2";
+
+function MusicBar({ post }) {
+  const [playing, setPlaying] = useState(false);
+  const [audio, setAudio] = useState(null);
+
+  if (!post.music_url) return null;
+
+  function toggle() {
+    if (playing) {
+      audio?.pause();
+      setPlaying(false);
+      return;
+    }
+    const a = new Audio(post.music_url);
+    a.play().catch(() => {});
+    a.onended = () => setPlaying(false);
+    setAudio(a);
+    setPlaying(true);
+  }
+
+  return (
+    <div className="mt-2 flex items-center gap-2 bg-gray-50 rounded-lg p-2">
+      <button
+        onClick={toggle}
+        className="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0"
+        style={{ background: FB }}
+      >
+        {playing ? <Pause size={14} /> : <Play size={14} />}
+      </button>
+      {post.music_artwork && (
+        <div className="w-9 h-9 rounded overflow-hidden shrink-0">
+          <Image src={post.music_artwork} fittingType="fill" className="w-full h-full" />
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <p className="text-xs font-semibold truncate text-gray-800">{post.music_title}</p>
+        <p className="text-[11px] text-gray-500 truncate">{post.music_artist}</p>
+      </div>
+      <Music2 size={14} className="text-gray-300 shrink-0" />
+    </div>
+  );
+}
 
 export default function PostCard({ post }) {
   const [likes, setLikes] = useState(post.likes || 0);
@@ -45,6 +87,7 @@ export default function PostCard({ post }) {
           <Image src={post.image_url} fittingType="fill" className="w-full h-52" />
         </div>
       )}
+      <MusicBar post={post} />
       <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
         <button
           onClick={like}

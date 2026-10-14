@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, ChevronLeft, RefreshCw } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import PostComposer from "@/components/profile/PostComposer";
+import PhotoComposer from "@/components/compose/PhotoComposer";
 import PostCard from "@/components/profile/PostCard";
 import FeedPhotoNotice from "@/components/feed/FeedPhotoNotice";
 import { Image } from "@/components/ui/image";
@@ -80,15 +80,14 @@ export default function Feed() {
       </div>
 
       <div className="max-w-2xl mx-auto px-3 pt-3 space-y-3">
-        {/* Compose entry (collapsed prompt) + controlled composer when opened */}
+        {/* Compose entry (collapsed prompt) + full photo composer when opened */}
         {me && (
           <>
-            {!composeOpen && <PostComposer me={me} onPosted={load} allowPhotoOnly />}
+            {!composeOpen && <PhotoComposer me={me} onPosted={load} />}
             {composeOpen && (
-              <PostComposer
+              <PhotoComposer
                 me={me}
                 onPosted={load}
-                allowPhotoOnly
                 open={composeOpen}
                 onOpenChange={setComposeOpen}
               />

@@ -44,6 +44,7 @@ const POOL = [
 ];
 
 const CATS = [
+  { name: "Products", emoji: "🛍️", labels: ["Product Reveal", "Unboxing", "Try On", "Demo", "Restock", "Best Seller"] },
   { name: "Life Hacks", emoji: "💡", labels: ["5-Min Fix", "Closet Hack", "Kitchen Tip", "Phone Trick", "Car Hack", "Budget Tip"] },
   { name: "Talent", emoji: "🎤", labels: ["Singing", "Dance Move", "Beat Box", "Spoken Word", "Sketch Art", "Cover Song"] },
   { name: "Foodies", emoji: "🍜", labels: ["Street Tacos", "Pasta Pull", "Brunch", "Late Bite", "Bake Off", "Coffee Art"] },

@@ -21,6 +21,7 @@ import CategoryBrowse from '@/pages/CategoryBrowse';
 import Support from '@/pages/Support';
 import ContactUs from '@/pages/ContactUs';
 import Notifications from '@/pages/Notifications';
+import NotificationsCategory from '@/pages/NotificationsCategory';
 import Groups from '@/pages/Groups';
 import Music from '@/pages/Music';
 import BuySell from '@/pages/BuySell';
@@ -74,6 +75,7 @@ const AuthenticatedApp = () => {
         <Route path="/support" element={<Support />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/notifications/:category" element={<NotificationsCategory />} />
         <Route path="/groups" element={<Groups />} />
         <Route path="/groups/:category" element={<GroupList />} />
         <Route path="/create-group" element={<CreateGroup />} />

@@ -3,22 +3,23 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import PreferenceDialog from "@/components/profile/PreferenceDialog";
+import BioPickerDialog from "@/components/profile/BioPickerDialog";
 
 const FB = "#1877f2";
 const TEXT_FIELDS = ["bio", "job", "birthday", "location"];
 
 const FIELDS = [
-  { field: "bio", label: "Bio", placeholder: "A short intro about you" },
-  { field: "location", label: "City, State", placeholder: "Walla Walla, WA" },
-  { field: "birthday", label: "Birthday", placeholder: "MM/DD/YYYY" },
-  { field: "job", label: "Job", placeholder: "Barista at ...", },
-  { field: "professional_interests", label: "Professional Interests", placeholder: "Marketing, Startups" },
-  { field: "traits", label: "Personal Traits", placeholder: "Outgoing, Loyal, Funny" },
-  { field: "interests", label: "Interests", placeholder: "Music, Sports, Tech" },
-  { field: "hobbies", label: "Hobbies", placeholder: "Hiking, Gaming, Cooking" },
-  { field: "goals", label: "Goals", placeholder: "Run a 5k, Learn guitar" },
-  { field: "music", label: "Music", placeholder: "Hip-hop, Jazz, Indie" },
-  { field: "family_members", label: "Family Members", placeholder: "Sister (Emma), Brother (Jake)" }
+  { field: "bio", label: "Bio", emoji: "📝", placeholder: "A short intro about you" },
+  { field: "location", label: "City, State", emoji: "📍", placeholder: "Walla Walla, WA" },
+  { field: "birthday", label: "Birthday", emoji: "🎂", placeholder: "MM/DD/YYYY" },
+  { field: "job", label: "Job", emoji: "💼", placeholder: "Barista at ..." },
+  { field: "professional_interests", label: "Professional Interests", emoji: "📈", placeholder: "Marketing, Startups" },
+  { field: "traits", label: "Personal Traits", emoji: "✨", placeholder: "Outgoing, Loyal, Funny" },
+  { field: "interests", label: "Interests", emoji: "⭐", placeholder: "Music, Sports, Tech" },
+  { field: "hobbies", label: "Hobbies", emoji: "🎯", placeholder: "Hiking, Gaming, Cooking" },
+  { field: "goals", label: "Goals", emoji: "🏆", placeholder: "Run a 5k, Learn guitar" },
+  { field: "music", label: "Music", emoji: "🎵", placeholder: "Hip-hop, Jazz, Indie" },
+  { field: "family_members", label: "Family Members", emoji: "👪", placeholder: "Sister (Emma), Brother (Jake)" }
 ];
 
 export default function ProfileAbout() {
@@ -56,14 +57,14 @@ export default function ProfileAbout() {
             <div key={f.field} className="bg-white rounded-2xl shadow-sm p-4">
               {isMe ? (
                 <button onClick={() => setEditing(f)} className="w-full text-left">
-                  <p className="text-sm font-semibold text-gray-800">{f.label}</p>
+                  <p className="text-sm font-semibold text-gray-800"><span className="mr-1.5">{f.emoji}</span>{f.label}</p>
                   <p className={`text-xs ${has ? "text-gray-500" : "text-gray-400"}`}>
                     {has ? preview : `Add your ${f.label.toLowerCase()}`}
                   </p>
                 </button>
               ) : (
                 <>
-                  <p className="text-sm font-semibold text-gray-800">{f.label}</p>
+                  <p className="text-sm font-semibold text-gray-800"><span className="mr-1.5">{f.emoji}</span>{f.label}</p>
                   <p className={`text-xs ${has ? "text-gray-500" : "text-gray-400"}`}>
                     {has ? preview : "—"}
                   </p>
@@ -74,8 +75,18 @@ export default function ProfileAbout() {
         })}
       </div>
 
-      {editing && (
+      {editing && TEXT_FIELDS.includes(editing.field) && (
         <PreferenceDialog
+          field={editing.field}
+          label={editing.label}
+          placeholder={editing.placeholder}
+          me={me}
+          onClose={() => setEditing(null)}
+          onSaved={setMe}
+        />
+      )}
+      {editing && !TEXT_FIELDS.includes(editing.field) && (
+        <BioPickerDialog
           field={editing.field}
           label={editing.label}
           placeholder={editing.placeholder}

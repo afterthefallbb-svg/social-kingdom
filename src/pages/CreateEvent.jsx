@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import InviteDialog from "@/components/invite/InviteDialog";
 
 const WALLA_WALLA = [46.0646, -118.3425];
 const FB = "#1877f2";
@@ -35,6 +36,8 @@ export default function CreateEvent() {
   const [visibility, setVisibility] = useState(
     params.get("visibility") === "personal" ? "personal" : "public"
   );
+  const [inviteAfter, setInviteAfter] = useState(true);
+  const [createdEvent, setCreatedEvent] = useState(null);
 
   function addTag() {
     const t = tagInput.trim();
@@ -53,7 +56,7 @@ export default function CreateEvent() {
     }
     setSaving(true);
     try {
-      await base44.entities.Event.create({
+      const ev = await base44.entities.Event.create({
         title: title.trim(),
         description: description.trim(),
         category,
@@ -67,7 +70,11 @@ export default function CreateEvent() {
         visibility,
         click_id: clickId
       });
-      navigate(clickId ? `/clicks/${clickId}` : "/");
+      if (inviteAfter) {
+        setCreatedEvent(ev);
+      } else {
+        navigate(clickId ? `/clicks/${clickId}` : `/event/${ev.id}`);
+      }
     } catch (e) {
       toast({ title: "Could not save gathering", description: String(e.message || e) });
     } finally {
@@ -250,6 +257,21 @@ export default function CreateEvent() {
           </p>
         </div>
 
+        <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200">
+          <div>
+            <p className="text-sm font-semibold text-gray-700">Invite friends after posting</p>
+            <p className="text-[11px] text-gray-400">Open the invite panel once your gathering is live.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setInviteAfter((v) => !v)}
+            className="relative w-11 h-6 rounded-full transition"
+            style={{ background: inviteAfter ? FB : "#cbd5e1" }}
+          >
+            <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all" style={{ left: inviteAfter ? "22px" : "2px" }} />
+          </button>
+        </div>
+
         <Button
           onClick={submit}
           disabled={saving}
@@ -259,6 +281,13 @@ export default function CreateEvent() {
           {saving ? "Posting…" : "Post Gathering"}
         </Button>
       </div>
+
+      {createdEvent && (
+        <InviteDialog
+          event={createdEvent}
+          onClose={() => navigate(clickId ? `/clicks/${clickId}` : `/event/${createdEvent.id}`)}
+        />
+      )}
     </div>
   );
 }

@@ -1,0 +1,48 @@
+{
+  "name": "Conversation",
+  "type": "object",
+  "properties": {
+    "is_group": {
+      "type": "boolean",
+      "default": false,
+      "title": "Is Group"
+    },
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "member_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Member Ids"
+    },
+    "member_count": {
+      "type": "number",
+      "default": 2,
+      "title": "Member Count"
+    },
+    "avatar": {
+      "type": "string",
+      "title": "Avatar"
+    },
+    "created_by_id": {
+      "type": "string",
+      "title": "Created By Id"
+    },
+    "last_message": {
+      "type": "string",
+      "title": "Last Message"
+    },
+    "last_message_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Message At"
+    }
+  },
+  "required": [
+    "is_group",
+    "member_ids"
+  ]
+}

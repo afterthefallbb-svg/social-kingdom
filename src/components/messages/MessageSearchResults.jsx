@@ -1,0 +1,98 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { base44 } from "@/api/base44Client";
+import { Image } from "@/components/ui/image";
+import { isOnline, statusEmoji } from "@/lib/presence";
+
+const FB = "#1877f2";
+
+function matchesFilters(u, f) {
+  if (f.city && !(u.location || "").toLowerCase().includes(f.city.toLowerCase())) return false;
+  if (f.job && !(u.job || "").toLowerCase().includes(f.job.toLowerCase())) return false;
+  if (f.company && !(u.company || "").toLowerCase().includes(f.company.toLowerCase())) return false;
+  return true;
+}
+
+export default function MessageSearchResults({ me, query, scope, filters, onSelectFriend }) {
+  const [people, setPeople] = useState([]);
+  const [cliqs, setCliqs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      if (!query.trim()) { setPeople([]); setCliqs([]); return; }
+      setLoading(true);
+      const q = query.trim();
+      const rx = { $regex: q, $options: "i" };
+
+      if (scope === "friends") {
+        const fr = await base44.entities.Friendship.filter({ user_id: me.id, status: "accepted", friend_name: rx }, { limit: 100 }).catch(() => ({ items: [] }));
+        const ids = fr.items.map((f) => f.friend_id).filter(Boolean);
+        let users = [];
+        if (ids.length) {
+          const u = await base44.entities.User.filter({ id: { $in: ids } }, { limit: 100 }).catch(() => ({ items: [] }));
+          users = u.items || [];
+        }
+        const map = Object.fromEntries(users.map((u) => [u.id, u]));
+        const merged = ids.map((id) => map[id] || { id, full_name: fr.items.find((f) => f.friend_id === id)?.friend_name, avatar_url: fr.items.find((f) => f.friend_id === id)?.friend_avatar, location: fr.items.find((f) => f.friend_id === id)?.friend_city });
+        setPeople(merged.filter((u) => matchesFilters(u, filters)));
+        setCliqs([]);
+      } else if (scope === "cliqs") {
+        const mem = await base44.entities.ClickMembership.filter({ user_id: me.id }, { limit: 200 }).catch(() => ({ items: [] }));
+        const ids = mem.items.map((m) => m.click_id).filter(Boolean);
+        let all = [];
+        if (ids.length) {
+          const c = await base44.entities.Click.filter({ id: { $in: ids }, name: rx }, { limit: 100 }).catch(() => ({ items: [] }));
+          all = c.items || [];
+        }
+        setCliqs(all);
+        setPeople([]);
+      } else {
+        const u = await base44.entities.User.filter({ full_name: rx }, { limit: 100 }).catch(() => ({ items: [] }));
+        setPeople((u.items || []).filter((x) => x.id !== me.id && matchesFilters(x, filters)));
+        setCliqs([]);
+      }
+      if (active) setLoading(false);
+    })();
+    return () => { active = false; };
+  }, [query, scope, filters, me?.id]);
+
+  if (!query.trim()) return null;
+  if (loading) return <div className="p-6 text-center text-sm text-gray-400">Searching…</div>;
+
+  return (
+    <div className="divide-y divide-gray-100">
+      {people.length === 0 && cliqs.length === 0 && (
+        <p className="p-6 text-center text-sm text-gray-400">No results.</p>
+      )}
+      {cliqs.map((c) => (
+        <button key={c.id} onClick={() => navigate(`/click/${c.id}`)} className="w-full flex items-center gap-3 px-3 py-3 hover:bg-gray-50 text-left">
+          <span className="w-11 h-11 rounded-full overflow-hidden border-2 flex items-center justify-center text-sm font-bold" style={{ borderColor: FB + "55", background: FB + "22", color: FB }}>
+            {c.avatar_url ? <Image src={c.avatar_url} fittingType="fill" className="w-full h-full" /> : (c.name?.charAt(0) || "C")}
+          </span>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-gray-900 truncate">{c.name}</p>
+            <p className="text-xs text-gray-500">CliQ · {c.member_count || 0} members</p>
+          </div>
+        </button>
+      ))}
+      {people.map((u) => {
+        const online = isOnline(u);
+        return (
+          <button key={u.id} onClick={() => onSelectFriend(u)} className="w-full flex items-center gap-3 px-3 py-3 hover:bg-gray-50 text-left">
+            <span className="relative w-11 h-11 rounded-full overflow-hidden border-2 flex items-center justify-center text-sm font-bold shrink-0" style={{ borderColor: FB + "55", background: FB + "22", color: FB }}>
+              {u.avatar_url ? <Image src={u.avatar_url} fittingType="fill" className="w-full h-full" /> : (u.full_name?.charAt(0) || "?")}
+              <span className="absolute -bottom-1 -right-1 text-xs bg-white rounded-full px-0.5">{online ? statusEmoji(u) : "⚫"}</span>
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-gray-900 truncate">{u.full_name || "User"}</p>
+              <p className="text-xs text-gray-500 truncate">{[u.location, u.job, u.company].filter(Boolean).join(" · ")}</p>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+}

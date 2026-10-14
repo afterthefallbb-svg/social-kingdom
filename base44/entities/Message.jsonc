@@ -1,0 +1,36 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "conversation_id": {
+      "type": "string",
+      "title": "Conversation Id"
+    },
+    "sender_id": {
+      "type": "string",
+      "title": "Sender Id"
+    },
+    "sender_name": {
+      "type": "string",
+      "title": "Sender Name"
+    },
+    "sender_avatar": {
+      "type": "string",
+      "title": "Sender Avatar"
+    },
+    "content": {
+      "type": "string",
+      "title": "Content"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "title": "Read"
+    }
+  },
+  "required": [
+    "conversation_id",
+    "sender_id",
+    "content"
+  ]
+}

@@ -88,9 +88,28 @@
       "type": "string",
       "title": "Job"
     },
+    "company": {
+      "type": "string",
+      "title": "Company"
+    },
     "birthday": {
       "type": "string",
       "title": "Birthday"
+    },
+    "status_emoji": {
+      "type": "string",
+      "default": "\ud83d\udc51",
+      "title": "Status Emoji"
+    },
+    "show_online": {
+      "type": "boolean",
+      "default": true,
+      "title": "Show Online"
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Seen"
     }
   },
   "required": [

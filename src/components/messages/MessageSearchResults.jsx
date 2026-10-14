@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
-import { isOnline, statusEmoji } from "@/lib/presence";
+import { presenceBadge } from "@/lib/presence";
+import PresenceBadge from "@/components/presence/PresenceBadge";
+import ClickPresenceBadge from "@/components/presence/ClickPresenceBadge";
+import { useClickHosts } from "@/hooks/useClickHosts";
 
 const FB = "#1877f2";
 
@@ -18,6 +21,7 @@ export default function MessageSearchResults({ me, query, scope, filters, onSele
   const [cliqs, setCliqs] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const hosts = useClickHosts(cliqs);
 
   useEffect(() => {
     let active = true;
@@ -69,8 +73,11 @@ export default function MessageSearchResults({ me, query, scope, filters, onSele
       )}
       {cliqs.map((c) => (
         <button key={c.id} onClick={() => navigate(`/click/${c.id}`)} className="w-full flex items-center gap-3 px-3 py-3 hover:bg-gray-50 text-left">
-          <span className="w-11 h-11 rounded-full overflow-hidden border-2 flex items-center justify-center text-sm font-bold" style={{ borderColor: FB + "55", background: FB + "22", color: FB }}>
-            {c.avatar_url ? <Image src={c.avatar_url} fittingType="fill" className="w-full h-full" /> : (c.name?.charAt(0) || "C")}
+          <span className="relative w-11 h-11 shrink-0">
+            <span className="w-full h-full rounded-full overflow-hidden border-2 flex items-center justify-center text-sm font-bold" style={{ borderColor: FB + "55", background: FB + "22", color: FB }}>
+              {c.avatar_url ? <Image src={c.avatar_url} fittingType="fill" className="w-full h-full" /> : (c.name?.charAt(0) || "C")}
+            </span>
+            <ClickPresenceBadge click={c} host={hosts[c.id]} className="-top-1 -right-1 text-xs" />
           </span>
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-gray-900 truncate">{c.name}</p>
@@ -79,12 +86,13 @@ export default function MessageSearchResults({ me, query, scope, filters, onSele
         </button>
       ))}
       {people.map((u) => {
-        const online = isOnline(u);
         return (
           <button key={u.id} onClick={() => onSelectFriend(u)} className="w-full flex items-center gap-3 px-3 py-3 hover:bg-gray-50 text-left">
-            <span className="relative w-11 h-11 rounded-full overflow-hidden border-2 flex items-center justify-center text-sm font-bold shrink-0" style={{ borderColor: FB + "55", background: FB + "22", color: FB }}>
-              {u.avatar_url ? <Image src={u.avatar_url} fittingType="fill" className="w-full h-full" /> : (u.full_name?.charAt(0) || "?")}
-              <span className="absolute -bottom-1 -right-1 text-xs bg-white rounded-full px-0.5">{online ? statusEmoji(u) : "⚫"}</span>
+            <span className="relative w-11 h-11 shrink-0">
+              <span className="w-full h-full rounded-full overflow-hidden border-2 flex items-center justify-center text-sm font-bold" style={{ borderColor: FB + "55", background: FB + "22", color: FB }}>
+                {u.avatar_url ? <Image src={u.avatar_url} fittingType="fill" className="w-full h-full" /> : (u.full_name?.charAt(0) || "?")}
+              </span>
+              <PresenceBadge badge={presenceBadge(u)} className="-top-1 -right-1 text-xs" />
             </span>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-gray-900 truncate">{u.full_name || "User"}</p>

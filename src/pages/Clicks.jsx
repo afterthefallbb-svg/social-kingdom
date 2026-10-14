@@ -3,11 +3,14 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Users } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
+import ClickPresenceBadge from "@/components/presence/ClickPresenceBadge";
+import { useClickHosts } from "@/hooks/useClickHosts";
 
 const FB = "#1877f2";
 
 export default function Clicks() {
   const [clicks, setClicks] = useState([]);
+  const hosts = useClickHosts(clicks);
 
   useEffect(() => {
     base44.entities.Click
@@ -34,14 +37,17 @@ export default function Clicks() {
             to={`/clicks/${c.id}`}
             className="flex items-center gap-4 bg-white rounded-2xl border border-gray-200 p-3 shadow-sm"
           >
-            <div className="w-16 h-16 rounded-full overflow-hidden border-2 shrink-0" style={{ borderColor: FB }}>
-              {c.avatar_url ? (
-                <Image src={c.avatar_url} fittingType="fill" className="w-full h-full" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-xl font-bold" style={{ color: FB }}>
-                  {(c.name || "?").charAt(0)}
-                </div>
-              )}
+            <div className="relative w-16 h-16 shrink-0">
+              <div className="w-full h-full rounded-full overflow-hidden border-2" style={{ borderColor: FB }}>
+                {c.avatar_url ? (
+                  <Image src={c.avatar_url} fittingType="fill" className="w-full h-full" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-xl font-bold" style={{ color: FB }}>
+                    {(c.name || "?").charAt(0)}
+                  </div>
+                )}
+              </div>
+              <ClickPresenceBadge click={c} host={hosts[c.id]} className="-top-1 -right-1 text-base" />
             </div>
             <div className="min-w-0 flex-1">
               <h2 className="text-lg font-bold text-gray-900 truncate">{c.name}</h2>

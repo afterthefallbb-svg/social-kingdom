@@ -18,6 +18,11 @@
       "type": "number",
       "default": 0,
       "title": "Member Count"
+    },
+    "show_online": {
+      "type": "boolean",
+      "default": true,
+      "title": "Show Online"
     }
   },
   "required": [

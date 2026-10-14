@@ -11,7 +11,23 @@ export function isOnline(user) {
 }
 
 export function statusEmoji(user) {
-  return user?.status_emoji || "👑";
+  return user?.status_emoji || "🤡";
+}
+
+// Returns { emoji, online } to render, or null when the user hides their status.
+export function presenceBadge(user) {
+  if (!user) return null;
+  if (user.show_online === false) return null;
+  return { emoji: statusEmoji(user), online: isOnline(user) };
+}
+
+// A CliQ shows its host's online emoji when both the host and the CliQ allow it.
+export function clickPresenceBadge(click, host) {
+  if (!click) return null;
+  if (click.show_online === false) return null;
+  if (!host) return null;
+  if (host.show_online === false) return null;
+  return { emoji: statusEmoji(host), online: isOnline(host) };
 }
 
 export function lastSeenLabel(user) {

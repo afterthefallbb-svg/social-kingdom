@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Send, Ban, MoreVertical, Plus, Smile, Image as ImageIcon, User } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
-import { isOnline, statusEmoji } from "@/lib/presence";
+import { isOnline, statusEmoji, presenceBadge } from "@/lib/presence";
 import { sendMessage, sendMessageWithImage, markConversationRead, getDraft, setDraft, clearDraft } from "@/lib/messaging";
 import EmojiPicker from "@/components/messages/EmojiPicker";
+import PresenceBadge from "@/components/presence/PresenceBadge";
 import { toast } from "@/components/ui/use-toast";
 
 const FB = "#1877f2";
@@ -142,7 +143,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
             <span className="w-full h-full rounded-full overflow-hidden border-2 border-white flex items-center justify-center text-base font-bold" style={{ background: FB + "55" }}>
               {avatar ? <Image src={avatar} fittingType="fill" className="w-full h-full" /> : title.charAt(0)}
             </span>
-            {!conversation?.is_group && <span className="absolute -top-1 -right-1 text-xs bg-white rounded-full px-0.5 leading-none">{online ? statusEmoji(peer) : "⚫"}</span>}
+            {!conversation?.is_group && <PresenceBadge badge={presenceBadge(peer)} className="-top-1 -right-1 text-xs" />}
           </span>
           <p className="text-xs font-bold truncate max-w-[140px] leading-tight">{title}</p>
           {conversation?.is_group && <p className="text-[10px] text-white/80 -mt-0.5">{conversation.member_ids?.length} members</p>}

@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Users, Calendar, MapPin, UserPlus, Flag } from "lucide-react";
+import { ArrowLeft, Users, Calendar, MapPin, UserPlus, Flag, Camera, Crown } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import { Image } from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
 import KloutButton from "@/components/klout/KloutButton";
+import ClickPresenceBadge from "@/components/presence/ClickPresenceBadge";
 
 const FB = "#1877f2";
 
@@ -17,14 +19,20 @@ export default function ClickDetail() {
   const [click, setClick] = useState(null);
   const [members, setMembers] = useState([]);
   const [events, setEvents] = useState([]);
+  const [me, setMe] = useState(null);
+  const [host, setHost] = useState(null);
   const [inviting, setInviting] = useState(false);
   const [friendName, setFriendName] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [showOnline, setShowOnline] = useState(true);
+  const fileRef = useRef(null);
 
   async function loadAll() {
     if (!id) return;
     const c = await base44.entities.Click.get(id).catch(() => null);
     setClick(c);
+    setShowOnline(c?.show_online !== false);
     const m = await base44.entities.ClickMembership
       .filter({ click_id: id }, { limit: 50 })
       .catch(() => ({ items: [] }));
@@ -33,12 +41,20 @@ export default function ClickDetail() {
       .filter({ click_id: id }, { sort: "start_time", limit: 50 })
       .catch(() => ({ items: [] }));
     setEvents(e.items);
+    base44.auth.me().then(setMe).catch(() => setMe(null));
+    if (c?.created_by_id) {
+      base44.entities.User.get(c.created_by_id).then(setHost).catch(() => setHost(null));
+    } else {
+      setHost(null);
+    }
   }
 
   useEffect(() => {
     loadAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  const isHost = !!me?.id && click?.created_by_id === me.id;
 
   async function inviteFriend() {
     const n = friendName.trim();
@@ -69,6 +85,37 @@ export default function ClickDetail() {
     }
   }
 
+  async function saveShowOnline(val) {
+    setSaving(true);
+    try {
+      const updated = await base44.entities.Click.update(id, { show_online: val });
+      setClick(updated);
+      toast({ title: val ? "CliQ online status shown" : "CliQ online status hidden" });
+    } catch (e) {
+      toast({ title: "Could not save", description: String(e.message || e) });
+      setShowOnline(!val);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function onAvatarFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingAvatar(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
+      const updated = await base44.entities.Click.update(id, { avatar_url: file_url });
+      setClick(updated);
+      toast({ title: "CliQ photo updated" });
+    } catch (err) {
+      toast({ title: "Upload failed", description: String(err.message || err) });
+    } finally {
+      setUploadingAvatar(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 pb-28">
       <div className="text-white px-4 py-4 flex items-center gap-3 shadow" style={{ background: FB }}>
@@ -80,15 +127,31 @@ export default function ClickDetail() {
 
       {click && (
         <div className="bg-white border-b-4 px-4 py-5 text-center" style={{ borderColor: FB }}>
-          <div className="w-20 h-20 rounded-full mx-auto overflow-hidden border-4" style={{ borderColor: FB }}>
-            {click.avatar_url ? (
-              <Image src={click.avatar_url} fittingType="fill" className="w-full h-full" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-2xl font-bold" style={{ color: FB }}>
-                {(click.name || "?").charAt(0)}
-              </div>
+          <div className="relative w-20 h-20 mx-auto shrink-0">
+            <div className="w-full h-full rounded-full overflow-hidden border-4" style={{ borderColor: FB }}>
+              {click.avatar_url ? (
+                <Image src={click.avatar_url} fittingType="fill" className="w-full h-full" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-2xl font-bold" style={{ color: FB }}>
+                  {(click.name || "?").charAt(0)}
+                </div>
+              )}
+            </div>
+            <ClickPresenceBadge click={click} host={host} className="-top-1 -right-1 text-base" />
+            {isHost && (
+              <button
+                onClick={() => fileRef.current?.click()}
+                disabled={uploadingAvatar}
+                className="absolute -bottom-1 -left-1 w-7 h-7 rounded-full bg-white shadow border flex items-center justify-center"
+                style={{ borderColor: FB, color: FB }}
+                aria-label="Edit CliQ photo"
+              >
+                <Camera size={13} />
+              </button>
             )}
+            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onAvatarFile} />
           </div>
+          {uploadingAvatar && <p className="text-xs text-gray-400 mt-1">Uploading…</p>}
           <h2 className="text-xl font-bold text-gray-900 mt-3">{click.name}</h2>
           <p className="text-sm font-semibold mt-1 flex items-center justify-center gap-1" style={{ color: FB }}>
             <Users size={14} /> {click.member_count || members.length} members
@@ -99,6 +162,62 @@ export default function ClickDetail() {
           {click.description && (
             <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto">{click.description}</p>
           )}
+
+          {/* Host */}
+          {host && (
+            <div className="mt-4 flex items-end gap-3 justify-center">
+              <Link to={`/profile/${host.id}`} className="relative shrink-0 pr-7" aria-label={`Host ${host.full_name}`}>
+                <div
+                  className="w-14 h-14 rounded-full overflow-hidden border-2 bg-blue-100 flex items-center justify-center text-lg font-bold"
+                  style={{ borderColor: FB, color: FB }}
+                >
+                  {host.avatar_url ? (
+                    <Image src={host.avatar_url} fittingType="fill" className="w-full h-full" />
+                  ) : (
+                    (host.full_name || "?").charAt(0).toUpperCase()
+                  )}
+                </div>
+                <span
+                  className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-white shadow border flex items-center justify-center"
+                  style={{ borderColor: FB, color: FB }}
+                  aria-hidden="true"
+                >
+                  <Crown size={12} />
+                </span>
+              </Link>
+              <div className="min-w-0 text-left">
+                <div className="flex items-center gap-1.5">
+                  <span
+                    className="text-[10px] font-bold uppercase tracking-wide rounded px-1.5 py-0.5 text-white"
+                    style={{ background: FB }}
+                  >
+                    Host
+                  </span>
+                  <span className="font-bold text-gray-900 truncate">{host.full_name}</span>
+                </div>
+                {host.location && <p className="text-sm text-gray-500 truncate">{host.location}</p>}
+              </div>
+            </div>
+          )}
+
+          {/* Host-only setting: whether this CliQ shows its online status */}
+          {isHost && (
+            <div className="mt-4 flex items-center justify-between max-w-xs mx-auto bg-gray-50 rounded-lg px-3 py-2">
+              <div className="text-left">
+                <p className="text-xs font-semibold text-gray-900">Show CliQ online status</p>
+                <p className="text-[11px] text-gray-500">Show this CliQ's online dot in messages & profile.</p>
+              </div>
+              <Switch
+                checked={showOnline}
+                disabled={saving}
+                onCheckedChange={(v) => {
+                  setShowOnline(v);
+                  saveShowOnline(v);
+                }}
+              />
+            </div>
+          )}
+
           <div className="flex gap-2 mt-4">
             <button
               onClick={() => setInviting(true)}

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
-import { isOnline, statusEmoji, lastSeenLabel } from "@/lib/presence";
+import { isOnline, statusEmoji, lastSeenLabel, presenceBadge } from "@/lib/presence";
+import PresenceBadge from "@/components/presence/PresenceBadge";
 
 const FB = "#1877f2";
 
@@ -54,7 +55,7 @@ export default function OnlineFriendsRow({ me, onSelectFriend, onLongPress, sele
               <span className={`w-full h-full rounded-full overflow-hidden border-2 flex items-center justify-center text-lg font-bold ${sel ? "ring-2 ring-offset-1" : ""}`} style={{ borderColor: sel ? FB : "#d1d5db", background: FB + "22", color: FB }}>
                 {f.avatar_url ? <Image src={f.avatar_url} fittingType="fill" className="w-full h-full" /> : (f.full_name?.charAt(0) || "?")}
               </span>
-              <span className="absolute -top-1 -right-1 text-xs bg-white rounded-full px-0.5 leading-none">{online ? statusEmoji(f) : "⚫"}</span>
+              <PresenceBadge badge={presenceBadge(f)} className="-top-1 -right-1 text-xs" />
             </span>
             <span className="text-[10px] text-gray-700 truncate w-full text-center">{f.full_name?.split(" ")[0]}</span>
             <span className="text-[9px] text-gray-400 truncate w-full text-center">{lastSeenLabel(f)}</span>

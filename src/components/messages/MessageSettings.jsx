@@ -5,11 +5,11 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
 
 const FB = "#1877f2";
-const EMOJIS = ["👑", "🟢", "🟡", "🔴", "😎", "🏆", "⭐", "💬", "👻", "🎯", "🔥", "✅"];
+const EMOJIS = ["🤡", "👑", "🟢", "🟡", "🔴", "😎", "🏆", "⭐", "💬", "👻", "🎯", "🔥", "✅"];
 
 export default function MessageSettings({ me, onClose, onSaved }) {
   const [showOnline, setShowOnline] = useState(me?.show_online !== false);
-  const [emoji, setEmoji] = useState(me?.status_emoji || "👑");
+  const [emoji, setEmoji] = useState(me?.status_emoji || "🤡");
   const [blocks, setBlocks] = useState([]);
   const [saving, setSaving] = useState(false);
 

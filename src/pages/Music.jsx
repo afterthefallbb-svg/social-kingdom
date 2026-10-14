@@ -1,46 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Search, Play, ExternalLink } from "lucide-react";
+import { ChevronLeft, Search, ExternalLink, Music as MusicIcon } from "lucide-react";
 
 const FB = "#1877f2";
 
-// Verified-embeddable YouTube music videos, used as seeds for endless genre mixes.
+// Verified YouTube music videos. Each tile opens the video plus an auto-generated
+// radio mix (list=RD<id>) so YouTube keeps playing related songs.
 const GENRES = [
-  { label: "Pop", id: "JGwWNGJdvx8", title: "Ed Sheeran - Shape of You" },
-  { label: "Hip-hop", id: "tvTRZJ-4EyI", title: "Kendrick Lamar - HUMBLE." },
-  { label: "R&B", id: "4NRXx6U8ABQ", title: "The Weeknd - Blinding Lights" },
-  { label: "Rock", id: "hTWKbfoikeg", title: "Nirvana - Smells Like Teen Spirit" },
-  { label: "Latin", id: "kJQP7kiw5Fk", title: "Luis Fonsi - Despacito" },
-  { label: "Country", id: "r7qovpFAGrQ", title: "Lil Nas X - Old Town Road" },
-  { label: "Funk", id: "OPf0YbXqDm0", title: "Mark Ronson - Uptown Funk" },
-  { label: "K-pop", id: "9bZkp7q19f0", title: "PSY - Gangnam Style" },
-  { label: "Alt", id: "DyDfgMOUjCI", title: "Billie Eilish - bad guy" },
-  { label: "Throwback", id: "RgKAFK5djSk", title: "Wiz Khalifa - See You Again" }
+  { label: "Pop", id: "JGwWNGJdvx8" },
+  { label: "Hip-hop", id: "tvTRZJ-4EyI" },
+  { label: "R&B", id: "4NRXx6U8ABQ" },
+  { label: "Rock", id: "hTWKbfoikeg" },
+  { label: "Latin", id: "kJQP7kiw5Fk" },
+  { label: "Country", id: "r7qovpFAGrQ" },
+  { label: "Funk", id: "OPf0YbXqDm0" },
+  { label: "K-pop", id: "9bZkp7q19f0" },
+  { label: "Alt", id: "DyDfgMOUjCI" },
+  { label: "Throwback", id: "RgKAFK5djSk" }
 ];
-
-function parseVideoId(input) {
-  const s = input.trim();
-  if (/^[\w-]{11}$/.test(s)) return s;
-  const m = s.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);
-  return m ? m[1] : null;
-}
 
 export default function Music() {
   const navigate = useNavigate();
-  const [current, setCurrent] = useState(GENRES[0]);
-  const [input, setInput] = useState("");
-
-  const src = `https://www.youtube.com/embed/${current.id}?list=RD${current.id}&autoplay=1&mute=1&rel=0`;
-
-  function playInput() {
-    const id = parseVideoId(input);
-    if (id) {
-      setCurrent({ id, title: "Your selection" });
-      setInput("");
-    } else if (input.trim()) {
-      window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(input.trim())}`, "_blank");
-    }
-  }
+  const [query, setQuery] = useState("");
 
   return (
     <div className="min-h-screen bg-white pb-28">
@@ -52,73 +33,73 @@ export default function Music() {
       </div>
       <div className="h-[3px] w-12 bg-gray-900 ml-4 mt-2 rounded-full" />
 
-      {/* Embedded in-app YouTube player */}
       <div className="px-4 mt-5">
-        <div className="relative w-full rounded-2xl overflow-hidden bg-black" style={{ aspectRatio: "16 / 9" }}>
-          <iframe
-            key={current.id}
-            src={src}
-            title={current.title}
-            className="absolute inset-0 w-full h-full"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          />
-        </div>
-        <p className="mt-2 text-sm font-semibold text-gray-800 truncate">{current.title}</p>
-        <p className="text-[11px] text-gray-400">Playing a YouTube mix in-app — tap the player to unmute</p>
+        <p className="text-sm text-gray-500">
+          Tap a genre to open it in YouTube, or search for any song or artist.
+        </p>
       </div>
 
-      {/* Paste a link or video ID to play in-app */}
-      <div className="px-4 mt-5">
-        <div className="flex gap-2">
+      {/* Search — submits straight to YouTube results, opens in a new tab */}
+      <div className="px-4 mt-4">
+        <form
+          action="https://www.youtube.com/results"
+          method="get"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex gap-2"
+        >
           <div className="relative flex-1">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") playInput();
-              }}
-              placeholder="Paste a YouTube link or video ID to play"
+              name="search_query"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search any song or artist on YouTube"
               className="w-full pl-9 pr-3 h-11 rounded-full bg-gray-100 text-sm outline-none"
             />
           </div>
           <button
-            onClick={playInput}
+            type="submit"
             className="shrink-0 inline-flex items-center gap-1 rounded-full px-4 text-sm font-semibold text-white"
             style={{ background: FB }}
           >
-            <Play size={15} /> Play
+            <ExternalLink size={15} /> Search
           </button>
-        </div>
-        <button
-          onClick={() => input.trim() && window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(input.trim())}`, "_blank")}
-          className="mt-2 inline-flex items-center gap-1 text-xs font-medium"
-          style={{ color: FB }}
-        >
-          <ExternalLink size={12} /> Type a song or artist name to search YouTube
-        </button>
+        </form>
       </div>
 
-      {/* Genre mixes */}
+      {/* Genre tiles — each opens the video + a radio mix on YouTube */}
       <div className="px-4 mt-6">
-        <p className="text-sm font-semibold text-gray-700 mb-2">Pick a genre — plays a mix</p>
+        <p className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+          <MusicIcon size={15} /> Pick a genre
+        </p>
         <div className="grid grid-cols-2 gap-2">
           {GENRES.map((g) => (
-            <button
+            <a
               key={g.id}
-              onClick={() => setCurrent(g)}
-              className="rounded-xl px-3 py-3 text-sm font-semibold text-left"
-              style={{
-                background: current.id === g.id ? FB : "#eef2f7",
-                color: current.id === g.id ? "#fff" : "#1f2937"
-              }}
+              href={`https://www.youtube.com/watch?v=${g.id}&list=RD${g.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-xl px-3 py-3 text-sm font-semibold text-left inline-flex items-center justify-between"
+              style={{ background: "#eef2f7", color: "#1f2937" }}
             >
               {g.label}
-            </button>
+              <ExternalLink size={14} style={{ color: FB }} />
+            </a>
           ))}
         </div>
+      </div>
+
+      <div className="px-4 mt-6">
+        <a
+          href="https://www.youtube.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs font-medium"
+          style={{ color: FB }}
+        >
+          <ExternalLink size={12} /> Open YouTube
+        </a>
       </div>
     </div>
   );

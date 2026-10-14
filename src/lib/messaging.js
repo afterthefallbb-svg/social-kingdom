@@ -38,6 +38,7 @@ export async function sendMessage(conversation, me, content) {
     sender_name: me.full_name || "",
     sender_avatar: me.avatar_url || "",
     content,
+    member_ids: conversation.member_ids || [],
   });
   await base44.entities.Conversation.update(conversation.id, {
     last_message: content,
@@ -55,6 +56,7 @@ export async function sendMessageWithImage(conversation, me, imageUrl, caption =
     sender_avatar: me.avatar_url || "",
     content: caption,
     image_url: imageUrl,
+    member_ids: conversation.member_ids || [],
   });
   await base44.entities.Conversation.update(conversation.id, {
     last_message: caption || "📷 Photo",

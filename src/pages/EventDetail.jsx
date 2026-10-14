@@ -127,7 +127,7 @@ export default function EventDetail() {
 
         <div className="p-4">
           {host && (
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-end gap-3 mb-4">
               <Link
                 to={`/profile/${host.id}`}
                 className="relative shrink-0 pr-7"

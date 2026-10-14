@@ -14,6 +14,10 @@
       "type": "string",
       "title": "Avatar Url"
     },
+    "location": {
+      "type": "string",
+      "title": "Location"
+    },
     "member_count": {
       "type": "number",
       "default": 0,

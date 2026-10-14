@@ -6,7 +6,7 @@ const FB = "#1877f2";
 const SCOPES = [
   { id: "all", label: "All" },
   { id: "friends", label: "Friends" },
-  { id: "clicks", label: "Clicks" },
+  { id: "clicks", label: "CliQs" },
   { id: "other", label: "Other" },
 ];
 

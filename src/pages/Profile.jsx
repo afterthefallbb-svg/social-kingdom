@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { ChevronLeft } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import EventsSection from "@/components/profile/EventsSection";
@@ -101,6 +102,9 @@ export default function Profile() {
       </div>
 
       <div className="relative z-10 p-3 pt-4 space-y-3 max-w-2xl mx-auto">
+        <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold text-white drop-shadow">
+          <ChevronLeft size={22} /> Back
+        </button>
         <ProfileHeader
           user={user}
           isMe={isMe}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import { Image } from "@/components/ui/image";
@@ -134,6 +134,12 @@ export default function SocialHub() {
 
   return (
     <div className="min-h-screen bg-white pb-36">
+      <div className="flex items-center px-3 pt-3">
+        <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold" style={{ color: FB }}>
+          <ChevronLeft size={22} /> Back
+        </button>
+      </div>
+
       {/* Header: photo + name on the left, logo filling the remaining space to the right edge, from the top of the screen down to the toggles */}
       <div className="flex items-stretch pl-4">
         <div className="flex items-end gap-1 shrink-0 pt-5">

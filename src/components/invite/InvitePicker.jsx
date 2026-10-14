@@ -4,6 +4,7 @@ import { Image } from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import { Search, Check, Loader2, Lock, Users, UserPlus } from "lucide-react";
 import { getCategory } from "@/lib/categories";
+import { matchesName } from "@/lib/nameMatch";
 
 const FB = "#1877f2";
 const TABS = [
@@ -84,7 +85,9 @@ export default function InvitePicker({ onChange }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Server-side name search only on the "Search" tab.
   useEffect(() => {
+    if (tab !== "search") return;
     const q = query.trim();
     if (!q) { setResults([]); return; }
     let active = true;
@@ -99,7 +102,7 @@ export default function InvitePicker({ onChange }) {
       }
     })();
     return () => { active = false; };
-  }, [query, me?.id]);
+  }, [query, me?.id, tab]);
 
   // Push the current selection up to the parent whenever it changes.
   useEffect(() => {
@@ -141,6 +144,29 @@ export default function InvitePicker({ onChange }) {
   const initial = (n) => (n ? n.charAt(0).toUpperCase() : "?");
   const totalSelected = selUsers.size + selClicks.size + selEvents.size;
 
+  // Local fuzzy filtering for the friends / cliqs / after-party lists.
+  const q = query.trim();
+  const friendsFiltered = q ? friends.filter((f) => matchesName(f.friend_name, q)) : friends;
+  const clicksFiltered = q ? clicks.filter((c) => matchesName(c.name, q)) : clicks;
+  const nearbyFiltered = q ? nearby.filter((e) => matchesName(e.title, q)) : nearby;
+
+  const SearchBar = () => (
+    <div className="relative">
+      <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+      <Input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder={
+          tab === "friends" ? "Search your friends"
+          : tab === "cliqs" ? "Search your CliQs"
+          : tab === "afterparty" ? "Search nearby events"
+          : "Search people by name"
+        }
+        className="pl-9"
+      />
+    </div>
+  );
+
   return (
     <div className="rounded-2xl border border-gray-200 p-3">
       <div className="flex items-center justify-between mb-2">
@@ -160,7 +186,7 @@ export default function InvitePicker({ onChange }) {
             <button
               key={t.id}
               type="button"
-              onClick={() => setTab(t.id)}
+              onClick={() => { setTab(t.id); setQuery(""); }}
               className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
               style={{ background: on ? FB : "#eef2f7", color: on ? "#fff" : "#1f2937" }}
             >
@@ -169,6 +195,8 @@ export default function InvitePicker({ onChange }) {
           );
         })}
       </div>
+
+      <div className="mt-2"><SearchBar /></div>
 
       <div className="max-h-64 overflow-y-auto mt-2 space-y-2">
         {busy && (
@@ -180,8 +208,10 @@ export default function InvitePicker({ onChange }) {
         {tab === "friends" &&
           (friends.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-4">No friends yet.</p>
+          ) : friendsFiltered.length === 0 ? (
+            <p className="text-sm text-gray-400 text-center py-4">No friends match “{q}”.</p>
           ) : (
-            friends.map((f) => {
+            friendsFiltered.map((f) => {
               const on = selUsers.has(f.friend_id);
               return (
                 <button
@@ -204,8 +234,10 @@ export default function InvitePicker({ onChange }) {
         {tab === "cliqs" &&
           (clicks.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-4">You're not in any CliQs yet.</p>
+          ) : clicksFiltered.length === 0 ? (
+            <p className="text-sm text-gray-400 text-center py-4">No CliQs match “{q}”.</p>
           ) : (
-            clicks.map((c) => {
+            clicksFiltered.map((c) => {
               const on = selClicks.has(c.id);
               return (
                 <button
@@ -233,8 +265,10 @@ export default function InvitePicker({ onChange }) {
         {tab === "afterparty" &&
           (nearby.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-4">No upcoming public events nearby.</p>
+          ) : nearbyFiltered.length === 0 ? (
+            <p className="text-sm text-gray-400 text-center py-4">No events match “{q}”.</p>
           ) : (
-            nearby.map((ev) => {
+            nearbyFiltered.map((ev) => {
               const cat = getCategory(ev.category);
               const on = selEvents.has(ev.id);
               return (
@@ -262,10 +296,6 @@ export default function InvitePicker({ onChange }) {
 
         {tab === "search" && (
           <>
-            <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search people by name" className="pl-9" />
-            </div>
             {searching && (
               <div className="flex justify-center py-3"><Loader2 className="w-5 h-5 animate-spin" style={{ color: FB }} /></div>
             )}

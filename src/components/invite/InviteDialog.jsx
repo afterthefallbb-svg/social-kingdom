@@ -4,6 +4,7 @@ import { Image } from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import { X, Search, Send, Check, Loader2, Lock } from "lucide-react";
 import { getCategory } from "@/lib/categories";
+import { matchesName } from "@/lib/nameMatch";
 
 const FB = "#1877f2";
 const TABS = [
@@ -75,6 +76,7 @@ export default function InviteDialog({ event, onClose }) {
   }, [event?.id]);
 
   useEffect(() => {
+    if (tab !== "search") return;
     const q = query.trim();
     if (!q) {
       setResults([]);
@@ -94,7 +96,7 @@ export default function InviteDialog({ event, onClose }) {
     return () => {
       active = false;
     };
-  }, [query, me?.id]);
+  }, [query, me?.id, tab]);
 
   async function sendInvite(inviteeId, inviteeName) {
     if (!me || !inviteeId || sent.has(inviteeId)) return;
@@ -153,6 +155,11 @@ export default function InviteDialog({ event, onClose }) {
 
   const initial = (n) => (n ? n.charAt(0).toUpperCase() : "?");
 
+  const q = query.trim();
+  const friendsFiltered = q ? friends.filter((f) => matchesName(f.friend_name, q)) : friends;
+  const clicksFiltered = q ? clicks.filter((c) => matchesName(c.name, q)) : clicks;
+  const nearbyFiltered = q ? nearby.filter((e) => matchesName(e.title, q)) : nearby;
+
   return (
     <div className="fixed inset-0 z-[800] flex items-end sm:items-center justify-center bg-black/40" onClick={onClose}>
       <div
@@ -175,7 +182,7 @@ export default function InviteDialog({ event, onClose }) {
             return (
               <button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={() => { setTab(t.id); setQuery(""); }}
                 className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
                 style={{ background: on ? FB : "#eef2f7", color: on ? "#fff" : "#1f2937" }}
               >
@@ -184,6 +191,23 @@ export default function InviteDialog({ event, onClose }) {
               </button>
             );
           })}
+        </div>
+
+        <div className="px-3 pt-2">
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={
+                tab === "friends" ? "Search your friends"
+                : tab === "cliqs" ? "Search your CliQs"
+                : tab === "afterparty" ? "Search nearby events"
+                : "Search people by name"
+              }
+              className="pl-9"
+            />
+          </div>
         </div>
 
         {note && <p className="px-4 pt-2 text-xs font-medium" style={{ color: FB }}>{note}</p>}
@@ -198,8 +222,10 @@ export default function InviteDialog({ event, onClose }) {
           {tab === "friends" &&
             (friends.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-4">No friends yet.</p>
+            ) : friendsFiltered.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-4">No friends match “{q}”.</p>
             ) : (
-              friends.map((f) => (
+              friendsFiltered.map((f) => (
                 <div key={f.id} className="flex items-center gap-3 p-2 rounded-lg border border-gray-100">
                   <span className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-sm font-bold shrink-0">
                     {f.friend_avatar ? <Image src={f.friend_avatar} fittingType="fill" className="w-full h-full" /> : initial(f.friend_name)}
@@ -221,8 +247,10 @@ export default function InviteDialog({ event, onClose }) {
           {tab === "cliqs" &&
             (clicks.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-4">You're not in any CliQs yet.</p>
+            ) : clicksFiltered.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-4">No CliQs match “{q}”.</p>
             ) : (
-              clicks.map((c) => (
+              clicksFiltered.map((c) => (
                 <div key={c.id} className="flex items-center gap-3 p-2 rounded-lg border border-gray-100">
                   <span className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-sm font-bold shrink-0">
                     {c.avatar_url ? <Image src={c.avatar_url} fittingType="fill" className="w-full h-full" /> : initial(c.name)}
@@ -241,8 +269,10 @@ export default function InviteDialog({ event, onClose }) {
           {tab === "afterparty" &&
             (nearby.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-4">No upcoming public events nearby.</p>
+            ) : nearbyFiltered.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-4">No events match “{q}”.</p>
             ) : (
-              nearby.map((ev) => {
+              nearbyFiltered.map((ev) => {
                 const cat = getCategory(ev.category);
                 return (
                   <div key={ev.id} className="flex items-center gap-3 p-2 rounded-lg border border-gray-100">
@@ -263,10 +293,6 @@ export default function InviteDialog({ event, onClose }) {
 
           {tab === "search" && (
             <>
-              <div className="relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search people by name" className="pl-9" autoFocus />
-              </div>
               {searching && (
                 <div className="flex justify-center py-3">
                   <Loader2 className="w-5 h-5 animate-spin" style={{ color: FB }} />

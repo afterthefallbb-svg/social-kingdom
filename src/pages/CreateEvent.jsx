@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import InviteDialog from "@/components/invite/InviteDialog";
+import InvitePicker from "@/components/invite/InvitePicker";
 
 const WALLA_WALLA = [46.0646, -118.3425];
 const FB = "#1877f2";
@@ -36,8 +36,12 @@ export default function CreateEvent() {
   const [visibility, setVisibility] = useState(
     params.get("visibility") === "personal" ? "personal" : "public"
   );
-  const [inviteAfter, setInviteAfter] = useState(true);
-  const [createdEvent, setCreatedEvent] = useState(null);
+  const [me, setMe] = useState(null);
+  const [inviteSelection, setInviteSelection] = useState({ users: [], clicks: [], events: [] });
+
+  useEffect(() => {
+    base44.auth.me().then(setMe).catch(() => setMe(null));
+  }, []);
 
   function addTag() {
     const t = tagInput.trim();
@@ -70,15 +74,46 @@ export default function CreateEvent() {
         visibility,
         click_id: clickId
       });
-      if (inviteAfter) {
-        setCreatedEvent(ev);
-      } else {
-        navigate(clickId ? `/clicks/${clickId}` : `/event/${ev.id}`);
-      }
+      await sendInvites(ev);
+      navigate(clickId ? `/clicks/${clickId}` : `/event/${ev.id}`);
     } catch (e) {
       toast({ title: "Could not save gathering", description: String(e.message || e) });
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function sendInvites(ev) {
+    if (!me) return;
+    const invited = new Set();
+    const inviteUser = async (uid, uname) => {
+      if (!uid || invited.has(uid) || uid === me.id) return;
+      invited.add(uid);
+      await base44.entities.Invite.create({
+        target_type: "event",
+        target_id: ev.id,
+        target_name: ev.title,
+        target_image: ev.image_url || "",
+        target_category: ev.category,
+        target_address: ev.address || "",
+        inviter_id: me.id,
+        inviter_name: me.full_name || "",
+        invitee_id: uid,
+        invitee_name: uname || ""
+      }).catch(() => {});
+    };
+    for (const u of inviteSelection.users) await inviteUser(u.id, u.name);
+    for (const c of inviteSelection.clicks) {
+      const mem = await base44.entities.ClickMembership
+        .filter({ click_id: c.id }, { limit: 200 })
+        .catch(() => ({ items: [] }));
+      for (const m of mem.items) await inviteUser(m.user_id, m.user_name);
+    }
+    for (const e of inviteSelection.events) {
+      const att = await base44.entities.Attendance
+        .filter({ event_id: e.id }, { limit: 200 })
+        .catch(() => ({ items: [] }));
+      for (const a of att.items) await inviteUser(a.user_id, a.user_name);
     }
   }
 
@@ -257,20 +292,7 @@ export default function CreateEvent() {
           </p>
         </div>
 
-        <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200">
-          <div>
-            <p className="text-sm font-semibold text-gray-700">Invite friends after posting</p>
-            <p className="text-[11px] text-gray-400">Open the invite panel once your gathering is live.</p>
-          </div>
-          <button
-            type="button"
-            onClick={() => setInviteAfter((v) => !v)}
-            className="relative w-11 h-6 rounded-full transition"
-            style={{ background: inviteAfter ? FB : "#cbd5e1" }}
-          >
-            <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all" style={{ left: inviteAfter ? "22px" : "2px" }} />
-          </button>
-        </div>
+        <InvitePicker onChange={setInviteSelection} />
 
         <Button
           onClick={submit}
@@ -282,12 +304,6 @@ export default function CreateEvent() {
         </Button>
       </div>
 
-      {createdEvent && (
-        <InviteDialog
-          event={createdEvent}
-          onClose={() => navigate(clickId ? `/clicks/${clickId}` : `/event/${createdEvent.id}`)}
-        />
-      )}
     </div>
   );
 }

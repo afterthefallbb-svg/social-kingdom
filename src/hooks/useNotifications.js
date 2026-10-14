@@ -78,6 +78,7 @@ export function useNotifications() {
         user_id: me.id,
         user_name: me.full_name || "",
         user_avatar: me.avatar_url || "",
+        user_city: me.location || "",
         status: "confirmed"
       }).catch(() => {});
       await base44.entities.Invite.update(inv.id, { status: "accepted" });
@@ -108,7 +109,8 @@ export function useNotifications() {
         click_id: inv.target_id,
         user_id: me.id,
         user_name: me.full_name || "",
-        user_avatar: me.avatar_url || ""
+        user_avatar: me.avatar_url || "",
+        user_city: me.location || ""
       }).catch(() => {});
       await base44.entities.Invite.update(inv.id, { status: "joined" });
       setCliqs((x) => x.filter((i) => i.id !== inv.id));

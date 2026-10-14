@@ -17,6 +17,10 @@
     "user_avatar": {
       "type": "string",
       "title": "User Avatar"
+    },
+    "user_city": {
+      "type": "string",
+      "title": "User City"
     }
   },
   "required": [

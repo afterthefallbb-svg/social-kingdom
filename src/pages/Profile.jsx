@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { ChevronLeft } from "lucide-react";
 import { Image } from "@/components/ui/image";
@@ -13,8 +13,12 @@ import EditProfileDialog from "@/components/profile/EditProfileDialog";
 export default function Profile() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { state } = useLocation();
+  const passed = state || {};
   const [me, setMe] = useState(null);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(
+    id && passed.name ? { id, full_name: passed.name, avatar_url: passed.avatar, location: passed.city } : null
+  );
   const [isMe, setIsMe] = useState(true);
   const [events, setEvents] = useState([]);
   const [clicks, setClicks] = useState([]);
@@ -39,6 +43,9 @@ export default function Profile() {
           u = await base44.entities.User.get(targetId);
         } catch {
           u = null;
+        }
+        if (!u && passed.name) {
+          u = { id: targetId, full_name: passed.name, avatar_url: passed.avatar, location: passed.city };
         }
         if (!u) {
           const fr = await base44.entities.Friendship.filter({ friend_id: targetId }, { limit: 1 }).catch(() => ({ items: [] }));

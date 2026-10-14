@@ -65,7 +65,8 @@ export default function CreateClick() {
         click_id: click.id,
         user_id: me.id,
         user_name: me.full_name,
-        user_avatar: me.avatar_url
+        user_avatar: me.avatar_url,
+        user_city: me.location || ""
       });
       toast({ title: "CliQ created" });
       navigate(`/clicks/${click.id}`, { replace: true });

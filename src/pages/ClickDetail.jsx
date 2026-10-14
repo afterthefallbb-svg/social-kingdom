@@ -245,7 +245,15 @@ export default function ClickDetail() {
         <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
           {members.length === 0 && <p className="text-sm text-gray-400">No members yet.</p>}
           {members.map((m) => (
-            <div key={m.id} className="flex flex-col items-center gap-1 shrink-0 w-16">
+            <button
+              key={m.id}
+              onClick={() =>
+                navigate(`/profile/${m.user_id}`, {
+                  state: { name: m.user_name, avatar: m.user_avatar, city: m.user_city }
+                })
+              }
+              className="flex flex-col items-center gap-1 shrink-0 w-16"
+            >
               <div className="w-14 h-14 rounded-full overflow-hidden border-2" style={{ borderColor: FB }}>
                 {m.user_avatar ? (
                   <Image src={m.user_avatar} fittingType="fill" className="w-full h-full" />
@@ -258,7 +266,7 @@ export default function ClickDetail() {
               <span className="text-[11px] text-gray-600 truncate max-w-[60px]">
                 {m.user_name?.split(" ")[0]}
               </span>
-            </div>
+            </button>
           ))}
         </div>
       </div>

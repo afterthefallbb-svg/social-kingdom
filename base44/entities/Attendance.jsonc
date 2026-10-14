@@ -18,6 +18,10 @@
       "type": "string",
       "title": "User Avatar"
     },
+    "user_city": {
+      "type": "string",
+      "title": "User City"
+    },
     "status": {
       "type": "string",
       "enum": [

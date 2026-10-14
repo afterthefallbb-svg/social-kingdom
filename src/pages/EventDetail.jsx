@@ -130,6 +130,7 @@ export default function EventDetail() {
             <div className="flex items-end gap-3 mb-4">
               <Link
                 to={`/profile/${host.id}`}
+                state={{ name: host.full_name, avatar: host.avatar_url, city: host.location }}
                 className="relative shrink-0 pr-7"
                 aria-label={`Host ${host.full_name}`}
               >
@@ -231,7 +232,7 @@ export default function EventDetail() {
       </div>
 
       <div className="p-3 space-y-3 max-w-2xl mx-auto">
-        <EventAttending eventId={event.id} />
+        <EventAttending eventId={event.id} hostId={event.created_by_id} />
         <EventPhotos eventId={event.id} />
         <EventPosts eventId={event.id} />
       </div>

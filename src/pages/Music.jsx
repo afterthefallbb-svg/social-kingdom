@@ -30,13 +30,15 @@ export default function Music() {
   const [current, setCurrent] = useState(GENRES[0]);
   const [input, setInput] = useState("");
 
-  const src = `https://www.youtube.com/embed/${current.id}?list=RD${current.id}&autoplay=1&rel=0`;
+  const src = `https://www.youtube.com/embed/${current.id}?list=RD${current.id}&autoplay=1&mute=1&rel=0`;
 
   function playInput() {
     const id = parseVideoId(input);
     if (id) {
       setCurrent({ id, title: "Your selection" });
       setInput("");
+    } else if (input.trim()) {
+      window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(input.trim())}`, "_blank");
     }
   }
 
@@ -64,7 +66,7 @@ export default function Music() {
           />
         </div>
         <p className="mt-2 text-sm font-semibold text-gray-800 truncate">{current.title}</p>
-        <p className="text-[11px] text-gray-400">Playing a YouTube mix right here in the app</p>
+        <p className="text-[11px] text-gray-400">Playing a YouTube mix in-app — tap the player to unmute</p>
       </div>
 
       {/* Paste a link or video ID to play in-app */}
@@ -95,7 +97,7 @@ export default function Music() {
           className="mt-2 inline-flex items-center gap-1 text-xs font-medium"
           style={{ color: FB }}
         >
-          <ExternalLink size={12} /> Or search YouTube to find a link
+          <ExternalLink size={12} /> Type a song or artist name to search YouTube
         </button>
       </div>
 

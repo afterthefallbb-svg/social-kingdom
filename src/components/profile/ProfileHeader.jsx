@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
+import KloutButton from "@/components/klout/KloutButton";
+import FriendMessageActions from "@/components/profile/FriendMessageActions";
 
 const FB = "#1877f2";
 
@@ -90,6 +92,26 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
         <h2 className="text-xl font-bold text-gray-900">{name}</h2>
         {city && <p className="text-sm text-gray-500">{city}</p>}
       </div>
+
+      {/* Klout (like + crown) — centered under the avatar with a clean gap */}
+      {user?.id && (
+        <div className="px-4 pt-3">
+          <div className="w-24 flex justify-center">
+            <KloutButton target_type="profile" target_id={user.id} />
+          </div>
+        </div>
+      )}
+
+      {/* Add Friend / Message toggles (other profiles only) */}
+      {!isMe && user?.id && (
+        <div className="px-4 pt-3">
+          <FriendMessageActions
+            targetId={user.id}
+            friendName={name}
+            friendAvatar={user?.avatar_url}
+          />
+        </div>
+      )}
 
       {/* Slim actions (current user only) */}
       {isMe && (

@@ -130,7 +130,7 @@ export default function EventDetail() {
             <div className="flex items-center gap-3 mb-4">
               <Link
                 to={`/profile/${host.id}`}
-                className="relative shrink-0 w-24 h-24"
+                className="relative shrink-0"
                 aria-label={`Host ${host.full_name}`}
               >
                 <div

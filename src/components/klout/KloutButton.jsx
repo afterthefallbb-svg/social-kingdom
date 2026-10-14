@@ -175,7 +175,7 @@ export default function KloutButton({ target_type, target_id, size = "md", page 
       </button>
 
       {menuOpen && (
-        <div className="absolute right-0 top-full mt-1 z-50 bg-white rounded-xl shadow-lg border border-gray-200 py-1 w-44">
+        <div className="absolute left-0 top-full mt-1 z-50 bg-white rounded-xl shadow-lg border border-gray-200 py-1 w-44">
           {REACTIONS.map((r) => {
             const active = mine?.reaction === r.id;
             return (

@@ -32,6 +32,9 @@ import CreateGroup from '@/pages/CreateGroup';
 import Projects from '@/pages/Projects';
 import Planner from '@/pages/Planner';
 import Stream from '@/pages/Stream';
+import Feed from '@/pages/Feed';
+import Announcements from '@/pages/Announcements';
+import Games from '@/pages/Games';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -82,6 +85,9 @@ const AuthenticatedApp = () => {
         <Route path="/projects" element={<Projects />} />
         <Route path="/planner" element={<Planner />} />
         <Route path="/stream" element={<Stream />} />
+        <Route path="/feed" element={<Feed />} />
+        <Route path="/announcements" element={<Announcements />} />
+        <Route path="/games" element={<Games />} />
         <Route path="/music" element={<Music />} />
         <Route path="/buy-sell" element={<BuySell />} />
         <Route path="/sell" element={<CreateListing />} />

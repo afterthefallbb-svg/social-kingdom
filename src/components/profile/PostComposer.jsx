@@ -4,8 +4,13 @@ import { toast } from "@/components/ui/use-toast";
 
 const FB = "#1877f2";
 
-export default function PostComposer({ me, onPosted }) {
-  const [open, setOpen] = useState(false);
+export default function PostComposer({ me, onPosted, allowPhotoOnly, open, onOpenChange }) {
+  // Controlled mode (open/onOpenChange) lets a parent plus-button open the composer.
+  const controlled = open !== undefined;
+  const [internalOpen, setInternalOpen] = useState(false);
+  const setOpen = (v) => (controlled ? onOpenChange(v) : setInternalOpen(v));
+  const isOpen = controlled ? open : internalOpen;
+
   const [text, setText] = useState("");
   const [img, setImg] = useState("");
   const [saving, setSaving] = useState(false);
@@ -13,8 +18,10 @@ export default function PostComposer({ me, onPosted }) {
   const initial = name.charAt(0).toUpperCase();
 
   async function post() {
-    if (!text.trim()) {
-      toast({ title: "Write something to post" });
+    const hasText = text.trim().length > 0;
+    const hasImg = img.trim().length > 0;
+    if (!hasText && !(allowPhotoOnly && hasImg)) {
+      toast({ title: allowPhotoOnly ? "Write something or add an image" : "Write something to post" });
       return;
     }
     setSaving(true);
@@ -38,7 +45,7 @@ export default function PostComposer({ me, onPosted }) {
     }
   }
 
-  if (!open) {
+  if (!isOpen) {
     return (
       <div className="bg-white rounded-2xl shadow-sm p-3 flex items-center gap-2">
         <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center font-bold shrink-0" style={{ color: FB }}>

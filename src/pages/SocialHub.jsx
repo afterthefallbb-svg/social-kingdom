@@ -126,10 +126,14 @@ export default function SocialHub() {
   const clickItemsP = pad(clickItems, CLIQ_SAMPLES, "/browse/cliqs", "c");
 
   const topLinks = [
+    { label: "Feed", to: "/feed" },
+    { label: "Messages", to: "/messages" },
     { label: "Notifications", to: "/notifications" },
     { label: "Groups", to: "/groups" },
     { label: "Buy/Sell", to: "/buy-sell" },
     { label: "Music", to: "/music" },
+    { label: "Games", to: "/games" },
+    { label: "Announcements", to: "/announcements" },
   ];
 
   return (
@@ -247,7 +251,7 @@ export default function SocialHub() {
       {/* Footer links */}
       <div className="mt-4 flex justify-center gap-8 pb-4 text-xs">
         <Link to="/support" className="font-medium" style={{ color: FB }}>Support</Link>
-        <Link to="/contact" className="font-medium" style={{ color: FB }}>Contact Us</Link>
+        <Link to="/contact" className="font-medium" style={{ color: FB }}>Feedback</Link>
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ export default function ContactUs() {
         <button onClick={() => navigate("/browse")} className="p-1">
           <ChevronLeft size={24} style={{ color: FB }} />
         </button>
-        <span className="font-bold text-gray-900 text-lg">Contact Us</span>
+        <span className="font-bold text-gray-900 text-lg">Feedback</span>
       </div>
 
       <div className="px-4 mt-6">

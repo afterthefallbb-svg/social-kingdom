@@ -41,11 +41,23 @@ export default function Profile() {
           u = null;
         }
         if (!u) {
-          const fr = await base44.entities.Friendship.filter({ friend_id: targetId }, { limit: 1 });
+          const fr = await base44.entities.Friendship.filter({ friend_id: targetId }, { limit: 1 }).catch(() => ({ items: [] }));
           const f = fr.items[0];
-          u = f
-            ? { id: targetId, friend_name: f.friend_name, avatar_url: f.friend_avatar, location: f.friend_city }
-            : { id: targetId, friend_name: "CliQ Member" };
+          if (f) {
+            u = { id: targetId, full_name: f.friend_name, avatar_url: f.friend_avatar, location: f.friend_city };
+          } else {
+            const att = await base44.entities.Attendance.filter({ user_id: targetId }, { limit: 1 }).catch(() => ({ items: [] }));
+            const a = att.items[0];
+            if (a) {
+              u = { id: targetId, full_name: a.user_name, avatar_url: a.user_avatar };
+            } else {
+              const cm = await base44.entities.ClickMembership.filter({ user_id: targetId }, { limit: 1 }).catch(() => ({ items: [] }));
+              const c = cm.items[0];
+              u = c
+                ? { id: targetId, full_name: c.user_name, avatar_url: c.user_avatar }
+                : { id: targetId, full_name: "CliQ Member" };
+            }
+          }
         }
         setUser(u);
       }

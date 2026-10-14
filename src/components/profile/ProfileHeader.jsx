@@ -7,6 +7,7 @@ import { toast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
 import KloutButton from "@/components/klout/KloutButton";
 import FriendMessageActions from "@/components/profile/FriendMessageActions";
+import { presenceBadge } from "@/lib/presence";
 
 const FB = "#1877f2";
 
@@ -75,6 +76,13 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
             </span>
           )}
         </button>
+
+        {(() => {
+          const badge = presenceBadge(user);
+          return badge ? (
+            <span className={`pb-4 text-3xl leading-none ${badge.online ? "" : "opacity-40 grayscale"}`}>{badge.emoji}</span>
+          ) : null;
+        })()}
 
         <div className="pb-3 flex-1 flex justify-end">
           <button

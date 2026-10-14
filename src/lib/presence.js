@@ -11,7 +11,7 @@ export function isOnline(user) {
 }
 
 export function statusEmoji(user) {
-  return user?.status_emoji || "🤡";
+  return user?.status_emoji || "👑";
 }
 
 // Returns { emoji, online } to render, or null when the user hides their status.

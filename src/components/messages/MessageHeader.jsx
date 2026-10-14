@@ -15,7 +15,7 @@ export default function MessageHeader({ me, onOpenSettings }) {
         <span className="w-12 h-12 rounded-full overflow-hidden border-2 border-white flex items-center justify-center text-lg font-bold text-white" style={{ background: FB + "55" }}>
           {me?.avatar_url ? <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" /> : (name.charAt(0))}
         </span>
-        <span className="absolute -bottom-1 -right-1 text-base leading-none bg-white rounded-full px-0.5">
+        <span className="absolute -top-1 -right-1 text-base leading-none bg-white rounded-full px-0.5">
           {online ? statusEmoji(me) : "⚫"}
         </span>
       </div>

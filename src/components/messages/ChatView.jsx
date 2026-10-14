@@ -138,9 +138,11 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
       <div className="flex items-center gap-2 px-3 py-3 pt-[calc(0.75rem+env(safe-area-inset-top))] text-white shrink-0" style={{ background: FB }}>
         <button onClick={onBack} aria-label="Back"><ArrowLeft size={22} /></button>
         <div className="flex flex-col items-center gap-1 shrink-0">
-          <span className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white flex items-center justify-center text-base font-bold" style={{ background: FB + "55" }}>
-            {avatar ? <Image src={avatar} fittingType="fill" className="w-full h-full" /> : title.charAt(0)}
-            {!conversation?.is_group && <span className="absolute -bottom-1 -right-1 text-xs bg-white rounded-full px-0.5">{online ? statusEmoji(peer) : "⚫"}</span>}
+          <span className="relative w-12 h-12 shrink-0">
+            <span className="w-full h-full rounded-full overflow-hidden border-2 border-white flex items-center justify-center text-base font-bold" style={{ background: FB + "55" }}>
+              {avatar ? <Image src={avatar} fittingType="fill" className="w-full h-full" /> : title.charAt(0)}
+            </span>
+            {!conversation?.is_group && <span className="absolute -top-1 -right-1 text-xs bg-white rounded-full px-0.5 leading-none">{online ? statusEmoji(peer) : "⚫"}</span>}
           </span>
           <p className="text-xs font-bold truncate max-w-[140px] leading-tight">{title}</p>
           {conversation?.is_group && <p className="text-[10px] text-white/80 -mt-0.5">{conversation.member_ids?.length} members</p>}

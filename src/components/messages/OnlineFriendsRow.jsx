@@ -39,19 +39,6 @@ export default function OnlineFriendsRow({ me, onSelectFriend, onLongPress, sele
 
   return (
     <div className="flex items-start gap-3 px-3 py-3 overflow-x-auto no-scrollbar">
-      {/* Your big avatar */}
-      <button
-        onClick={() => onSelectFriend(me)}
-        onContextMenu={(e) => { e.preventDefault(); onLongPress?.(me); }}
-        className="flex flex-col items-center gap-1 shrink-0 w-20"
-      >
-        <span className="relative w-20 h-20 rounded-full overflow-hidden border-2 flex items-center justify-center text-2xl font-bold text-white" style={{ borderColor: FB, background: FB + "33" }}>
-          {me?.avatar_url ? <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" /> : (me?.full_name?.charAt(0) || "U")}
-          <span className="absolute -bottom-1 -right-1 text-sm bg-white rounded-full px-0.5">{statusEmoji(me)}</span>
-        </span>
-        <span className="text-[10px] font-semibold text-gray-700 truncate w-full text-center">You</span>
-      </button>
-
       {/* Friends row, smaller avatars */}
       {friends.map((f) => {
         const online = isOnline(f);
@@ -63,9 +50,11 @@ export default function OnlineFriendsRow({ me, onSelectFriend, onLongPress, sele
             onContextMenu={(e) => { e.preventDefault(); onLongPress?.(f); }}
             className="flex flex-col items-center gap-1 shrink-0 w-16"
           >
-            <span className={`relative w-14 h-14 rounded-full overflow-hidden border-2 flex items-center justify-center text-lg font-bold ${sel ? "ring-2 ring-offset-1" : ""}`} style={{ borderColor: sel ? FB : "#d1d5db", background: FB + "22", color: FB }}>
-              {f.avatar_url ? <Image src={f.avatar_url} fittingType="fill" className="w-full h-full" /> : (f.full_name?.charAt(0) || "?")}
-              <span className="absolute -bottom-1 -right-1 text-xs bg-white rounded-full px-0.5">{online ? statusEmoji(f) : "⚫"}</span>
+            <span className="relative w-14 h-14 shrink-0">
+              <span className={`w-full h-full rounded-full overflow-hidden border-2 flex items-center justify-center text-lg font-bold ${sel ? "ring-2 ring-offset-1" : ""}`} style={{ borderColor: sel ? FB : "#d1d5db", background: FB + "22", color: FB }}>
+                {f.avatar_url ? <Image src={f.avatar_url} fittingType="fill" className="w-full h-full" /> : (f.full_name?.charAt(0) || "?")}
+              </span>
+              <span className="absolute -top-1 -right-1 text-xs bg-white rounded-full px-0.5 leading-none">{online ? statusEmoji(f) : "⚫"}</span>
             </span>
             <span className="text-[10px] text-gray-700 truncate w-full text-center">{f.full_name?.split(" ")[0]}</span>
             <span className="text-[9px] text-gray-400 truncate w-full text-center">{lastSeenLabel(f)}</span>

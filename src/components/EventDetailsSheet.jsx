@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Navigation, MapPin } from "lucide-react";
+import { X, MapPin } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
-import { openDirections } from "@/lib/directions";
+import EventDirectionsLink from "@/components/event/EventDirectionsLink";
 import { Image } from "@/components/ui/image";
 
 function Tag({ children, color }) {
@@ -117,15 +117,7 @@ export default function EventDetailsSheet({ event, onClose }) {
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => openDirections(event)}
-                className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3.5 text-white font-semibold text-base"
-                style={{ background: "#1877f2" }}
-              >
-                <Navigation size={18} color="#ffffff" fill="#ffffff" />
-                Start Directions
-              </button>
+              <EventDirectionsLink event={event} className="mt-5 py-3.5 text-base" filledIcon />
             </div>
           </motion.div>
         </>

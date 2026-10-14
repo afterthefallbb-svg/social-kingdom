@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Navigation, MapPin, Globe, Lock, UserPlus, Camera } from "lucide-react";
+import { ArrowLeft, MapPin, Globe, Lock, UserPlus, Camera } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
-import { openDirections } from "@/lib/directions";
+import EventDirectionsLink from "@/components/event/EventDirectionsLink";
 import { Image } from "@/components/ui/image";
 import { useToast } from "@/components/ui/use-toast";
 import EventAttending from "@/components/event/EventAttending";
@@ -130,7 +130,7 @@ export default function EventDetail() {
             <div className="flex items-center gap-3 mb-4">
               <Link
                 to={`/profile/${host.id}`}
-                className="relative shrink-0"
+                className="relative shrink-0 w-24 h-24"
                 aria-label={`Host ${host.full_name}`}
               >
                 <div
@@ -144,7 +144,7 @@ export default function EventDetail() {
                   )}
                 </div>
                 <span
-                  className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white shadow flex items-center justify-center text-base border"
+                  className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-card shadow flex items-center justify-center text-base border"
                   style={{ borderColor: cat.color }}
                   aria-hidden="true"
                 >
@@ -211,14 +211,7 @@ export default function EventDetail() {
 
           {event.description && <p className="text-sm text-gray-600 mt-3">{event.description}</p>}
 
-          <button
-            type="button"
-            onClick={() => openDirections(event)}
-            className="mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-white font-semibold"
-            style={{ background: FB }}
-          >
-            <Navigation size={18} /> Start Directions
-          </button>
+          <EventDirectionsLink event={event} className="mt-4 py-3" />
 
           <button
             onClick={() => {

@@ -195,14 +195,17 @@ export default function SocialHub() {
         ))}
       </div>
 
-      {/* Top text links as blue bubbles — four whole bubbles, no protruding sliver */}
-      <div className="flex flex-wrap justify-center gap-2 px-4 mt-3">
+      {/* Top links — horizontal snap-scroll, only whole links show, no hanging edges */}
+      <div
+        className="flex gap-2 overflow-x-auto px-4 mt-3 pb-1 no-scrollbar"
+        style={{ scrollSnapType: "x mandatory", scrollbarWidth: "none" }}
+      >
         {topLinks.map((l) => (
           <button
             key={l.label}
             onClick={() => navigate(l.to)}
             className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
-            style={{ background: FB, color: "#e8edf3" }}
+            style={{ background: FB, color: "#e8edf3", scrollSnapAlign: "start", scrollSnapStop: "always" }}
           >
             {l.label}
           </button>

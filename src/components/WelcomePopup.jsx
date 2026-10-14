@@ -37,9 +37,9 @@ export default function WelcomePopup() {
         <button onClick={dismiss} aria-label="Close" className="absolute top-3 right-3 text-gray-400">
           <X size={20} />
         </button>
-        <h2 className="text-xl font-bold text-gray-900">Welcome to Meet Me 👋</h2>
+        <h2 className="text-xl font-bold text-gray-900">Welcome to Social Kingdom 👋</h2>
         <p className="text-sm text-gray-600 mt-3 leading-relaxed">
-          Meet Me is designed around your convenience, to make gathering easier and to
+          Social Kingdom is designed around your convenience, to make gathering easier and to
           improve your everyday quality of life. We're here to serve you, help you connect,
           and succeed where other social apps have fallen short.
         </p>

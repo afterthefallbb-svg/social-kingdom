@@ -1,46 +1,56 @@
-import React, { useEffect, useState } from "react";
-import { Heart, MessageCircle, Send } from "lucide-react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
-import { Input } from "@/components/ui/input";
+import KloutButton from "@/components/klout/KloutButton";
+import CommentSection from "@/components/comments/CommentSection";
 
 const FB = "#1877f2";
 
-export default function PostCard({ post, onLike }) {
-  const navigate = useNavigate();
-  const [comments, setComments] = useState([]);
-  const [showComments, setShowComments] = useState(false);
-  const [me, setMe] = useState(null);
-  const [text, setText] = useState("");
+function MusicBar({ post }) {
+  const [playing, setPlaying] = useState(false);
+  const [audio, setAudio] = useState(null);
 
-  useEffect(() => {
-    base44.auth.me().then(setMe).catch(() => {});
-  }, []);
+  if (!post.music_url) return null;
 
-  useEffect(() => {
-    if (!showComments) return;
-    base44.entities.Comment.filter({ post_id: post.id }, { sort: "created_date", limit: 100 })
-      .then((p) => setComments(p.items))
-      .catch(() => {});
-  }, [showComments, post.id]);
-
-  async function addComment() {
-    if (!text.trim() || !me) return;
-    try {
-      const c = await base44.entities.Comment.create({
-        post_id: post.id,
-        user_id: me.id,
-        user_name: me.full_name,
-        user_avatar: me.avatar_url,
-        content: text.trim()
-      });
-      setComments([...comments, c]);
-      setText("");
-    } catch (e) {
-      /* ignore */
+  function toggle() {
+    if (playing) {
+      audio?.pause();
+      setPlaying(false);
+      return;
     }
+    const a = new Audio(post.music_url);
+    a.play().catch(() => {});
+    a.onended = () => setPlaying(false);
+    setAudio(a);
+    setPlaying(true);
   }
+
+  return (
+    <div className="mt-2 flex items-center gap-2 bg-gray-50 rounded-lg p-2">
+      <button
+        onClick={toggle}
+        className="w-8 h-8 rounded-full flex items-center justify-center text-white shrink-0"
+        style={{ background: FB }}
+      >
+        {playing ? "❚❚" : "▶"}
+      </button>
+      {post.music_artwork && (
+        <div className="w-9 h-9 rounded overflow-hidden shrink-0">
+          <Image src={post.music_artwork} fittingType="fill" className="w-full h-full" />
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <p className="text-xs font-semibold truncate text-gray-800">{post.music_title}</p>
+        <p className="text-[11px] text-gray-500 truncate">{post.music_artist}</p>
+      </div>
+    </div>
+  );
+}
+
+export default function PostCard({ post }) {
+  const navigate = useNavigate();
+  const time = post.created_date ? new Date(post.created_date).toLocaleString() : "";
+  const initial = (post.author_name || "?").charAt(0).toUpperCase();
 
   return (
     <div className="rounded-xl border p-3" style={{ borderColor: "#eef0f3" }}>
@@ -62,62 +72,19 @@ export default function PostCard({ post, onLike }) {
         >
           {post.author_name}
         </button>
+        <span className="ml-auto text-[10px] text-gray-400">{time}</span>
       </div>
 
       {post.content && <p className="text-sm text-gray-700 mt-2">{post.content}</p>}
-      {post.image_url && <Image src={post.image_url} fittingType="fill" className="w-full h-48 rounded-lg mt-2" />}
+      {post.image_url && (
+        <Image src={post.image_url} fittingType="fill" className="w-full h-48 rounded-lg mt-2" />
+      )}
+      <MusicBar post={post} />
 
       <div className="flex items-center gap-4 mt-2">
-        <button onClick={() => onLike(post)} className="inline-flex items-center gap-1 text-xs text-gray-500">
-          <Heart size={14} /> {post.likes || 0}
-        </button>
-        <button
-          onClick={() => setShowComments((s) => !s)}
-          className="inline-flex items-center gap-1 text-xs text-gray-500"
-        >
-          <MessageCircle size={14} /> Comment
-        </button>
+        <KloutButton target_type="post" target_id={post.id} size="sm" />
+        <CommentSection postId={post.id} />
       </div>
-
-      {showComments && (
-        <div className="mt-2 space-y-2">
-          {comments.map((c) => (
-            <div key={c.id} className="flex gap-2">
-              <span
-                className="w-7 h-7 rounded-full overflow-hidden border flex items-center justify-center text-[10px] font-bold shrink-0"
-                style={{ borderColor: FB, background: FB + "22", color: FB }}
-              >
-                {c.user_avatar ? (
-                  <Image src={c.user_avatar} fittingType="fill" className="w-full h-full" />
-                ) : (
-                  (c.user_name || "?").charAt(0)
-                )}
-              </span>
-              <div className="rounded-2xl bg-gray-100 px-3 py-1.5">
-                <p className="text-xs font-semibold text-gray-800">{c.user_name?.split(" ")[0]}</p>
-                <p className="text-sm text-gray-700">{c.content}</p>
-              </div>
-            </div>
-          ))}
-          <div className="flex gap-2">
-            <Input
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") addComment(); }}
-              placeholder="Write a comment..."
-              className="h-8 text-xs"
-            />
-            <button
-              onClick={addComment}
-              className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white"
-              style={{ background: FB }}
-              aria-label="Send comment"
-            >
-              <Send size={13} />
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

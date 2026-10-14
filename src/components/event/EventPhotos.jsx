@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { toast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
+import KloutButton from "@/components/klout/KloutButton";
 
 const FB = "#1877f2";
 
@@ -55,12 +56,15 @@ export default function EventPhotos({ eventId }) {
       ) : (
         <div className="grid grid-cols-3 gap-1.5">
           {photos.map((p) => (
-            <div key={p.id} className="aspect-square rounded-lg overflow-hidden">
+            <div key={p.id} className="relative aspect-square rounded-lg overflow-hidden">
               {p.type === "video" ? (
                 <video src={p.url} className="w-full h-full object-cover" controls />
               ) : (
                 <Image src={p.url} fittingType="fill" className="w-full h-full" />
               )}
+              <div className="absolute bottom-1 left-1 bg-white/85 rounded-full px-1 py-0.5">
+                <KloutButton target_type="photo" target_id={p.id} size="sm" />
+              </div>
             </div>
           ))}
         </div>

@@ -205,7 +205,7 @@ export default function EventDetail() {
           )}
 
           <div className="mt-2">
-            <KloutButton target_type="event" target_id={event.id} />
+            <KloutButton target_type="event" target_id={event.id} page={{ page_type: "event", page_id: event.id }} />
           </div>
 
           {click && (

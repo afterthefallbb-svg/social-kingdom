@@ -105,7 +105,7 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
       {user?.id && (
         <div className="px-4 pt-3">
           <div className="w-24 flex justify-center">
-            <KloutButton target_type="profile" target_id={user.id} />
+            <KloutButton target_type="profile" target_id={user.id} page={{ page_type: "profile", page_id: user.id }} />
           </div>
         </div>
       )}

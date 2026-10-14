@@ -1,15 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
+import { ThumbsUp } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import KloutBreakdown from "./KloutBreakdown";
+
+const FB = "#1877f2";
 
 const REACTIONS = [
   { id: "thumbs", emoji: "👍", label: "Like", value: 1 },
   { id: "horns", emoji: "🤘", label: "Super like", value: 2 },
-  { id: "crown", emoji: "👑", label: "Crown", value: 5 },
+  { id: "crown", emoji: "👑", label: "Crown", value: 3 },
 ];
 const valueOf = (r) => (REACTIONS.find((x) => x.id === r) || {}).value || 0;
 
-export default function KloutButton({ target_type, target_id, size = "md" }) {
+export default function KloutButton({ target_type, target_id, size = "md", page }) {
   const [me, setMe] = useState(null);
   const [mine, setMine] = useState(null);
   const [counts, setCounts] = useState({ thumbs: 0, horns: 0, crown: 0 });
@@ -18,23 +21,40 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
   const [breakdown, setBreakdown] = useState(false);
   const [busy, setBusy] = useState(false);
   const ref = useRef(null);
+  const holdTimer = useRef(null);
+  const openedByHold = useRef(false);
 
   async function load() {
     const user = await base44.auth.me().catch(() => null);
     setMe(user);
-    const agg = await base44.entities.Klout.aggregate({
-      query: { target_id, target_type },
-      groupBy: "reaction",
-      sum: ["value"],
-    }).catch(() => ({ rows: [] }));
     const c = { thumbs: 0, horns: 0, crown: 0 };
     let t = 0;
-    (agg.rows || []).forEach((row) => {
-      c[row.reaction] = row.count || 0;
-      t += row.sum_value || 0;
-    });
-    setCounts(c);
-    setTotal(t);
+    if (page) {
+      try {
+        const res = await base44.functions.invoke("getPageKlout", {
+          page_type: page.page_type,
+          page_id: page.page_id,
+        });
+        const d = res.data || {};
+        setTotal(d.total || 0);
+        setCounts(d.counts || c);
+      } catch {
+        setTotal(0);
+        setCounts(c);
+      }
+    } else {
+      const agg = await base44.entities.Klout.aggregate({
+        query: { target_id, target_type },
+        groupBy: "reaction",
+        sum: ["value"],
+      }).catch(() => ({ rows: [] }));
+      (agg.rows || []).forEach((row) => {
+        c[row.reaction] = row.count || 0;
+        t += row.sum_value || 0;
+      });
+      setCounts(c);
+      setTotal(t);
+    }
     if (user) {
       const my = await base44.entities.Klout.filter(
         { target_id, target_type, user_id: user.id },
@@ -48,7 +68,7 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
     if (!target_id) return;
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [target_id, target_type]);
+  }, [target_id, target_type, JSON.stringify(page)]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -56,8 +76,35 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
       if (ref.current && !ref.current.contains(e.target)) setMenuOpen(false);
     };
     document.addEventListener("mousedown", h);
-    return () => document.removeEventListener("mousedown", h);
+    document.addEventListener("touchstart", h);
+    return () => {
+      document.removeEventListener("mousedown", h);
+      document.removeEventListener("touchstart", h);
+    };
   }, [menuOpen]);
+
+  function openMenu() {
+    setMenuOpen(true);
+  }
+
+  function onPointerDown() {
+    openedByHold.current = false;
+    holdTimer.current = setTimeout(() => {
+      openedByHold.current = true;
+      openMenu();
+    }, 380);
+  }
+  function clearHold() {
+    if (holdTimer.current) {
+      clearTimeout(holdTimer.current);
+      holdTimer.current = null;
+    }
+  }
+  function onClick() {
+    // A quick tap (not a hold) opens the reaction row too.
+    if (!openedByHold.current) openMenu();
+    openedByHold.current = false;
+  }
 
   async function react(rid) {
     if (!me || busy) return;
@@ -65,6 +112,7 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
     setMenuOpen(false);
     try {
       if (mine && mine.reaction === rid) {
+        // tapping the active reaction removes it
         await base44.entities.Klout.delete(mine.id);
         setMine(null);
       } else if (mine) {
@@ -94,28 +142,33 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
   const myReaction = REACTIONS.find((r) => r.id === mine?.reaction);
   const pad = size === "sm" ? "px-2 py-1" : "px-3 py-1.5";
   const txt = size === "sm" ? "text-xs" : "text-sm";
+  const iconSize = size === "sm" ? 15 : 17;
 
   return (
     <div className="relative inline-flex items-center gap-1.5" ref={ref}>
       <button
         type="button"
-        onClick={() => setMenuOpen((v) => !v)}
-        className={`inline-flex items-center gap-1 rounded-full ${pad} bg-gray-100 border border-gray-200 ${txt} font-semibold text-gray-700`}
+        onPointerDown={onPointerDown}
+        onPointerUp={clearHold}
+        onPointerLeave={clearHold}
+        onClick={onClick}
+        className={`inline-flex items-center gap-1 rounded-full ${pad} bg-gray-100 border border-gray-200 ${txt} font-semibold select-none`}
+        style={{ color: myReaction ? FB : "#374151" }}
+        aria-label="Like"
       >
-        {myReaction ? (
-          <>
-            {myReaction.emoji} {myReaction.label}
-          </>
-        ) : (
-          <>👍 Like</>
-        )}
+        <ThumbsUp
+          size={iconSize}
+          fill={myReaction ? FB : "none"}
+          color={myReaction ? FB : "#374151"}
+        />
+        {myReaction && <span>{myReaction.emoji}</span>}
       </button>
 
       <button
         type="button"
         onClick={() => setBreakdown(true)}
-        className={`inline-flex items-center gap-1.5 ${txt} font-bold text-gray-800`}
-        title="View reactions"
+        className={`inline-flex items-center gap-1 ${txt} font-bold text-gray-800`}
+        title="View clout"
       >
         <span>{total}</span>
         <span>👑</span>
@@ -123,21 +176,26 @@ export default function KloutButton({ target_type, target_id, size = "md" }) {
 
       {menuOpen && (
         <div className="absolute right-0 top-full mt-1 z-50 bg-white rounded-xl shadow-lg border border-gray-200 py-1 w-44">
-          {REACTIONS.map((r) => (
-            <button
-              key={r.id}
-              type="button"
-              onClick={() => react(r.id)}
-              className={`flex items-center justify-between w-full px-3 py-2 text-sm hover:bg-gray-50 ${
-                mine?.reaction === r.id ? "text-blue-600 font-semibold" : "text-gray-700"
-              }`}
-            >
-              <span className="flex items-center gap-2">
-                <span className="text-lg">{r.emoji}</span> {r.label}
-              </span>
-              <span className="text-xs text-gray-400">+{r.value}</span>
-            </button>
-          ))}
+          {REACTIONS.map((r) => {
+            const active = mine?.reaction === r.id;
+            return (
+              <button
+                key={r.id}
+                type="button"
+                onClick={() => react(r.id)}
+                disabled={busy}
+                className={`flex items-center justify-between w-full px-3 py-2 text-sm hover:bg-gray-50 ${
+                  active ? "text-blue-600 font-semibold" : "text-gray-700"
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <span className="text-lg">{r.emoji}</span>{" "}
+                  {active ? "Remove" : r.label}
+                </span>
+                <span className="text-xs text-gray-400">+{r.value}</span>
+              </button>
+            );
+          })}
         </div>
       )}
 

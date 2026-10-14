@@ -157,7 +157,7 @@ export default function ClickDetail() {
             <Users size={14} /> {click.member_count || members.length} members
           </p>
           <div className="mt-3 flex justify-center">
-            <KloutButton target_type="click" target_id={click.id} />
+            <KloutButton target_type="click" target_id={click.id} page={{ page_type: "click", page_id: click.id }} />
           </div>
           {click.description && (
             <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto">{click.description}</p>

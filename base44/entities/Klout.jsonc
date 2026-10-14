@@ -7,7 +7,10 @@
       "enum": [
         "profile",
         "event",
-        "click"
+        "click",
+        "post",
+        "comment",
+        "photo"
       ],
       "default": "profile",
       "title": "Target Type"

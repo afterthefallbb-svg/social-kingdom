@@ -57,15 +57,6 @@ export default function EventPosts({ eventId }) {
     }
   }
 
-  async function toggleLike(post) {
-    try {
-      const updated = await base44.entities.Post.update(post.id, { likes: (post.likes || 0) + 1 });
-      setPosts(posts.map((p) => (p.id === post.id ? updated : p)));
-    } catch {
-      /* ignore */
-    }
-  }
-
   return (
     <div className="bg-white rounded-2xl shadow-sm p-4">
       <h3 className="font-bold text-gray-900 mb-3">Posts & Comments</h3>
@@ -112,7 +103,7 @@ export default function EventPosts({ eventId }) {
       <div className="mt-3 space-y-3">
         {posts.length === 0 && <p className="text-xs text-gray-400">No posts yet. Start the conversation!</p>}
         {posts.map((p) => (
-          <PostCard key={p.id} post={p} onLike={toggleLike} />
+          <PostCard key={p.id} post={p} />
         ))}
       </div>
 

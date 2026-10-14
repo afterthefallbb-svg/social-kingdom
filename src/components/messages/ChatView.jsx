@@ -64,6 +64,14 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages.length]);
 
+  // Auto-grow the composer up to ~5 lines
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 120) + "px";
+  }, [text]);
+
   function onTextChange(val) {
     setText(val);
     setDraft(conversation?.id, val);
@@ -188,7 +196,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
       )}
 
       {/* Composer */}
-      <div className="shrink-0 border-t bg-white p-2 pb-[calc(0.6rem+env(safe-area-inset-bottom))] flex items-center gap-1.5">
+      <div className="shrink-0 border-t bg-white p-2 pb-[calc(0.5rem+104px)] flex items-end gap-1.5">
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPickPhoto} />
         <button onClick={() => { setAttachOpen((o) => !o); setEmojiOpen(false); }} className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: FB + "22", color: FB }} aria-label="Attach">
           <Plus size={20} />
@@ -196,14 +204,14 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
         <button onClick={() => { setEmojiOpen((o) => !o); setAttachOpen(false); }} className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: FB + "22", color: FB }} aria-label="Emoji">
           <Smile size={20} />
         </button>
-        <input
+        <textarea
           ref={inputRef}
           value={text}
           onChange={(e) => onTextChange(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") { send(); setEmojiOpen(false); } }}
+          rows={1}
           placeholder={uploading ? "Uploading…" : "Message…"}
           disabled={uploading}
-          className="flex-1 rounded-full border border-gray-200 px-4 py-2 text-sm outline-none"
+          className="flex-1 resize-none rounded-2xl border border-gray-200 px-4 py-2 text-sm outline-none max-h-[120px] leading-5 overflow-y-auto"
         />
         <button onClick={send} disabled={sending || uploading || (!text.trim() && !pendingImage)} className="w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0" style={{ background: FB }}>
           <Send size={18} />

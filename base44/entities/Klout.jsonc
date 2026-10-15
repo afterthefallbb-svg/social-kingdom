@@ -10,7 +10,8 @@
         "click",
         "post",
         "comment",
-        "photo"
+        "photo",
+        "video"
       ],
       "default": "profile",
       "title": "Target Type"

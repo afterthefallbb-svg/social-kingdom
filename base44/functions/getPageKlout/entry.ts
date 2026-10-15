@@ -19,25 +19,50 @@ export default async function(req) {
     const targets = [{ target_type: page_type, target_id: page_id }];
 
     if (page_type === 'event') {
-      const [posts, photos] = await Promise.all([
+      const [posts, photos, videos] = await Promise.all([
         base44.entities.Post.filter({ event_id: page_id }, { limit: 500, fields: ['id'] }).catch(() => ({ items: [] })),
-        base44.entities.EventPhoto.filter({ event_id: page_id }, { limit: 500, fields: ['id'] }).catch(() => ({ items: [] }))
+        base44.entities.EventPhoto.filter({ event_id: page_id }, { limit: 500, fields: ['id'] }).catch(() => ({ items: [] })),
+        base44.entities.Video.filter({ event_id: page_id }, { limit: 500, fields: ['id'] }).catch(() => ({ items: [] }))
       ]);
       const postIds = (posts.items || []).map((p) => p.id);
       postIds.forEach((id) => targets.push({ target_type: 'post', target_id: id }));
       (photos.items || []).map((p) => p.id).forEach((id) => targets.push({ target_type: 'photo', target_id: id }));
+      (videos.items || []).map((v) => v.id).forEach((id) => targets.push({ target_type: 'video', target_id: id }));
       if (postIds.length) {
         const comments = await base44.entities.Comment.filter({ post_id: { $in: postIds } }, { limit: 1000, fields: ['id'] }).catch(() => ({ items: [] }));
         (comments.items || []).map((c) => c.id).forEach((id) => targets.push({ target_type: 'comment', target_id: id }));
       }
+      const videoIds = (videos.items || []).map((v) => v.id);
+      if (videoIds.length) {
+        const vcomments = await base44.entities.Comment.filter({ video_id: { $in: videoIds } }, { limit: 1000, fields: ['id'] }).catch(() => ({ items: [] }));
+        (vcomments.items || []).map((c) => c.id).forEach((id) => targets.push({ target_type: 'comment', target_id: id }));
+      }
+    } else if (page_type === 'click') {
+      const videos = await base44.entities.Video.filter({ click_id: page_id }, { limit: 500, fields: ['id'] }).catch(() => ({ items: [] }));
+      const videoIds = (videos.items || []).map((v) => v.id);
+      videoIds.forEach((id) => targets.push({ target_type: 'video', target_id: id }));
+      if (videoIds.length) {
+        const vcomments = await base44.entities.Comment.filter({ video_id: { $in: videoIds } }, { limit: 1000, fields: ['id'] }).catch(() => ({ items: [] }));
+        (vcomments.items || []).map((c) => c.id).forEach((id) => targets.push({ target_type: 'comment', target_id: id }));
+      }
     } else if (page_type === 'profile') {
       // Only the user's own profile-page posts (not their posts on other events).
-      const posts = await base44.entities.Post.filter({ author_id: page_id }, { limit: 500, fields: ['id', 'event_id'] }).catch(() => ({ items: [] }));
+      const [posts, videos] = await Promise.all([
+        base44.entities.Post.filter({ author_id: page_id }, { limit: 500, fields: ['id', 'event_id'] }).catch(() => ({ items: [] })),
+        base44.entities.Video.filter({ user_id: page_id }, { limit: 500, fields: ['id'] }).catch(() => ({ items: [] }))
+      ]);
       const postIds = (posts.items || []).filter((p) => !p.event_id).map((p) => p.id);
       postIds.forEach((id) => targets.push({ target_type: 'post', target_id: id }));
-      if (postIds.length) {
-        const comments = await base44.entities.Comment.filter({ post_id: { $in: postIds } }, { limit: 1000, fields: ['id'] }).catch(() => ({ items: [] }));
+      const videoIds = (videos.items || []).map((v) => v.id);
+      videoIds.forEach((id) => targets.push({ target_type: 'video', target_id: id }));
+      const allCommentPostIds = [...postIds];
+      if (allCommentPostIds.length) {
+        const comments = await base44.entities.Comment.filter({ post_id: { $in: allCommentPostIds } }, { limit: 1000, fields: ['id'] }).catch(() => ({ items: [] }));
         (comments.items || []).map((c) => c.id).forEach((id) => targets.push({ target_type: 'comment', target_id: id }));
+      }
+      if (videoIds.length) {
+        const vcomments = await base44.entities.Comment.filter({ video_id: { $in: videoIds } }, { limit: 1000, fields: ['id'] }).catch(() => ({ items: [] }));
+        (vcomments.items || []).map((c) => c.id).forEach((id) => targets.push({ target_type: 'comment', target_id: id }));
       }
     }
     // "click" pages have no posts/photos — clout is direct likes only.

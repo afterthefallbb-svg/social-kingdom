@@ -9,6 +9,7 @@ import EventsAttendedSection from "@/components/profile/EventsAttendedSection";
 import CliQsSection from "@/components/profile/CliQsSection";
 import FriendsSection from "@/components/profile/FriendsSection";
 import EditProfileDialog from "@/components/profile/EditProfileDialog";
+import VideoGallery from "@/components/video/VideoGallery";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -141,6 +142,10 @@ export default function Profile() {
             <FriendsSection friends={friends} />
           </div>
         </div>
+
+        {user?.id && (
+          <VideoGallery title={isMe ? "My Videos" : "Videos"} scope={{ user_id: user.id }} />
+        )}
       </div>
 
       {editing && (

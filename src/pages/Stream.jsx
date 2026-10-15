@@ -79,6 +79,7 @@ export default function Stream() {
               title={c.name}
               items={items}
               emptyText="No videos yet."
+              onTitle={() => navigate(`/stream/category?name=${encodeURIComponent(c.name)}`)}
               onVideoClick={(idx) => setPlayerState({ videos: catVideos, index: idx })}
             />
           );

@@ -30,6 +30,14 @@
       "type": "string",
       "title": "User Avatar"
     },
+    "event_id": {
+      "type": "string",
+      "title": "Event Id"
+    },
+    "click_id": {
+      "type": "string",
+      "title": "Click Id"
+    },
     "music_url": {
       "type": "string",
       "title": "Music Url"

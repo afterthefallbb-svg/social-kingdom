@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
 import KloutButton from "@/components/klout/KloutButton";
+import VideoGallery from "@/components/video/VideoGallery";
 import ClickPresenceBadge from "@/components/presence/ClickPresenceBadge";
 
 const FB = "#1877f2";
@@ -269,6 +270,11 @@ export default function ClickDetail() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Videos posted to this CliQ */}
+      <div className="px-4 mt-6">
+        <VideoGallery title="CliQ Videos" scope={{ click_id: id }} />
       </div>
 
       {/* Upcoming private events for this CliQ */}

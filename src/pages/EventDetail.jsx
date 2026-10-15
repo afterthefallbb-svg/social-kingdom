@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import EventAttending from "@/components/event/EventAttending";
 import EventPhotos from "@/components/event/EventPhotos";
 import EventPosts from "@/components/event/EventPosts";
+import VideoGallery from "@/components/video/VideoGallery";
 import KloutButton from "@/components/klout/KloutButton";
 import InviteDialog from "@/components/invite/InviteDialog";
 import PhotoEditor from "@/components/compose/PhotoEditor";
@@ -262,6 +263,7 @@ export default function EventDetail() {
       <div className="p-3 space-y-3 max-w-2xl mx-auto">
         <EventAttending eventId={event.id} hostId={event.created_by_id} refreshKey={attendingVersion} />
         <EventPhotos eventId={event.id} />
+        <VideoGallery title="Event Videos" scope={{ event_id: event.id }} />
         <EventPosts eventId={event.id} />
       </div>
 

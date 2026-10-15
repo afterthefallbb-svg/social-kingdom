@@ -6,6 +6,14 @@
       "type": "string",
       "title": "Post Id"
     },
+    "video_id": {
+      "type": "string",
+      "title": "Video Id"
+    },
+    "parent_id": {
+      "type": "string",
+      "title": "Parent Id"
+    },
     "user_id": {
       "type": "string",
       "title": "User Id"
@@ -24,7 +32,6 @@
     }
   },
   "required": [
-    "post_id",
     "user_id",
     "content"
   ],

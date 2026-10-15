@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { FILTERS, TEXT_COLORS, SIZES } from "@/lib/photoEdit";
 import MusicSearch from "@/components/compose/MusicSearch";
+import VideoCategoryPicker from "./VideoCategoryPicker";
 import { X, Camera, ImagePlus, Type, Music2, Loader2, Send, Sparkles } from "lucide-react";
 
 const FB = "#1877f2";
@@ -10,7 +11,7 @@ const FB = "#1877f2";
 // Full video creation tool: record or upload (no URL box), then edit with
 // filters, draggable text overlays, music, and a caption — then upload
 // (stored publicly — anyone with the link can open them) and save.
-export default function VideoComposer({ category, onCreated, onClose }) {
+export default function VideoComposer({ category, eventId, clickId, onCreated, onClose }) {
   const [me, setMe] = useState(null);
   const [file, setFile] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
@@ -18,6 +19,7 @@ export default function VideoComposer({ category, onCreated, onClose }) {
   const [texts, setTexts] = useState([]);
   const [music, setMusic] = useState(null);
   const [caption, setCaption] = useState("");
+  const [cat, setCat] = useState(category || "");
   const [busy, setBusy] = useState(false);
   const [activeText, setActiveText] = useState(null);
   const [showText, setShowText] = useState(false);
@@ -31,7 +33,7 @@ export default function VideoComposer({ category, onCreated, onClose }) {
   function reset() {
     if (videoUrl) URL.revokeObjectURL(videoUrl);
     setFile(null); setVideoUrl(null); setFilter(FILTERS[0]);
-    setTexts([]); setMusic(null); setCaption(""); setShowText(false); setActiveText(null);
+    setTexts([]); setMusic(null); setCaption(""); setCat(category || ""); setShowText(false); setActiveText(null);
   }
 
   function pickFile(useCamera) {
@@ -107,8 +109,9 @@ export default function VideoComposer({ category, onCreated, onClose }) {
       } catch {}
       await base44.entities.Video.create({
         url: file_url, thumbnail: thumbUrl, caption: caption.trim(),
-        category: category || "", user_id: me.id,
+        category: cat || "", user_id: me.id,
         user_name: me.full_name || me.email || "You", user_avatar: me.avatar_url || "",
+        event_id: eventId || "", click_id: clickId || "",
         music_url: music?.previewUrl || "", music_title: music?.trackName || "",
         music_artist: music?.artistName || "", music_artwork: music?.artworkUrl || "",
         text_overlays: texts.map(({ id, ...rest }) => rest), filter: filter.css,
@@ -213,6 +216,12 @@ export default function VideoComposer({ category, onCreated, onClose }) {
           {videoUrl && (
             <div className="mt-3">
               <input value={caption} onChange={(e) => setCaption(e.target.value)} placeholder="Add a caption…" className="w-full text-sm border rounded-lg px-3 py-2 outline-none" />
+            </div>
+          )}
+
+          {videoUrl && (
+            <div className="mt-3 border-t border-gray-100 pt-2">
+              <VideoCategoryPicker value={cat} onChange={setCat} />
             </div>
           )}
 

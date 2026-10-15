@@ -12,7 +12,7 @@ const REACTIONS = [
 ];
 const valueOf = (r) => (REACTIONS.find((x) => x.id === r) || {}).value || 0;
 
-export default function KloutButton({ target_type, target_id, size = "md", page }) {
+export default function KloutButton({ target_type, target_id, size = "md", page, menuAlign = "left" }) {
   const [me, setMe] = useState(null);
   const [mine, setMine] = useState(null);
   const [counts, setCounts] = useState({ thumbs: 0, horns: 0, crown: 0 });
@@ -175,7 +175,7 @@ export default function KloutButton({ target_type, target_id, size = "md", page 
       </button>
 
       {menuOpen && (
-        <div className="absolute left-0 top-full mt-1 z-50 bg-white rounded-xl shadow-lg border border-gray-200 py-1 w-44">
+        <div className={`absolute top-full mt-1 z-50 bg-white rounded-xl shadow-lg border border-gray-200 py-1 w-44 ${menuAlign === "right" ? "right-0" : "left-0"}`}>
           {REACTIONS.map((r) => {
             const active = mine?.reaction === r.id;
             return (

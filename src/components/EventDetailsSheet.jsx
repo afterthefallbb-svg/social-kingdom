@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, MapPin } from "lucide-react";
+import { X, MapPin, ArrowLeft, User, Navigation, Plus } from "lucide-react";
+import { NavLink } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import EventDirectionsLink from "@/components/event/EventDirectionsLink";
@@ -14,6 +15,43 @@ function Tag({ children, color }) {
     >
       {children}
     </span>
+  );
+}
+
+const FB = "#1877f2";
+const NAV_SIZE = 30;
+const NAV_BOX = "w-12 h-12 flex items-center justify-center";
+
+// Mirrors BottomNav so the three main destinations stay reachable while the
+// event details sheet is open (the global nav is hidden behind the sheet).
+function SheetNav() {
+  return (
+    <nav className="flex justify-around items-center pt-2 pb-[max(3.5rem,calc(env(safe-area-inset-bottom)+0.5rem))] border-t border-gray-100 bg-white">
+      <NavLink to="/browse" aria-label="Browse">
+        {({ isActive }) => (
+          <span
+            className={`${NAV_BOX} rounded-full border-2`}
+            style={{ borderColor: FB, background: isActive ? FB : "rgba(24,119,242,0.25)" }}
+          >
+            <User size={NAV_SIZE} color="#ffffff" strokeWidth={2.25} />
+          </span>
+        )}
+      </NavLink>
+      <NavLink to="/" end aria-label="Map">
+        {() => (
+          <span className={`${NAV_BOX} rounded-full`} style={{ background: FB }}>
+            <Navigation size={NAV_SIZE} color="#ffffff" strokeWidth={2.25} fill="#ffffff" />
+          </span>
+        )}
+      </NavLink>
+      <NavLink to="/create" aria-label="Create event">
+        {() => (
+          <span className={`${NAV_BOX} rounded-2xl`} style={{ background: FB }}>
+            <Plus size={NAV_SIZE} color="#ffffff" strokeWidth={2.5} />
+          </span>
+        )}
+      </NavLink>
+    </nav>
   );
 }
 
@@ -51,15 +89,25 @@ export default function EventDetailsSheet({ event, onClose }) {
             transition={{ type: "spring", damping: 32, stiffness: 320 }}
           >
             <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mt-3" />
-            <button
-              onClick={onClose}
-              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-              aria-label="Close"
-            >
-              <X size={16} className="text-gray-600" />
-            </button>
+            <div className="flex items-center justify-between px-3 pt-2">
+              <button
+                onClick={onClose}
+                className="inline-flex items-center gap-1 text-black font-semibold"
+                aria-label="Back"
+              >
+                <ArrowLeft size={20} className="text-black" />
+                Back
+              </button>
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                aria-label="Close"
+              >
+                <X size={16} className="text-gray-600" />
+              </button>
+            </div>
 
-            <div className="px-5 pb-7 max-h-[78vh] overflow-y-auto">
+            <div className="px-5 pb-4 max-h-[66vh] overflow-y-auto">
               <div className="flex items-center gap-2 mt-2">
                 <span
                   className="inline-flex items-center justify-center w-7 h-7 rounded-full text-base"
@@ -119,6 +167,8 @@ export default function EventDetailsSheet({ event, onClose }) {
 
               <EventDirectionsLink event={event} className="mt-5 py-3.5 text-base" filledIcon />
             </div>
+
+            <SheetNav />
           </motion.div>
         </>
       )}

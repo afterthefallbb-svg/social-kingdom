@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ChevronLeft, Bookmark, Play } from "lucide-react";
+import { ChevronLeft, Bookmark, Play, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import VideoPlayer from "./VideoPlayer";
@@ -31,6 +31,16 @@ export default function MyVideosView({ onClose }) {
     })();
     return () => { active = false; };
   }, []);
+
+  async function removeSaved(rec) {
+    if (!window.confirm("Remove this video from My Videos?")) return;
+    try {
+      await base44.entities.SavedVideo.delete(rec.id);
+      setSaved((prev) => prev.filter((x) => x.id !== rec.id));
+    } catch {
+      /* ignore */
+    }
+  }
 
   const videos = saved.map((s) => ({
     id: s.video_id,
@@ -75,25 +85,37 @@ export default function MyVideosView({ onClose }) {
         <div className="flex-1 overflow-y-auto p-3">
           <div className="grid grid-cols-2 gap-3">
             {videos.map((v, i) => (
-              <button
+              <div
                 key={v.id || i}
-                onClick={() => setPlayerState({ index: i })}
                 className="relative aspect-[9/16] rounded-xl overflow-hidden bg-gray-100"
               >
-                {v.thumbnail ? (
-                  <Image src={v.thumbnail} fittingType="fill" className="w-full h-full" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-3xl">🎬</div>
-                )}
-                <span className="absolute inset-0 flex items-center justify-center bg-black/20">
-                  <Play size={26} className="text-white fill-white" />
-                </span>
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5">
-                  <p className="text-xs text-white font-medium truncate">
-                    {v.caption || v.user_name || "Saved video"}
-                  </p>
-                </div>
-              </button>
+                <button
+                  onClick={() => setPlayerState({ index: i })}
+                  className="w-full h-full block"
+                  aria-label="Play saved video"
+                >
+                  {v.thumbnail ? (
+                    <Image src={v.thumbnail} fittingType="fill" className="w-full h-full" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-3xl">🎬</div>
+                  )}
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/20">
+                    <Play size={26} className="text-white fill-white" />
+                  </span>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-2 py-1.5 text-left">
+                    <p className="text-xs text-white font-medium truncate">
+                      {v.caption || v.user_name || "Saved video"}
+                    </p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => removeSaved(saved[i])}
+                  className="absolute top-1 right-1 w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center"
+                  aria-label="Remove from My Videos"
+                >
+                  <Trash2 size={13} />
+                </button>
+              </div>
             ))}
           </div>
         </div>

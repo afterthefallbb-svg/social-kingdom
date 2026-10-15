@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Camera } from "lucide-react";
+import { Camera, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { toast } from "@/components/ui/use-toast";
@@ -13,12 +13,27 @@ export default function EventPhotos({ eventId }) {
   const [me, setMe] = useState(null);
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    base44.auth.me().then(setMe).catch(() => {});
+  function load() {
     base44.entities.EventPhoto.filter({ event_id: eventId }, { sort: "-created_date", limit: 100 })
       .then((p) => setPhotos(p.items))
       .catch(() => setPhotos([]));
+  }
+
+  useEffect(() => {
+    base44.auth.me().then(setMe).catch(() => {});
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId]);
+
+  async function remove(p) {
+    if (!window.confirm("Delete this photo/video? This cannot be undone.")) return;
+    try {
+      await base44.entities.EventPhoto.delete(p.id);
+      setPhotos((prev) => prev.filter((x) => x.id !== p.id));
+    } catch {
+      /* ignore */
+    }
+  }
 
   async function onUploaded(url, type) {
     setUploading(false);
@@ -65,6 +80,15 @@ export default function EventPhotos({ eventId }) {
               <div className="absolute bottom-1 left-1 bg-white/85 rounded-full px-1 py-0.5">
                 <KloutButton target_type="photo" target_id={p.id} size="sm" />
               </div>
+              {me && p.user_id === me.id && (
+                <button
+                  onClick={() => remove(p)}
+                  className="absolute top-1 right-1 w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center"
+                  aria-label="Delete photo"
+                >
+                  <Trash2 size={13} />
+                </button>
+              )}
             </div>
           ))}
         </div>

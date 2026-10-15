@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, MapPin, Globe, Lock, UserPlus, Camera } from "lucide-react";
+import { ArrowLeft, MapPin, Globe, Lock, UserPlus, Camera, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import EventDirectionsLink from "@/components/event/EventDirectionsLink";
@@ -255,6 +255,25 @@ export default function EventDetail() {
               style={{ borderColor: "#e11d48", color: "#e11d28" }}
             >
               Remove attendance
+            </button>
+          )}
+
+          {isCreator && (
+            <button
+              onClick={async () => {
+                if (!window.confirm("Delete this event permanently? This cannot be undone.")) return;
+                try {
+                  await base44.entities.Event.delete(event.id);
+                  toast({ title: "Event deleted" });
+                  navigate("/browse");
+                } catch (e) {
+                  toast({ title: "Could not delete", description: String(e.message || e) });
+                }
+              }}
+              className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold border"
+              style={{ borderColor: "#e11d48", color: "#e11d28" }}
+            >
+              <Trash2 size={16} /> Delete event
             </button>
           )}
         </div>

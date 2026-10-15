@@ -311,9 +311,20 @@ export default function PhotoEditor({
           {/* Music */}
           {enableMusic && imgEl && (
             <div className="mt-2 border-t border-gray-100 pt-2">
-              <p className="text-[11px] font-semibold text-gray-500 flex items-center gap-1 mb-1">
-                <Music2 size={12} /> Add music behind your photo
-              </p>
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-[11px] font-semibold text-gray-500 flex items-center gap-1">
+                  <Music2 size={12} /> Add music behind your photo
+                </p>
+                {music && (
+                  <button
+                    onClick={() => setMusic(null)}
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-red-500"
+                    aria-label="Remove music"
+                  >
+                    <X size={12} /> Remove song
+                  </button>
+                )}
+              </div>
               <MusicSearch selected={music} onSelect={setMusic} />
             </div>
           )}

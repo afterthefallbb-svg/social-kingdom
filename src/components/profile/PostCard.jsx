@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Share } from "lucide-react";
+import { Share, Trash2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import KloutButton from "@/components/klout/KloutButton";
 import CommentSection from "@/components/comments/CommentSection";
@@ -47,13 +48,25 @@ function MusicBar({ post }) {
   );
 }
 
-export default function PostCard({ post }) {
+export default function PostCard({ post, me, onDeleted }) {
   const time = post.created_date ? new Date(post.created_date).toLocaleString() : "";
   const initial = (post.author_name || "?").charAt(0).toUpperCase();
+  const canDelete = !!me && post.author_id === me.id;
 
   async function share() {
     try {
       await navigator.share?.({ title: post.author_name || "Post", text: post.content || "" });
+    } catch {
+      /* ignore */
+    }
+  }
+
+  async function del() {
+    if (!canDelete) return;
+    if (!window.confirm("Delete this post? This cannot be undone.")) return;
+    try {
+      await base44.entities.Post.delete(post.id);
+      onDeleted?.(post);
     } catch {
       /* ignore */
     }
@@ -72,10 +85,19 @@ export default function PostCard({ post }) {
             initial
           )}
         </div>
-        <div>
+        <div className="flex-1 min-w-0">
           <p className="text-sm font-bold text-gray-900">{post.author_name}</p>
           <p className="text-[11px] text-gray-400">{time}</p>
         </div>
+        {canDelete && (
+          <button
+            onClick={del}
+            className="shrink-0 p-1.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50"
+            aria-label="Delete post"
+          >
+            <Trash2 size={16} />
+          </button>
+        )}
       </div>
 
       {post.content && (

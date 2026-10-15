@@ -111,9 +111,9 @@ export default function Feed() {
 
         {!loading && posts.map((p) =>
           p.content && p.content.trim() ? (
-            <PostCard key={p.id} post={p} />
+            <PostCard key={p.id} post={p} me={me} onDeleted={(d) => setPosts((prev) => prev.filter((x) => x.id !== d.id))} />
           ) : p.image_url ? (
-            <FeedPhotoNotice key={p.id} post={p} onOpen={(post) => setZoom(post.image_url)} />
+            <FeedPhotoNotice key={p.id} post={p} me={me} onDeleted={(d) => setPosts((prev) => prev.filter((x) => x.id !== d.id))} onOpen={(post) => setZoom(post.image_url)} />
           ) : null
         )}
       </div>

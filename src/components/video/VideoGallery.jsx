@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
-import { Play, Video as VideoIcon } from "lucide-react";
+import { Play, Video as VideoIcon, Trash2 } from "lucide-react";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import VideoComposer from "@/components/video/VideoComposer";
 import VideoCreateButton from "@/components/video/VideoCreateButton";
@@ -18,6 +18,21 @@ export default function VideoGallery({ title = "Videos", scope, createCategory }
   const [playerState, setPlayerState] = useState(null);
   const [composing, setComposing] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
+  const [me, setMe] = useState(null);
+
+  useEffect(() => {
+    base44.auth.me().then(setMe).catch(() => {});
+  }, []);
+
+  async function remove(v) {
+    if (!window.confirm("Delete this video? This cannot be undone.")) return;
+    try {
+      await base44.entities.Video.delete(v.id);
+      setReloadKey((k) => k + 1);
+    } catch {
+      /* ignore */
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -75,6 +90,18 @@ export default function VideoGallery({ title = "Videos", scope, createCategory }
                   {v.caption || v.user_name || "Video"}
                 </p>
               </div>
+              {me && v.user_id === me.id && (
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onClick={(e) => { e.stopPropagation(); remove(v); }}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); remove(v); } }}
+                  className="absolute top-1 right-1 w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center"
+                  aria-label="Delete video"
+                >
+                  <Trash2 size={13} />
+                </span>
+              )}
             </button>
           ))}
         </div>

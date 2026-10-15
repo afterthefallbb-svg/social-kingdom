@@ -103,7 +103,7 @@ export default function EventPosts({ eventId }) {
       <div className="mt-3 space-y-3">
         {posts.length === 0 && <p className="text-xs text-gray-400">No posts yet. Start the conversation!</p>}
         {posts.map((p) => (
-          <PostCard key={p.id} post={p} />
+          <PostCard key={p.id} post={p} me={me} onDeleted={() => loadPosts()} />
         ))}
       </div>
 

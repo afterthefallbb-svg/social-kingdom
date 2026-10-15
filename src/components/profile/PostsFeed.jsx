@@ -42,7 +42,7 @@ export default function PostsFeed({ me }) {
         </div>
       )}
       {posts.map((p) => (
-        <PostCard key={p.id} post={p} />
+        <PostCard key={p.id} post={p} me={me} onDeleted={(d) => setPosts((prev) => prev.filter((x) => x.id !== d.id))} />
       ))}
     </div>
   );

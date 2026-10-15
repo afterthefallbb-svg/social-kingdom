@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MessageCircle, Send, Trash2, Reply } from "lucide-react";
+import { MessageCircle, Send, Trash2, Reply, Pencil, Check, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,8 @@ export default function CommentSection({ postId, videoId }) {
   const [text, setText] = useState("");
   const [replyTo, setReplyTo] = useState(null);
   const [replyText, setReplyText] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [editText, setEditText] = useState("");
 
   const scope = videoId ? { video_id: videoId } : { post_id: postId };
 
@@ -90,6 +92,23 @@ export default function CommentSection({ postId, videoId }) {
     }
   }
 
+  function startEdit(c) {
+    setEditId(c.id);
+    setEditText(c.content || "");
+  }
+
+  async function saveEdit(id) {
+    if (!editText.trim()) return;
+    try {
+      await base44.entities.Comment.update(id, { content: editText.trim() });
+      setComments((prev) => prev.map((c) => (c.id === id ? { ...c, content: editText.trim() } : c)));
+    } catch {
+      /* ignore */
+    }
+    setEditId(null);
+    setEditText("");
+  }
+
   const topLevel = comments.filter((c) => !c.parent_id);
   const repliesOf = (parentId) => comments.filter((c) => c.parent_id === parentId);
 
@@ -115,7 +134,34 @@ export default function CommentSection({ postId, videoId }) {
         <div className="flex-1 min-w-0">
           <div className="rounded-2xl bg-gray-100 px-3 py-1.5">
             <p className="text-xs font-semibold text-gray-800">{c.user_name?.split(" ")[0]}</p>
-            <p className="text-sm text-gray-700 break-words">{c.content}</p>
+            {editId === c.id ? (
+              <div className="flex gap-1 mt-1">
+                <Input
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") saveEdit(c.id); }}
+                  className="h-7 text-xs"
+                  autoFocus
+                />
+                <button
+                  onClick={() => saveEdit(c.id)}
+                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-white"
+                  style={{ background: FB }}
+                  aria-label="Save edit"
+                >
+                  <Check size={13} />
+                </button>
+                <button
+                  onClick={() => { setEditId(null); setEditText(""); }}
+                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-gray-200 text-gray-600"
+                  aria-label="Cancel edit"
+                >
+                  <X size={13} />
+                </button>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-700 break-words">{c.content}</p>
+            )}
           </div>
           <div className="flex items-center gap-3 mt-1">
             <KloutButton target_type="comment" target_id={c.id} size="sm" />
@@ -126,6 +172,15 @@ export default function CommentSection({ postId, videoId }) {
             >
               <Reply size={12} /> Reply
             </button>
+            {me && c.user_id === me.id && editId !== c.id && (
+              <button
+                onClick={() => startEdit(c)}
+                className="inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-blue-500"
+                aria-label="Edit comment"
+              >
+                <Pencil size={12} /> Edit
+              </button>
+            )}
             {me && c.user_id === me.id && (
               <button
                 onClick={() => remove(c.id)}

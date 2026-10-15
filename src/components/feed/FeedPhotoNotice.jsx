@@ -1,18 +1,35 @@
 import React from "react";
+import { Camera, Music2, Trash2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
-import { Camera, Music2 } from "lucide-react";
 
 const FB = "#1877f2";
 
 // Slender rectangle for a picture-only post (no text): a compact notice that a
 // friend posted a photo, with a small thumbnail — keeps the feed uncluttered.
-export default function FeedPhotoNotice({ post, onOpen }) {
+export default function FeedPhotoNotice({ post, onOpen, me, onDeleted }) {
   const name = post.author_name || "Someone";
   const initial = name.charAt(0).toUpperCase();
+  const canDelete = !!me && post.author_id === me.id;
+
+  async function del(e) {
+    e.stopPropagation();
+    if (!canDelete) return;
+    if (!window.confirm("Delete this photo post? This cannot be undone.")) return;
+    try {
+      await base44.entities.Post.delete(post.id);
+      onDeleted?.(post);
+    } catch {
+      /* ignore */
+    }
+  }
+
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       onClick={() => onOpen && onOpen(post)}
+      onKeyDown={(e) => { if (e.key === "Enter") onOpen && onOpen(post); }}
       className="w-full flex items-center gap-3 bg-white rounded-xl shadow-sm px-3 py-2 text-left"
     >
       <div className="w-9 h-9 rounded-full overflow-hidden bg-blue-100 flex items-center justify-center font-bold shrink-0" style={{ color: FB }}>
@@ -36,6 +53,15 @@ export default function FeedPhotoNotice({ post, onOpen }) {
           <Image src={post.image_url} fittingType="fill" className="w-full h-full" />
         </div>
       )}
-    </button>
+      {canDelete && (
+        <button
+          onClick={del}
+          className="shrink-0 p-1.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50"
+          aria-label="Delete photo post"
+        >
+          <Trash2 size={16} />
+        </button>
+      )}
+    </div>
   );
 }

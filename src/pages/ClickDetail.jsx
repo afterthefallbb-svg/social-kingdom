@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Users, Calendar, MapPin, UserPlus, Flag, Camera, Crown } from "lucide-react";
+import { ArrowLeft, Users, Calendar, MapPin, UserPlus, Flag, Camera, Crown, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import { Image } from "@/components/ui/image";
@@ -235,6 +235,24 @@ export default function ClickDetail() {
               <Flag size={15} /> Host Event
             </button>
           </div>
+          {isHost && (
+            <button
+              onClick={async () => {
+                if (!window.confirm("Delete this CliQ permanently? This cannot be undone.")) return;
+                try {
+                  await base44.entities.Click.delete(id);
+                  toast({ title: "CliQ deleted" });
+                  navigate("/clicks");
+                } catch (e) {
+                  toast({ title: "Could not delete", description: String(e.message || e) });
+                }
+              }}
+              className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold border"
+              style={{ borderColor: "#e11d48", color: "#e11d28" }}
+            >
+              <Trash2 size={15} /> Delete CliQ
+            </button>
+          )}
         </div>
       )}
 

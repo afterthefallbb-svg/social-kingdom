@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Trash2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import KloutButton from "@/components/klout/KloutButton";
 import CommentSection from "@/components/comments/CommentSection";
@@ -47,10 +49,22 @@ function MusicBar({ post }) {
   );
 }
 
-export default function PostCard({ post }) {
+export default function PostCard({ post, me, onDeleted }) {
   const navigate = useNavigate();
   const time = post.created_date ? new Date(post.created_date).toLocaleString() : "";
   const initial = (post.author_name || "?").charAt(0).toUpperCase();
+  const canDelete = !!me && post.author_id === me.id;
+
+  async function del() {
+    if (!canDelete) return;
+    if (!window.confirm("Delete this post? This cannot be undone.")) return;
+    try {
+      await base44.entities.Post.delete(post.id);
+      onDeleted?.(post);
+    } catch {
+      /* ignore */
+    }
+  }
 
   return (
     <div className="rounded-xl border p-3" style={{ borderColor: "#eef0f3" }}>
@@ -73,6 +87,15 @@ export default function PostCard({ post }) {
           {post.author_name}
         </button>
         <span className="ml-auto text-[10px] text-gray-400">{time}</span>
+        {canDelete && (
+          <button
+            onClick={del}
+            className="shrink-0 p-1 rounded-full text-gray-400 hover:text-red-500"
+            aria-label="Delete post"
+          >
+            <Trash2 size={15} />
+          </button>
+        )}
       </div>
 
       {post.content && <p className="text-sm text-gray-700 mt-2">{post.content}</p>}

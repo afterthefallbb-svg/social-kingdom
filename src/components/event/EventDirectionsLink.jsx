@@ -16,7 +16,9 @@ export default function EventDirectionsLink({ event, className = "", filledIcon 
   return (
     <a
       href={href}
-      target="_blank"
+      // Leave the embedded app instead of requesting a new window.
+      // Keep browser navigation synchronous with the user's tap.
+      target="_top"
       rel="noopener noreferrer"
       className={classes}
       aria-label={`Start Directions to ${event.title || "the event"}`}

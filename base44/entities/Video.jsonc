@@ -1,0 +1,97 @@
+{
+  "name": "Video",
+  "type": "object",
+  "properties": {
+    "url": {
+      "type": "string",
+      "title": "Url"
+    },
+    "thumbnail": {
+      "type": "string",
+      "title": "Thumbnail"
+    },
+    "caption": {
+      "type": "string",
+      "title": "Caption"
+    },
+    "category": {
+      "type": "string",
+      "title": "Category"
+    },
+    "user_id": {
+      "type": "string",
+      "title": "User Id"
+    },
+    "user_name": {
+      "type": "string",
+      "title": "User Name"
+    },
+    "user_avatar": {
+      "type": "string",
+      "title": "User Avatar"
+    },
+    "music_url": {
+      "type": "string",
+      "title": "Music Url"
+    },
+    "music_title": {
+      "type": "string",
+      "title": "Music Title"
+    },
+    "music_artist": {
+      "type": "string",
+      "title": "Music Artist"
+    },
+    "music_artwork": {
+      "type": "string",
+      "title": "Music Artwork"
+    },
+    "text_overlays": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "title": "Text Overlays"
+    },
+    "filter": {
+      "type": "string",
+      "title": "Filter"
+    }
+  },
+  "required": [
+    "url",
+    "user_id"
+  ],
+  "rls": {
+    "update": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

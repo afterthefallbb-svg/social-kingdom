@@ -6,6 +6,7 @@ import { getCategory } from "@/lib/categories";
 import { Image } from "@/components/ui/image";
 import CategoryRow from "@/components/hub/CategoryRow";
 import { STREAM_SAMPLES, EVENT_SAMPLES, ARTIST_SAMPLES, CLIQ_SAMPLES } from "@/lib/hubSamples";
+import VideoPlayer from "@/components/video/VideoPlayer";
 
 const FB = "#1877f2";
 
@@ -16,6 +17,7 @@ export default function SocialHub() {
   const [artists, setArtists] = useState([]);
   const [videos, setVideos] = useState([]);
   const [clicks, setClicks] = useState([]);
+  const [playerState, setPlayerState] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -65,11 +67,11 @@ export default function SocialHub() {
         setArtists([]);
       }
 
-      // Videos — recent video media on the platform
+      // Videos — recent video posts
       try {
-        const res = await base44.entities.EventPhoto.filter(
-          { type: "video" },
-          { sort: "-created_date", limit: 10 }
+        const res = await base44.entities.Video.filter(
+          {},
+          { sort: "-created_date", limit: 20 }
         );
         if (active) setVideos(res.items);
       } catch {
@@ -100,10 +102,10 @@ export default function SocialHub() {
   const artistItems = artists.map(mapEvent);
   const videoItems = videos.map((v) => ({
     id: v.id,
-    label: v.user_name,
-    image: v.url,
+    label: v.caption || v.user_name || "Video",
+    image: v.thumbnail,
     emoji: "🎬",
-    onClick: () => (v.event_id ? navigate(`/event/${v.event_id}`) : null),
+    isVideo: true,
   }));
   const clickItems = clicks.map((c) => ({
     id: c.id,
@@ -120,7 +122,11 @@ export default function SocialHub() {
       .slice(0, Math.max(0, 10 - items.length))
       .map((s, i) => ({ ...s, id: `${prefix}-${i}`, isVideo, onClick: () => navigate(to) })),
   ];
-  const videoItemsP = pad(videoItems, STREAM_SAMPLES, "/browse/videos", "s", true);
+  const videoItemsP = [
+    ...videoItems,
+    ...STREAM_SAMPLES.slice(0, Math.max(0, 10 - videoItems.length))
+      .map((s, i) => ({ ...s, id: `s-${i}`, isVideo: false, onClick: () => navigate("/browse/videos") })),
+  ];
   const eventItemsP = pad(eventItems, EVENT_SAMPLES, "/browse/events", "e");
   const artistItemsP = pad(artistItems, ARTIST_SAMPLES, "/browse/artists", "a");
   const clickItemsP = pad(clickItems, CLIQ_SAMPLES, "/browse/cliqs", "c");
@@ -238,6 +244,7 @@ export default function SocialHub() {
           onTitle={() => navigate("/stream")}
           items={videoItemsP}
           emptyText="No videos yet."
+          onVideoClick={(idx) => setPlayerState({ videos, index: idx })}
         />
         <CategoryRow
           title="Events"
@@ -258,6 +265,14 @@ export default function SocialHub() {
           emptyText="No CliQs yet."
         />
       </div>
+
+      {playerState && (
+        <VideoPlayer
+          videos={playerState.videos}
+          startIndex={playerState.index}
+          onClose={() => setPlayerState(null)}
+        />
+      )}
 
       {/* Footer links */}
       <div className="mt-4 flex justify-center gap-8 pb-4 text-xs">

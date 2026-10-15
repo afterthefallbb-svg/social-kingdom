@@ -6,7 +6,7 @@ const FB = "#1877f2";
 
 // A single browse category row: centered blue heading (no underline, clickable
 // to open the full category page) and a horizontally scrollable strip of circles.
-export default function CategoryRow({ title, onTitle, items = [], emptyText = "Nothing here yet." }) {
+export default function CategoryRow({ title, onTitle, items = [], emptyText = "Nothing here yet.", onVideoClick }) {
   return (
     <div className="px-4 text-center">
       <button onClick={onTitle} className="block mx-auto mb-1 leading-tight">
@@ -16,10 +16,10 @@ export default function CategoryRow({ title, onTitle, items = [], emptyText = "N
         <p className="text-sm text-gray-400">{emptyText}</p>
       ) : (
         <div className="flex overflow-x-auto no-scrollbar snap-x snap-mandatory pb-1">
-          {items.map((it) => (
+          {items.map((it, idx) => (
             <button
               key={it.id}
-              onClick={it.onClick}
+              onClick={() => (it.isVideo && onVideoClick ? onVideoClick(idx) : it.onClick && it.onClick())}
               className="flex flex-col items-center gap-1 shrink-0 w-1/4 px-1.5 snap-start"
             >
               <span className="relative w-16 h-16 rounded-full overflow-hidden flex items-center justify-center text-2xl bg-gray-100">

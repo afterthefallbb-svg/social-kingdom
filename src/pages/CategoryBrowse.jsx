@@ -4,6 +4,9 @@ import { ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import { Image } from "@/components/ui/image";
+import VideoPlayer from "@/components/video/VideoPlayer";
+import VideoComposer from "@/components/video/VideoComposer";
+import VideoCreateButton from "@/components/video/VideoCreateButton";
 
 const FB = "#1877f2";
 
@@ -24,6 +27,9 @@ export default function CategoryBrowse() {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [playerState, setPlayerState] = useState(null);
+  const [composing, setComposing] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -44,16 +50,17 @@ export default function CategoryBrowse() {
             onClick: () => navigate(`/event/${e.id}`),
           }));
         } else if (category === "videos") {
-          const res = await base44.entities.EventPhoto.filter(
-            { type: "video" },
+          const res = await base44.entities.Video.filter(
+            {},
             { sort: "-created_date", limit: 100 }
           );
-          its = res.items.map((v) => ({
+          const vids = res.items;
+          its = vids.map((v, i) => ({
             id: v.id,
-            label: v.user_name,
-            image: v.url,
+            label: v.caption || v.user_name || "Video",
+            image: v.thumbnail,
             emoji: "🎬",
-            onClick: () => (v.event_id ? navigate(`/event/${v.event_id}`) : null),
+            onClick: () => setPlayerState({ videos: vids, index: i }),
           }));
         } else if (category === "cliqs") {
           const res = await base44.entities.Click.filter({}, { sort: "-member_count", limit: 100 });
@@ -76,7 +83,7 @@ export default function CategoryBrowse() {
     return () => {
       active = false;
     };
-  }, [category]);
+  }, [category, reloadKey]);
 
   const title = TITLES[category] || "Browse";
   const hasData = SUPPORTED.includes(category);
@@ -88,6 +95,11 @@ export default function CategoryBrowse() {
           <ChevronLeft size={24} style={{ color: FB }} />
         </button>
         <span className="font-bold text-gray-900 text-lg">{title}</span>
+        {category === "videos" && (
+          <div className="ml-auto">
+            <VideoCreateButton onClick={() => setComposing(true)} />
+          </div>
+        )}
       </div>
       <div className="h-[3px] w-12 bg-gray-900 ml-4 mt-2 rounded-full" />
 
@@ -121,6 +133,21 @@ export default function CategoryBrowse() {
           </div>
         )}
       </div>
+
+      {playerState && (
+        <VideoPlayer
+          videos={playerState.videos}
+          startIndex={playerState.index}
+          onClose={() => setPlayerState(null)}
+        />
+      )}
+      {composing && (
+        <VideoComposer
+          category={category}
+          onCreated={() => { setComposing(false); setReloadKey((k) => k + 1); }}
+          onClose={() => setComposing(false)}
+        />
+      )}
     </div>
   );
 }

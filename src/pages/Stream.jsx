@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Bookmark } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import CategoryRow from "@/components/hub/CategoryRow";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import VideoComposer from "@/components/video/VideoComposer";
 import VideoCreateButton from "@/components/video/VideoCreateButton";
+import MyVideosView from "@/components/video/MyVideosView";
 import { STREAM_CATEGORIES } from "@/lib/streamCategories";
 
 const FB = "#1877f2";
@@ -19,6 +20,7 @@ export default function Stream() {
   const [playerState, setPlayerState] = useState(null);
   const [composing, setComposing] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
+  const [myVideosOpen, setMyVideosOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -55,6 +57,16 @@ export default function Stream() {
         </div>
       </div>
       <div className="h-[3px] w-12 bg-gray-900 ml-4 mt-2 rounded-full" />
+
+      <div className="px-4 mt-3">
+        <button
+          onClick={() => setMyVideosOpen(true)}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 text-sm font-semibold"
+          style={{ borderColor: FB, color: FB }}
+        >
+          <Bookmark size={16} /> My Videos
+        </button>
+      </div>
 
       <div className="mt-4 space-y-4">
         {STREAM_CATEGORIES.map((c) => {
@@ -94,6 +106,7 @@ export default function Stream() {
       {playerState && (
         <VideoPlayer videos={playerState.videos} startIndex={playerState.index} onClose={() => setPlayerState(null)} />
       )}
+      {myVideosOpen && <MyVideosView onClose={() => setMyVideosOpen(false)} />}
       {composing && (
         <VideoComposer
           onCreated={() => { setComposing(false); setReloadKey((k) => k + 1); }}

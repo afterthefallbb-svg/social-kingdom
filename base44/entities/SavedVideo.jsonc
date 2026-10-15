@@ -1,0 +1,95 @@
+{
+  "name": "SavedVideo",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "User Id"
+    },
+    "video_id": {
+      "type": "string",
+      "title": "Video Id"
+    },
+    "url": {
+      "type": "string",
+      "title": "Url"
+    },
+    "thumbnail": {
+      "type": "string",
+      "title": "Thumbnail"
+    },
+    "caption": {
+      "type": "string",
+      "title": "Caption"
+    },
+    "video_user_name": {
+      "type": "string",
+      "title": "Video User Name"
+    },
+    "video_user_avatar": {
+      "type": "string",
+      "title": "Video User Avatar"
+    },
+    "music_url": {
+      "type": "string",
+      "title": "Music Url"
+    },
+    "music_title": {
+      "type": "string",
+      "title": "Music Title"
+    },
+    "music_artist": {
+      "type": "string",
+      "title": "Music Artist"
+    },
+    "music_artwork": {
+      "type": "string",
+      "title": "Music Artwork"
+    }
+  },
+  "required": [
+    "user_id",
+    "video_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

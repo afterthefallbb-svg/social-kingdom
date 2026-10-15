@@ -5,7 +5,6 @@ import { base44 } from "@/api/base44Client";
 import PhotoComposer from "@/components/compose/PhotoComposer";
 import PostCard from "@/components/profile/PostCard";
 import FeedPhotoNotice from "@/components/feed/FeedPhotoNotice";
-import FeedVideos from "@/components/feed/FeedVideos";
 import { Image } from "@/components/ui/image";
 
 const FB = "#1877f2";
@@ -97,8 +96,6 @@ export default function Feed() {
             )}
           </>
         )}
-
-        {authorIds.length > 0 && <FeedVideos authorIds={authorIds} />}
 
         {loading && (
           <div className="flex justify-center py-10">

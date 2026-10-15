@@ -188,7 +188,7 @@ export default function SocialHub() {
       </div>
 
       {/* Projects | Planner toggles */}
-      <div className="flex justify-center gap-1 px-4 pt-2">
+      <div className="flex justify-center gap-1 px-4 pt-1">
         {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
           <button
             key={t.l}
@@ -203,7 +203,7 @@ export default function SocialHub() {
 
       {/* Top links — horizontal snap-scroll, only whole links show, no hanging edges */}
       <div
-        className="flex gap-2 overflow-x-auto px-4 mt-3 pb-1 no-scrollbar"
+        className="flex gap-2 overflow-x-auto px-4 mt-2 pb-1 no-scrollbar"
         style={{ scrollSnapType: "x mandatory", scrollbarWidth: "none" }}
       >
         {topLinks.map((l) => (
@@ -219,7 +219,7 @@ export default function SocialHub() {
       </div>
 
       {/* Search bar — sits just above the Stream row */}
-      <div className="px-4 mt-3">
+      <div className="px-4 mt-2">
         <button
           onClick={() => navigate("/")}
           className="w-full flex items-center bg-gray-100 rounded-full px-3 h-12"
@@ -230,7 +230,7 @@ export default function SocialHub() {
       </div>
 
       {/* Category rows — Stream first, then Events */}
-      <div className="mt-2 space-y-1">
+      <div className="mt-1 space-y-1">
         <CategoryRow
           title="Stream"
           onTitle={() => navigate("/stream")}

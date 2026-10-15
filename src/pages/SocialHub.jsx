@@ -138,7 +138,7 @@ export default function SocialHub() {
 
   return (
     <div className="min-h-screen bg-white pb-36">
-      <div className="flex items-center justify-between px-3 pt-3">
+      <div className="flex items-center justify-between px-3 pt-1">
         <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold" style={{ color: "#000000" }}>
           <ChevronLeft size={22} /> Back
         </button>
@@ -151,9 +151,9 @@ export default function SocialHub() {
         </button>
       </div>
 
-      {/* Header: photo + name on the left, logo filling the remaining space to the right edge, from the top of the screen down to the toggles */}
+      {/* Header: avatar + name stacked on the left, logo filling from the avatar's right edge to the right side of the screen */}
       <div className="flex items-stretch pl-4">
-        <div className="flex items-end gap-1 shrink-0 pt-5">
+        <div className="shrink-0 pt-2">
           <button onClick={() => navigate("/profile")}>
             <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
               {me?.avatar_url ? (
@@ -163,7 +163,7 @@ export default function SocialHub() {
               )}
             </span>
           </button>
-          <button onClick={() => navigate("/profile")} className="text-left mb-1">
+          <button onClick={() => navigate("/profile")} className="block text-left mt-1 max-w-[80px]">
             {(() => {
               const full = me?.full_name || me?.email || "You";
               const parts = full.split(" ");
@@ -178,12 +178,11 @@ export default function SocialHub() {
             })()}
           </button>
         </div>
-        <div className="flex-1 min-w-0 ml-2">
-          <Image
+        <div className="flex-1 min-w-0 ml-3 flex items-center">
+          <img
             src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/237bd4549_social-kingdom-wordmark.png"
             alt="Social Kingdom"
-            fittingType="fit"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
       </div>

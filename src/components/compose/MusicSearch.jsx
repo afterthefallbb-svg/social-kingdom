@@ -11,6 +11,7 @@ export default function MusicSearch({ selected, onSelect }) {
   const [loading, setLoading] = useState(false);
   const [playingId, setPlayingId] = useState(null);
   const [audio, setAudio] = useState(null);
+  const [error, setError] = useState("");
 
   function stop() {
     if (audio) {
@@ -38,11 +39,15 @@ export default function MusicSearch({ selected, onSelect }) {
     if (!term.trim()) return;
     stop();
     setLoading(true);
+    setError("");
     try {
       const res = await base44.functions.invoke("searchMusic", { term });
-      setResults(res.data?.results || []);
-    } catch {
+      const data = res.data || res || {};
+      setResults(data.results || []);
+      if (!(data.results || []).length) setError("No tracks found. Try another search.");
+    } catch (err) {
       setResults([]);
+      setError("Search failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -117,9 +122,15 @@ export default function MusicSearch({ selected, onSelect }) {
         </div>
       )}
 
-      {!selected && !loading && results.length === 0 && (
+      {!selected && !loading && results.length === 0 && !error && (
         <p className="text-[11px] text-gray-400 mt-2 flex items-center gap-1">
-          <Music2 size={12} /> Search to add a 30-second song clip behind your photo.
+          <Music2 size={12} /> Search to add a 30-second song clip behind your video.
+        </p>
+      )}
+
+      {!selected && !loading && error && (
+        <p className="text-[11px] text-red-400 mt-2 flex items-center gap-1">
+          <Music2 size={12} /> {error}
         </p>
       )}
     </div>

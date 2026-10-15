@@ -124,7 +124,7 @@ export default function VideoComposer({ category, onCreated, onClose }) {
 
   return (
     <div className="fixed inset-0 z-[800] flex items-end sm:items-center justify-center bg-black/50" onClick={onClose}>
-      <div className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[94vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[94vh] overflow-y-auto pb-[env(safe-area-inset-bottom)]" onClick={(e) => e.stopPropagation()}>
         <input ref={fileRef} type="file" accept="video/*" capture={capture ? "environment" : undefined} className="hidden" onChange={onFile} />
         <div className="flex items-center justify-between p-3 border-b sticky top-0 bg-white z-10" style={{ borderColor: "#eef0f3" }}>
           <button onClick={() => { reset(); onClose && onClose(); }} className="p-1 text-gray-500"><X size={20} /></button>
@@ -224,6 +224,9 @@ export default function VideoComposer({ category, onCreated, onClose }) {
           )}
 
           {busy && <div className="flex items-center justify-center gap-2 py-4 text-gray-500 text-sm"><Loader2 className="animate-spin" size={16} /> Uploading…</div>}
+
+          {/* Spacer so music search clears the Android nav bar */}
+          <div className="h-20" />
         </div>
       </div>
     </div>

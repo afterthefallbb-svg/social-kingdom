@@ -38,10 +38,20 @@ export default function CreateEvent() {
     params.get("visibility") === "personal" ? "personal" : "public"
   );
   const [me, setMe] = useState(null);
+  const [existingEvents, setExistingEvents] = useState([]);
   const [inviteSelection, setInviteSelection] = useState({ users: [], clicks: [], events: [] });
 
   useEffect(() => {
     base44.auth.me().then(setMe).catch(() => setMe(null));
+  }, []);
+
+  useEffect(() => {
+    base44.entities.Event.filter(
+      { visibility: "public", latitude: { $exists: true } },
+      { limit: 200, fields: ["title", "latitude", "longitude", "category"] }
+    )
+      .then((page) => setExistingEvents(page.items))
+      .catch(() => setExistingEvents([]));
   }, []);
 
   function addTag() {
@@ -289,6 +299,17 @@ export default function CreateEvent() {
                 className="meetme-tiles"
                 maxZoom={19}
               />
+              {existingEvents.map((ev) =>
+                ev.latitude != null && ev.longitude != null ? (
+                  <Marker
+                    key={ev.id}
+                    position={[ev.latitude, ev.longitude]}
+                    icon={makeEventIcon(ev.category)}
+                    interactive={false}
+                    zIndexOffset={-100}
+                  />
+                ) : null
+              )}
               <ClickHandler onPick={setPosition} />
               {position && (
                 <Marker position={[position.lat, position.lng]} icon={makeEventIcon(category)} />

@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import PhotoComposer from "@/components/compose/PhotoComposer";
 import PostCard from "@/components/profile/PostCard";
 import FeedPhotoNotice from "@/components/feed/FeedPhotoNotice";
+import FeedVideos from "@/components/feed/FeedVideos";
 import { Image } from "@/components/ui/image";
 
 const FB = "#1877f2";
@@ -16,6 +17,7 @@ export default function Feed() {
   const [loading, setLoading] = useState(true);
   const [composeOpen, setComposeOpen] = useState(false);
   const [zoom, setZoom] = useState(null);
+  const [authorIds, setAuthorIds] = useState([]);
 
   async function load() {
     setLoading(true);
@@ -37,6 +39,7 @@ export default function Feed() {
         }
       }
       const authorIds = u ? [u.id, ...friendIds] : [];
+      setAuthorIds(authorIds);
       const res = authorIds.length
         ? await base44.entities.Post.filter(
             { author_id: { $in: authorIds } },
@@ -94,6 +97,8 @@ export default function Feed() {
             )}
           </>
         )}
+
+        {authorIds.length > 0 && <FeedVideos authorIds={authorIds} />}
 
         {loading && (
           <div className="flex justify-center py-10">

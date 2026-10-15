@@ -154,7 +154,7 @@ export default function SocialHub() {
       {/* Header: avatar + name stacked on the left, logo filling from the avatar's right edge to the right side of the screen */}
       <div className="flex items-stretch pl-4">
         <div className="shrink-0 pt-2">
-          <button onClick={() => navigate("/profile")}>
+          <button onClick={() => navigate("/profile")} className="block">
             <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
               {me?.avatar_url ? (
                 <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
@@ -178,17 +178,19 @@ export default function SocialHub() {
             })()}
           </button>
         </div>
-        <div className="flex-1 min-w-0 ml-3 flex items-center">
-          <img
+        {/* Crop the logo's built-in blank space without letting its square canvas set the header height. */}
+        <div className="relative flex-1 min-w-0 min-h-0 ml-3 overflow-hidden">
+          <Image
             src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/237bd4549_social-kingdom-wordmark.png"
             alt="Social Kingdom"
-            className="w-full h-full object-contain"
+            fittingType="fit"
+            className="absolute left-1/2 top-1/2 w-full max-w-lg h-auto -translate-x-1/2 -translate-y-1/2"
           />
         </div>
       </div>
 
       {/* Projects | Planner toggles */}
-      <div className="flex justify-center gap-1 px-4 pt-1">
+      <div className="flex justify-center gap-1 px-4">
         {[{ l: "Projects", to: "/projects" }, { l: "Planner", to: "/planner" }].map((t) => (
           <button
             key={t.l}

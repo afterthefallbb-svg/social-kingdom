@@ -26,7 +26,7 @@ const NAV_BOX = "w-12 h-12 flex items-center justify-center";
 // event details sheet is open (the global nav is hidden behind the sheet).
 function SheetNav() {
   return (
-    <nav className="flex justify-around items-center pt-2 pb-[max(3.5rem,calc(env(safe-area-inset-bottom)+0.5rem))] border-t border-gray-100 bg-white">
+    <nav className="flex justify-around items-center pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] border-t border-gray-100 bg-white">
       <NavLink to="/browse" aria-label="Browse">
         {({ isActive }) => (
           <span

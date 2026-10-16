@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { isOnline, statusEmoji, presenceBadge } from "@/lib/presence";
 import { sendMessage, sendMessageWithImage, markConversationRead, getDraft, setDraft, clearDraft } from "@/lib/messaging";
+import { canContact } from "@/lib/ageSafety";
 import EmojiPicker from "@/components/messages/EmojiPicker";
 import PresenceBadge from "@/components/presence/PresenceBadge";
 import { toast } from "@/components/ui/use-toast";
@@ -83,6 +84,13 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
   async function send() {
     const content = text.trim();
     if ((!content && !pendingImage) || sending || !conversation) return;
+    if (!conversation.is_group) {
+      const guard = canContact(me, peer);
+      if (!guard.allowed) {
+        toast({ title: "Message blocked", description: guard.reason });
+        return;
+      }
+    }
     setSending(true);
     const wasText = text;
     setText("");

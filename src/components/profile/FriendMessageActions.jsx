@@ -4,12 +4,14 @@ import { UserPlus, MessageCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { addFriendToMyPersonalEvents } from "@/lib/eventVisibility";
+import { canContact } from "@/lib/ageSafety";
 
 const FB = "#1877f2";
 
 export default function FriendMessageActions({ targetId, friendName, friendAvatar }) {
   const navigate = useNavigate();
   const [me, setMe] = useState(null);
+  const [target, setTarget] = useState(null);
   const [isFriend, setIsFriend] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -19,6 +21,8 @@ export default function FriendMessageActions({ targetId, friendName, friendAvata
       const current = await base44.auth.me().catch(() => null);
       if (!active || !current || !targetId) return;
       setMe(current);
+      const tgt = await base44.entities.User.get(targetId).catch(() => null);
+      if (active) setTarget(tgt);
       const res = await base44.entities.Friendship.filter(
         { user_id: current.id, friend_id: targetId },
         { limit: 1 }
@@ -30,8 +34,14 @@ export default function FriendMessageActions({ targetId, friendName, friendAvata
     };
   }, [targetId]);
 
+  const guard = me ? canContact(me, target) : { allowed: true };
+
   async function addFriend() {
     if (!me || busy || isFriend) return;
+    if (!guard.allowed) {
+      toast({ title: "Action blocked", description: guard.reason });
+      return;
+    }
     setBusy(true);
     try {
       await base44.entities.Friendship.create({
@@ -74,7 +84,13 @@ export default function FriendMessageActions({ targetId, friendName, friendAvata
       </button>
       <button
         type="button"
-        onClick={() => navigate(`/messages?chat=${targetId}`)}
+        onClick={() => {
+          if (!guard.allowed) {
+            toast({ title: "Action blocked", description: guard.reason });
+            return;
+          }
+          navigate(`/messages?chat=${targetId}`);
+        }}
         className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-2 text-sm font-semibold text-white"
         style={{ background: FB }}
       >

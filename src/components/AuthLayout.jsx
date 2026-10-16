@@ -1,14 +1,15 @@
 import React from "react";
+import { Image } from "@/components/ui/image";
 
 const LOGO_URL =
-  "https://media.base44.com/images/public/6ac40db708d83e8619ab9efd/c2af849e2_generated_image.png";
+  "https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/6b7cd0149_social-kingdom-complete-crown-raised.png";
 
 export default function AuthLayout({ icon: Icon, title, subtitle, footer, children }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">
         <div className="flex items-center justify-center gap-2 mb-6">
-          <img src={LOGO_URL} alt="Social Kingdom" className="w-10 h-10 rounded-xl" />
+          <Image src={LOGO_URL} alt="Social Kingdom" className="w-10 h-10 rounded-xl" />
           <span className="text-xl font-bold tracking-tight text-foreground">
             <span>S</span>ocial <span className="font-extrabold">K</span>ingdom
           </span>

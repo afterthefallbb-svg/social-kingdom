@@ -36,6 +36,10 @@ export default function Login() {
     base44.auth.loginWithProvider("google", returnTo);
   };
 
+  const handleApple = () => {
+    base44.auth.loginWithProvider("apple", returnTo);
+  };
+
   return (
     <AuthLayout
       icon={LogIn}
@@ -55,11 +59,19 @@ export default function Login() {
     >
       <Button
         variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
+        className="w-full h-12 text-sm font-medium mb-3"
         onClick={handleGoogle}
       >
         <GoogleIcon className="w-5 h-5 mr-2" />
         Continue with Google
+      </Button>
+      <Button
+        variant="outline"
+        className="w-full h-12 text-sm font-medium mb-6"
+        onClick={handleApple}
+      >
+        <span className="w-5 h-5 mr-2 inline-flex items-center justify-center font-bold"></span>
+        Continue with Apple
       </Button>
 
       <div className="relative mb-6">

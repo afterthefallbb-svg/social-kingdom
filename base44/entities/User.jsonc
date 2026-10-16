@@ -35,6 +35,39 @@
       "default": true,
       "title": "Public Profile"
     },
+    "profile_type": {
+      "type": "string",
+      "enum": [
+        "none",
+        "artist",
+        "content_creator"
+      ],
+      "default": "none",
+      "title": "Profile Type"
+    },
+    "selfie_verified": {
+      "type": "boolean",
+      "default": false,
+      "title": "Selfie Verified"
+    },
+    "selfie_uri": {
+      "type": "string",
+      "title": "Selfie Uri"
+    },
+    "id_submitted": {
+      "type": "boolean",
+      "default": false,
+      "title": "Id Submitted"
+    },
+    "id_uri": {
+      "type": "string",
+      "title": "Id Uri"
+    },
+    "id_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Id Expires At"
+    },
     "traits": {
       "type": "array",
       "items": {

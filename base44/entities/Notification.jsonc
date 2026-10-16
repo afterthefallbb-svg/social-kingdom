@@ -1,0 +1,108 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "title": "User Id"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "event_post",
+        "click_post",
+        "event_invite",
+        "friend_request",
+        "klout",
+        "system"
+      ],
+      "default": "system",
+      "title": "Type"
+    },
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "body": {
+      "type": "string",
+      "title": "Body"
+    },
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "event",
+        "click",
+        "post",
+        "profile",
+        "video",
+        "photo"
+      ],
+      "default": "event",
+      "title": "Target Type"
+    },
+    "target_id": {
+      "type": "string",
+      "title": "Target Id"
+    },
+    "actor_id": {
+      "type": "string",
+      "title": "Actor Id"
+    },
+    "actor_name": {
+      "type": "string",
+      "title": "Actor Name"
+    },
+    "actor_avatar": {
+      "type": "string",
+      "title": "Actor Avatar"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "title": "Read"
+    }
+  },
+  "required": [
+    "user_id",
+    "type",
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

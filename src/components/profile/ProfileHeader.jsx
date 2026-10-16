@@ -97,7 +97,24 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
 
       {/* Name + city/state */}
       <div className="px-4 pt-2">
-        <h2 className="text-xl font-bold text-gray-900">{name}</h2>
+        <div className="flex items-center gap-2 flex-wrap">
+          <h2 className="text-xl font-bold text-gray-900">{name}</h2>
+          {user?.profile_type === "artist" && (
+            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold text-white" style={{ background: "#7c3aed" }}>
+              🎨 Artist
+            </span>
+          )}
+          {user?.profile_type === "content_creator" && (
+            <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold text-white" style={{ background: "#db2777" }}>
+              🎬 Content Creator
+            </span>
+          )}
+          {user?.selfie_verified && (
+            <span className="inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[11px] font-semibold" style={{ background: "#dcfce7", color: "#15803d" }}>
+              ✓ Verified
+            </span>
+          )}
+        </div>
         {city && <p className="text-sm text-gray-500">{city}</p>}
       </div>
 

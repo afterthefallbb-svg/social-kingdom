@@ -137,6 +137,23 @@ export default function NotifList({ category, items, actions, acting, navigate }
     ));
   }
 
+  if (category === "posts") {
+    return items.map((n) => (
+      <div key={n.id} className="flex items-center gap-3 p-3 rounded-xl border border-gray-200">
+        <button
+          onClick={() => { actions.markPostRead?.(n); navigate(n.target_type === "event" ? `/event/${n.target_id}` : `/browse`); }}
+          className="flex items-center gap-3 min-w-0 text-left flex-1"
+        >
+          <Avatar src={n.actor_avatar} name={n.actor_name} />
+          <span className="min-w-0">
+            <span className="text-sm font-semibold text-gray-900 truncate block">{n.title}</span>
+            {n.body && <span className="text-[11px] text-gray-400 truncate block">{n.body}</span>}
+          </span>
+        </button>
+      </div>
+    ));
+  }
+
   return (
     <div className="flex items-center gap-2 text-sm text-gray-500">
       <span className="text-lg">👑</span>

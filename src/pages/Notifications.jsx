@@ -12,7 +12,10 @@ export default function Notifications() {
   const navigate = useNavigate();
   const n = useNotifications();
   const itemsFor = (cat) =>
-    cat === "friends" ? n.friends : cat === "events" ? n.events : cat === "cliqs" ? n.cliqs : [];
+    cat === "friends" ? n.friends
+      : cat === "events" ? n.events
+      : cat === "posts" ? n.posts
+      : cat === "cliqs" ? n.cliqs : [];
 
   return (
     <div className="min-h-screen bg-white pb-28">

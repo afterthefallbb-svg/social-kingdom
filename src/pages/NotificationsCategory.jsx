@@ -13,7 +13,10 @@ export default function NotificationsCategory() {
   const n = useNotifications();
   const cat = NOTIF_CATS.find((c) => c.id === category) || NOTIF_CATS[0];
   const items =
-    cat.id === "friends" ? n.friends : cat.id === "events" ? n.events : cat.id === "cliqs" ? n.cliqs : [];
+    cat.id === "friends" ? n.friends
+      : cat.id === "events" ? n.events
+      : cat.id === "posts" ? n.posts
+      : cat.id === "cliqs" ? n.cliqs : [];
 
   return (
     <div className="min-h-screen bg-white pb-28">

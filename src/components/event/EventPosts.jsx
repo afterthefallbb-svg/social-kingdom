@@ -33,7 +33,7 @@ export default function EventPosts({ eventId }) {
     if (!text.trim() && !imgUrl) return;
     setBusy(true);
     try {
-      await base44.entities.Post.create({
+      const created = await base44.entities.Post.create({
         content: text.trim(),
         image_url: imgUrl,
         author_id: me.id,
@@ -50,10 +50,42 @@ export default function EventPosts({ eventId }) {
       setImgUrl("");
       setMusic(null);
       await loadPosts();
+      // Notify everyone attending this event (except the author) about the new post.
+      notifyAttendees(created).catch(() => {});
     } catch (e) {
       toast({ title: "Could not post", description: String(e.message || e) });
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function notifyAttendees(post) {
+    try {
+      const ev = await base44.entities.Event.get(eventId).catch(() => null);
+      const att = await base44.entities.Attendance
+        .filter({ event_id: eventId }, { limit: 500 })
+        .catch(() => ({ items: [] }));
+      const recipients = att.items
+        .map((a) => a.user_id)
+        .filter((x) => x && x !== me.id);
+      if (!recipients.length) return;
+      const preview = (post.content || "New photo post").slice(0, 80);
+      await base44.entities.Notification.bulkCreate(
+        recipients.map((uid) => ({
+          user_id: uid,
+          type: "event_post",
+          title: `${me.full_name || "Someone"} posted to ${ev?.title || "an event"}`,
+          body: preview,
+          target_type: "event",
+          target_id: eventId,
+          actor_id: me.id,
+          actor_name: me.full_name || "",
+          actor_avatar: me.avatar_url || "",
+          read: false
+        }))
+      );
+    } catch {
+      /* notifications are best-effort */
     }
   }
 

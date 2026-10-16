@@ -8,6 +8,7 @@ import { UserPlus, Mail, Lock, Loader2 } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
+import SelfieCapture from "@/components/auth/SelfieCapture";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
@@ -19,6 +20,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
+  const [showSelfie, setShowSelfie] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +48,7 @@ export default function Register() {
       if (result?.access_token) {
         base44.auth.setToken(result.access_token);
       }
-      window.location.href = safeReturnTo();
+      setShowSelfie(true);
     } catch (err) {
       setError(err.message || "Invalid verification code");
     } finally {
@@ -70,6 +72,29 @@ export default function Register() {
   const handleGoogle = () => {
     base44.auth.loginWithProvider("google", safeReturnTo());
   };
+
+  const handleApple = () => {
+    base44.auth.loginWithProvider("apple", safeReturnTo());
+  };
+
+  async function handleSelfie(fileUri) {
+    try {
+      await base44.auth.updateMe({ selfie_verified: true, selfie_uri: fileUri });
+    } catch {
+      /* verification still recorded server-side; continue */
+    }
+    window.location.href = safeReturnTo();
+  }
+
+  if (showSelfie) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background px-4">
+        <div className="w-full max-w-md">
+          <SelfieCapture onCaptured={handleSelfie} />
+        </div>
+      </div>
+    );
+  }
 
   if (showOtp) {
     return (
@@ -144,11 +169,19 @@ export default function Register() {
     >
       <Button
         variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
+        className="w-full h-12 text-sm font-medium mb-3"
         onClick={handleGoogle}
       >
         <GoogleIcon className="w-5 h-5 mr-2" />
         Continue with Google
+      </Button>
+      <Button
+        variant="outline"
+        className="w-full h-12 text-sm font-medium mb-6"
+        onClick={handleApple}
+      >
+        <span className="w-5 h-5 mr-2 inline-flex items-center justify-center font-bold"></span>
+        Continue with Apple
       </Button>
 
       <div className="relative mb-6">

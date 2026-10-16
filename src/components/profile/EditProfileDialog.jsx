@@ -20,6 +20,7 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
   const [hobbies, setHobbies] = useState((me?.hobbies || []).join(", "));
   const [music, setMusic] = useState((me?.music || []).join(", "));
   const [publicProfile, setPublicProfile] = useState(me?.public_profile !== false);
+  const [profileType, setProfileType] = useState(me?.profile_type || "none");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(null);
 
@@ -34,7 +35,8 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
         traits: toArray(traits),
         hobbies: toArray(hobbies),
         music: toArray(music),
-        public_profile: publicProfile
+        public_profile: publicProfile,
+        profile_type: profileType
       });
       onSaved(updated);
       onClose();
@@ -97,8 +99,25 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
             <Input value={hobbies} onChange={(e) => setHobbies(e.target.value)} className="mt-1.5" placeholder="Hiking, Gaming, Cooking" />
           </div>
           <div>
-            <label className="text-sm font-semibold text-gray-700">Music (comma separated)</label>
-            <Input value={music} onChange={(e) => setMusic(e.target.value)} className="mt-1.5" placeholder="Hip-hop, Jazz, Indie" />
+            <label className="text-sm font-semibold text-gray-700">Profile type</label>
+            <p className="text-[11px] text-gray-400 mb-1.5">Show a badge on your profile and let people find you by type.</p>
+            <div className="flex gap-2">
+              {[
+                { id: "none", label: "Standard" },
+                { id: "artist", label: "🎨 Artist" },
+                { id: "content_creator", label: "🎬 Content Creator" }
+              ].map((o) => (
+                <button
+                  key={o.id}
+                  type="button"
+                  onClick={() => setProfileType(o.id)}
+                  className="flex-1 rounded-lg py-2 text-xs font-semibold border"
+                  style={profileType === o.id ? { background: FB, color: "#fff", borderColor: FB } : { borderColor: "#e5e7eb", color: "#374151" }}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
           </div>
           <div className="flex items-center justify-between p-3 rounded-xl border border-gray-200">
             <div>

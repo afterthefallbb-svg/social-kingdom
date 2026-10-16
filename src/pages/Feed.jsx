@@ -23,28 +23,49 @@ export default function Feed() {
     try {
       const u = await base44.auth.me().catch(() => null);
       setMe(u);
-
-      // Friends (accepted) of the current user — the feed shows their posts + yours.
-      let friendIds = [];
-      if (u) {
-        try {
-          const fr = await base44.entities.Friendship.filter(
-            { user_id: u.id, status: "accepted" },
-            { limit: 500 }
-          );
-          friendIds = fr.items.map((f) => f.friend_id).filter(Boolean);
-        } catch {
-          /* ignore */
-        }
+      if (!u) {
+        setPosts([]);
+        return;
       }
-      const authorIds = u ? [u.id, ...friendIds] : [];
-      setAuthorIds(authorIds);
-      const res = authorIds.length
+
+      // 1. Friends (accepted) — their posts + yours.
+      const fr = await base44.entities.Friendship
+        .filter({ user_id: u.id, status: "accepted" }, { limit: 500 })
+        .catch(() => ({ items: [] }));
+      const friendIds = fr.items.map((f) => f.friend_id).filter(Boolean);
+
+      // 2. Events you attend (confirmed or interested) — posts made to those events.
+      const att = await base44.entities.Attendance
+        .filter({ user_id: u.id }, { limit: 200 })
+        .catch(() => ({ items: [] }));
+      const eventIds = att.items.map((a) => a.event_id).filter(Boolean);
+
+      // 3. CliQs you belong to — posts from your co-members.
+      const mem = await base44.entities.ClickMembership
+        .filter({ user_id: u.id }, { limit: 100 })
+        .catch(() => ({ items: [] }));
+      const clickIds = mem.items.map((m) => m.click_id).filter(Boolean);
+      let coMemberIds = [];
+      if (clickIds.length) {
+        const coMem = await base44.entities.ClickMembership
+          .filter({ click_id: { $in: clickIds } }, { limit: 500 })
+          .catch(() => ({ items: [] }));
+        coMemberIds = coMem.items.map((m) => m.user_id).filter((x) => x && x !== u.id);
+      }
+
+      const authorIds = Array.from(new Set([u.id, ...friendIds, ...coMemberIds]));
+
+      const clauses = [];
+      if (authorIds.length) clauses.push({ author_id: { $in: authorIds } });
+      if (eventIds.length) clauses.push({ event_id: { $in: eventIds } });
+
+      const res = clauses.length
         ? await base44.entities.Post.filter(
-            { author_id: { $in: authorIds } },
+            { $or: clauses },
             { sort: "-created_date", limit: 50 }
           )
         : await base44.entities.Post.filter({}, { sort: "-created_date", limit: 50 });
+      setAuthorIds(authorIds);
       setPosts(res.items || []);
     } catch {
       setPosts([]);

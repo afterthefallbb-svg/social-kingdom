@@ -9,6 +9,7 @@ export function useNotifications() {
   const [friends, setFriends] = useState([]);
   const [events, setEvents] = useState([]);
   const [cliqs, setCliqs] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState(null);
 
@@ -31,10 +32,14 @@ export function useNotifications() {
           { invitee_id: u.id, target_type: "click", status: "pending" },
           { sort: "-created_date", limit: 100 }
         ).catch(() => ({ items: [] }));
+        const pn = await base44.entities.Notification
+          .filter({ user_id: u.id, read: false }, { sort: "-created_date", limit: 50 })
+          .catch(() => ({ items: [] }));
         if (active) {
           setFriends(fr.items);
           setEvents(ev.items);
           setCliqs(cq.items);
+          setPosts(pn.items.filter((n) => n.type === "event_post" || n.type === "click_post"));
         }
       } catch {
         /* ignore */
@@ -136,6 +141,15 @@ export function useNotifications() {
     }
   };
 
+  const markPostRead = async (n) => {
+    try {
+      await base44.entities.Notification.update(n.id, { read: true });
+      setPosts((x) => x.filter((i) => i.id !== n.id));
+    } catch {
+      /* ignore */
+    }
+  };
+
   return {
     me,
     loading,
@@ -143,11 +157,13 @@ export function useNotifications() {
     friends,
     events,
     cliqs,
+    posts,
     acceptFriend,
     denyFriend,
     attendEvent,
     rejectEvent,
     joinCliq,
-    rejectCliq
+    rejectCliq,
+    markPostRead
   };
 }

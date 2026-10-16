@@ -23,6 +23,7 @@ export default function InviteDialog({ event, onClose }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
+  const [typeFilter, setTypeFilter] = useState("none");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(new Set());
   const [friendIds, setFriendIds] = useState(new Set());
@@ -78,15 +79,18 @@ export default function InviteDialog({ event, onClose }) {
   useEffect(() => {
     if (tab !== "search") return;
     const q = query.trim();
-    if (!q) {
+    if (!q && typeFilter === "none") {
       setResults([]);
       return;
     }
     let active = true;
     setSearching(true);
     (async () => {
+      const f = {};
+      if (q) f.full_name = { $regex: q, $options: "i" };
+      if (typeFilter !== "none") f.profile_type = typeFilter;
       const res = await base44.entities.User
-        .filter({ full_name: { $regex: q, $options: "i" } }, { limit: 30 })
+        .filter(f, { limit: 30 })
         .catch(() => ({ items: [] }));
       if (active) {
         setResults(res.items.filter((r) => r.id !== me?.id));
@@ -96,7 +100,7 @@ export default function InviteDialog({ event, onClose }) {
     return () => {
       active = false;
     };
-  }, [query, me?.id, tab]);
+  }, [query, me?.id, tab, typeFilter]);
 
   async function sendInvite(inviteeId, inviteeName) {
     if (!me || !inviteeId || sent.has(inviteeId)) return;
@@ -296,13 +300,35 @@ export default function InviteDialog({ event, onClose }) {
 
           {tab === "search" && (
             <>
+              <div className="flex gap-2 pb-2">
+                {[
+                  { id: "none", label: "All" },
+                  { id: "artist", label: "🎨 Artists" },
+                  { id: "content_creator", label: "🎬 Creators" }
+                ].map((o) => {
+                  const on = typeFilter === o.id;
+                  return (
+                    <button
+                      key={o.id}
+                      onClick={() => setTypeFilter(o.id)}
+                      className="shrink-0 rounded-full px-3 py-1 text-xs font-semibold"
+                      style={on ? { background: FB, color: "#fff" } : { background: "#eef2f7", color: "#1f2937" }}
+                    >
+                      {o.label}
+                    </button>
+                  );
+                })}
+              </div>
               {searching && (
                 <div className="flex justify-center py-3">
                   <Loader2 className="w-5 h-5 animate-spin" style={{ color: FB }} />
                 </div>
               )}
-              {!searching && query && results.length === 0 && (
+              {!searching && (query || typeFilter !== "none") && results.length === 0 && (
                 <p className="text-sm text-gray-400 text-center py-4">No one found.</p>
+              )}
+              {!query && typeFilter === "none" && (
+                <p className="text-sm text-gray-400 text-center py-4">Search by name, or pick Artists or Creators to browse them.</p>
               )}
               {results.map((u) => {
                 const allowed = canInvite(u);
@@ -311,7 +337,15 @@ export default function InviteDialog({ event, onClose }) {
                     <span className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-sm font-bold shrink-0">
                       {u.avatar_url ? <Image src={u.avatar_url} fittingType="fill" className="w-full h-full" /> : initial(u.full_name)}
                     </span>
-                    <span className="flex-1 text-sm font-medium text-gray-800 truncate">{u.full_name || "User"}</span>
+                    <span className="flex-1 min-w-0">
+                      <span className="text-sm font-medium text-gray-800 truncate block">{u.full_name || "User"}</span>
+                      {u.profile_type === "artist" && (
+                        <span className="text-[10px] font-semibold" style={{ color: "#7c3aed" }}>🎨 Artist</span>
+                      )}
+                      {u.profile_type === "content_creator" && (
+                        <span className="text-[10px] font-semibold" style={{ color: "#db2777" }}>🎬 Content Creator</span>
+                      )}
+                    </span>
                     {sent.has(u.id) ? (
                       <span className="text-xs font-semibold flex items-center gap-1" style={{ color: FB }}>
                         <Check size={14} /> Sent

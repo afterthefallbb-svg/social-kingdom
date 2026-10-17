@@ -5,7 +5,7 @@ const FB = "#1877f2";
 
 export default function ConversationSelectBar({ count, onCancel, onDelete, onGroup }) {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 bg-white border-t shadow-2xl rounded-t-2xl p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+    <div className="fixed inset-x-0 z-[700] bg-white border-t shadow-2xl rounded-t-2xl p-4 pb-4" style={{ bottom: "calc(96px + env(safe-area-inset-bottom))" }}>
       <div className="flex items-center justify-between mb-3">
         <button onClick={onCancel} className="flex items-center gap-1 text-sm text-gray-500">
           <X size={16} /> Cancel

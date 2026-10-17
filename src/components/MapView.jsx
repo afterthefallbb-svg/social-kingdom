@@ -13,11 +13,11 @@ function Recenter({ center }) {
   return null;
 }
 
-export default function MapView({ events = [], activeId, onSelect, mode = "events" }) {
+export default function MapView({ events = [], activeId, onSelect, mode = "events", center = WALLA_WALLA }) {
   const isEvents = mode === "events";
   return (
     <MapContainer
-      center={WALLA_WALLA}
+      center={center}
       zoom={13}
       zoomControl={false}
       attributionControl={false}
@@ -36,7 +36,7 @@ export default function MapView({ events = [], activeId, onSelect, mode = "event
           maxZoom={19}
         />
       )}
-      <Recenter center={WALLA_WALLA} />
+      <Recenter center={center} />
       {isEvents &&
         events.map((ev) => (
           <Marker

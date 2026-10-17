@@ -5,19 +5,9 @@ import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
 import CategoryFilter from "@/components/CategoryFilter";
 import EventSideList from "@/components/EventSideList";
+import { getUserLocation } from "@/lib/localSeed";
 
-const CENTER = { lat: 46.0646, lng: -118.3425 };
-
-function haversineKm(lat, lng) {
-  const toRad = (d) => (d * Math.PI) / 180;
-  const R = 6371;
-  const dLat = toRad(lat - CENTER.lat);
-  const dLng = toRad(lng - CENTER.lng);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(CENTER.lat)) * Math.cos(toRad(lat)) * Math.sin(dLng / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(a));
-}
+const DEFAULT_CENTER = [46.0646, -118.3425];
 
 export default function Home() {
   const navigate = useNavigate();
@@ -25,7 +15,21 @@ export default function Home() {
   const [count, setCount] = useState(0);
   const [activeCat, setActiveCat] = useState(null);
   const [query, setQuery] = useState("");
+  const [center, setCenter] = useState(DEFAULT_CENTER);
+  const [seedTick, setSeedTick] = useState(0);
   const mode = "events";
+
+  useEffect(() => {
+    getUserLocation().then((loc) => {
+      if (loc) setCenter([loc.latitude, loc.longitude]);
+    });
+  }, []);
+
+  useEffect(() => {
+    function onSeeded() { setSeedTick((t) => t + 1); }
+    window.addEventListener("sk:area_seeded", onSeeded);
+    return () => window.removeEventListener("sk:area_seeded", onSeeded);
+  }, []);
 
   useEffect(() => {
     const publicQuery = { visibility: { $ne: "personal" } };
@@ -34,7 +38,7 @@ export default function Home() {
       .filter(publicQuery, { sort: "-created_date", limit: 100 })
       .then((page) => setEvents(page.items))
       .catch(() => setEvents([]));
-  }, []);
+  }, [seedTick]);
 
   const filtered = useMemo(() => {
     let list = events;
@@ -43,8 +47,19 @@ export default function Home() {
       const q = query.toLowerCase();
       list = list.filter((e) => e.title.toLowerCase().includes(q));
     }
-    return [...list].sort((a, b) => haversineKm(a.latitude, a.longitude) - haversineKm(b.latitude, b.longitude));
-  }, [events, activeCat, query]);
+    const [clat, clng] = center;
+    const toRad = (d) => (d * Math.PI) / 180;
+    const dist = (e) => {
+      const R = 6371;
+      const dLat = toRad(e.latitude - clat);
+      const dLng = toRad(e.longitude - clng);
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(clat)) * Math.cos(toRad(e.latitude)) * Math.sin(dLng / 2) ** 2;
+      return 2 * R * Math.asin(Math.sqrt(a));
+    };
+    return [...list].sort((a, b) => dist(a) - dist(b));
+  }, [events, activeCat, query, center]);
 
   const goEvent = (ev) => navigate(`/event/${ev.id}`);
 
@@ -55,6 +70,7 @@ export default function Home() {
         activeId={null}
         onSelect={goEvent}
         mode={mode}
+        center={center}
       />
 
       {/* Top stack: search + count + filters */}

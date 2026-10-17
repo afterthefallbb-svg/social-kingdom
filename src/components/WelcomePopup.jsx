@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { seedLocalEventsForUser } from "@/lib/localSeed";
 
 const FB = "#1877f2";
 
 export default function WelcomePopup() {
-  const navigate = useNavigate();
   const [me, setMe] = useState(null);
   const [show, setShow] = useState(false);
+  const [firstInArea, setFirstInArea] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -16,9 +15,18 @@ export default function WelcomePopup() {
       const u = await base44.auth.me().catch(() => null);
       if (!active || !u) return;
       setMe(u);
-      const key = `welcome_seen_${u.id}`;
-      if (!localStorage.getItem(key)) {
-        setShow(true);
+      const seenKey = `welcome_seen_${u.id}`;
+      if (!localStorage.getItem(seenKey)) setShow(true);
+
+      // Seed local placeholder events once per browser session.
+      const seedKey = `seed_run_${u.id}`;
+      if (!sessionStorage.getItem(seedKey)) {
+        sessionStorage.setItem(seedKey, "1");
+        const res = await seedLocalEventsForUser();
+        if (active && res?.firstInArea) {
+          setFirstInArea(true);
+          window.dispatchEvent(new CustomEvent("sk:area_seeded", { detail: { firstInArea: true } }));
+        }
       }
     })();
     return () => { active = false; };
@@ -32,31 +40,45 @@ export default function WelcomePopup() {
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-5">
-      <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 relative">
-        <button onClick={dismiss} aria-label="Close" className="absolute top-3 right-3 text-gray-400">
-          <X size={20} />
-        </button>
-        <h2 className="text-xl font-bold text-gray-900">Welcome to Social Kingdom 👋</h2>
-        <p className="text-sm text-gray-600 mt-3 leading-relaxed">
-          Social Kingdom is designed around your convenience, to make gathering easier and to
-          improve your everyday quality of life. We're here to serve you, help you connect,
-          and succeed where other social apps have fallen short.
-        </p>
-        <p className="text-sm text-gray-600 mt-3 leading-relaxed">
-          We're rolling the app out now and tailoring it as we go — please excuse any rough
-          edges along the way. Your feedback shapes what we build next.
-        </p>
-        <div className="flex flex-col gap-2 mt-5">
+    <div className="fixed inset-0 z-[700] bg-black/60 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full flex flex-col overflow-hidden" style={{ maxHeight: "86vh" }}>
+        <div className="px-6 pt-6 pb-2 text-center">
+          <h2 className="text-xl font-bold text-gray-900">Welcome to Social Kingdom 👋</h2>
+        </div>
+        <div className="px-6 pb-4 overflow-y-auto text-sm text-gray-700 leading-relaxed space-y-3">
+          {firstInArea && (
+            <p>
+              We have generated five Public Events, Activities, Get-togethers, and Parties in your
+              area to help you see how this app works. These events are real, so be sure to invite
+              your friends and family to come download the app and create profiles so that they can
+              start attending events and parties along with you and the rest of us, or host your own!
+            </p>
+          )}
+          <p>
+            The more people that are on the Social Kingdom app or website, the more successfully it
+            works! We are marketing to get people out there on this app as quickly as we can, but we
+            could sure use all the help we can get!
+          </p>
+          <p>
+            The main feature for Social Kingdom is the ability to meet people physically by attending
+            or creating any type of party, event, activity, or get-together with the maps feature.
+          </p>
+          <p>
+            Our design is tailored for you to have whatever you need at your disposal on ONE social
+            media app. Every profile is connected to a real person, so on Social Kingdom someone can
+            build real meaning, quality of life, real friendships, and real relationships!
+          </p>
+          <p className="font-semibold text-gray-900">
+            We challenge you to help us change the social media industry, and to change the world!
+          </p>
+        </div>
+        <div className="px-6 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2">
           <button
-            onClick={() => { dismiss(); navigate("/contact"); }}
-            className="w-full rounded-lg py-2.5 text-sm font-semibold text-white"
+            onClick={dismiss}
+            className="w-full rounded-xl py-3.5 text-base font-bold text-white shadow-md"
             style={{ background: FB }}
           >
-            Give Feedback
-          </button>
-          <button onClick={dismiss} className="w-full rounded-lg py-2.5 text-sm font-semibold text-gray-600 bg-gray-100">
-            Got it
+            Thank You
           </button>
         </div>
       </div>

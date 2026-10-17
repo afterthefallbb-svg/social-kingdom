@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, MapPin, Globe, Lock, UserPlus, Camera, Trash2 } from "lucide-react";
+import { ArrowLeft, MapPin, Globe, Lock, UserPlus, UserCheck, Clock, Camera, Trash2 } from "lucide-react";
+import EventPendingRequests from "@/components/event/EventPendingRequests";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import EventDirectionsLink from "@/components/event/EventDirectionsLink";
@@ -22,8 +23,7 @@ export default function EventDetail() {
   const [event, setEvent] = useState(null);
   const [click, setClick] = useState(null);
   const [me, setMe] = useState(null);
-  const [attending, setAttending] = useState(false);
-  const [myAttendanceId, setMyAttendanceId] = useState(null);
+  const [myAttendance, setMyAttendance] = useState(null);
   const [attendingVersion, setAttendingVersion] = useState(0);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [host, setHost] = useState(null);
@@ -62,15 +62,10 @@ export default function EventDetail() {
       const a = await base44.entities.Attendance
         .filter({ event_id: event.id, user_id: me.id }, { limit: 1 })
         .catch(() => ({ items: [] }));
-      if (active) {
-        setAttending(a.items.length > 0);
-        setMyAttendanceId(a.items[0]?.id || null);
-      }
+      if (active) setMyAttendance(a.items[0] || null);
     })();
-    return () => {
-      active = false;
-    };
-  }, [me, event]);
+    return () => { active = false; };
+  }, [me, event, attendingVersion]);
 
   if (!event) {
     return (
@@ -83,17 +78,55 @@ export default function EventDetail() {
   const cat = getCategory(event.category);
   const isPersonal = event.visibility === "personal";
   const isCreator = event.created_by_id === me?.id;
+  const attending = myAttendance?.status === "confirmed";
+  const myAttendanceId = myAttendance?.id;
+  const seededHost = event.is_seeded && event.host_name
+    ? { full_name: event.host_name, avatar_url: event.host_avatar, location: event.address }
+    : null;
+  const showHost = host || seededHost;
 
   async function removeAttendance() {
     if (!myAttendanceId) return;
     try {
       await base44.entities.Attendance.delete(myAttendanceId);
-      setAttending(false);
-      setMyAttendanceId(null);
+      setMyAttendance(null);
       setAttendingVersion((v) => v + 1);
-      toast({ title: "You're no longer attending" });
+      toast({ title: myAttendance?.status === "interested" ? "Request cancelled" : "You're no longer attending" });
     } catch (e) {
       toast({ title: "Could not remove", description: String(e.message || e) });
+    }
+  }
+
+  async function requestAttendance() {
+    if (!me) return;
+    try {
+      const auto = !!event.auto_approve;
+      const rec = await base44.entities.Attendance.create({
+        event_id: event.id,
+        user_id: me.id,
+        user_name: me.full_name,
+        user_avatar: me.avatar_url,
+        user_city: me.location,
+        status: auto ? "confirmed" : "interested",
+      });
+      setMyAttendance(rec);
+      setAttendingVersion((v) => v + 1);
+      if (!auto && event.created_by_id && event.created_by_id !== me.id) {
+        await base44.entities.Notification.create({
+          user_id: event.created_by_id,
+          type: "event_invite",
+          title: "New attendance request",
+          body: `${me.full_name || "Someone"} requested to attend "${event.title}"`,
+          target_type: "event",
+          target_id: event.id,
+          actor_id: me.id,
+          actor_name: me.full_name,
+          actor_avatar: me.avatar_url,
+        }).catch(() => {});
+      }
+      toast({ title: auto ? "You're attending!" : "Attendance requested — waiting for host approval" });
+    } catch (e) {
+      toast({ title: "Could not request", description: String(e.message || e) });
     }
   }
 
@@ -145,32 +178,54 @@ export default function EventDetail() {
         )}
 
         <div className="p-4">
-          {host && (
+          {showHost && (
             <div className="flex items-end gap-3 mb-4">
-              <Link
-                to={`/profile/${host.id}`}
-                state={{ name: host.full_name, avatar: host.avatar_url, city: host.location }}
-                className="relative shrink-0 pr-7"
-                aria-label={`Host ${host.full_name}`}
-              >
-                <div
-                  className="w-16 h-16 rounded-full overflow-hidden border-2 bg-blue-100 flex items-center justify-center text-xl font-bold"
-                  style={{ borderColor: FB, color: FB }}
+              {host ? (
+                <Link
+                  to={`/profile/${host.id}`}
+                  state={{ name: host.full_name, avatar: host.avatar_url, city: host.location }}
+                  className="relative shrink-0 pr-7"
+                  aria-label={`Host ${host.full_name}`}
                 >
-                  {host.avatar_url ? (
-                    <Image src={host.avatar_url} fittingType="fill" className="w-full h-full" />
-                  ) : (
-                    (host.full_name || "?").charAt(0).toUpperCase()
-                  )}
+                  <div
+                    className="w-16 h-16 rounded-full overflow-hidden border-2 bg-blue-100 flex items-center justify-center text-xl font-bold"
+                    style={{ borderColor: FB, color: FB }}
+                  >
+                    {host.avatar_url ? (
+                      <Image src={host.avatar_url} fittingType="fill" className="w-full h-full" />
+                    ) : (
+                      (host.full_name || "?").charAt(0).toUpperCase()
+                    )}
+                  </div>
+                  <span
+                    className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-card shadow flex items-center justify-center text-base border"
+                    style={{ borderColor: cat.color }}
+                    aria-hidden="true"
+                  >
+                    {cat.emoji}
+                  </span>
+                </Link>
+              ) : (
+                <div className="relative shrink-0 pr-7">
+                  <div
+                    className="w-16 h-16 rounded-full overflow-hidden border-2 bg-blue-100 flex items-center justify-center text-xl font-bold"
+                    style={{ borderColor: FB, color: FB }}
+                  >
+                    {showHost.avatar_url ? (
+                      <Image src={showHost.avatar_url} fittingType="fill" className="w-full h-full" />
+                    ) : (
+                      (showHost.full_name || "?").charAt(0).toUpperCase()
+                    )}
+                  </div>
+                  <span
+                    className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-card shadow flex items-center justify-center text-base border"
+                    style={{ borderColor: cat.color }}
+                    aria-hidden="true"
+                  >
+                    {cat.emoji}
+                  </span>
                 </div>
-                <span
-                  className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-card shadow flex items-center justify-center text-base border"
-                  style={{ borderColor: cat.color }}
-                  aria-hidden="true"
-                >
-                  {cat.emoji}
-                </span>
-              </Link>
+              )}
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span
@@ -179,9 +234,9 @@ export default function EventDetail() {
                   >
                     Host
                   </span>
-                  <span className="font-bold text-gray-900 truncate">{host.full_name}</span>
+                  <span className="font-bold text-gray-900 truncate">{showHost.full_name}</span>
                 </div>
-                {host.location && <p className="text-sm text-gray-500 truncate">{host.location}</p>}
+                {showHost.location && <p className="text-sm text-gray-500 truncate">{showHost.location}</p>}
               </div>
             </div>
           )}
@@ -233,28 +288,46 @@ export default function EventDetail() {
 
           <EventDirectionsLink event={event} className="mt-4 py-3" />
 
-          <button
-            onClick={() => {
-              const canInvite = event.created_by_id === me?.id || attending;
-              if (canInvite) {
-                setInviteOpen(true);
-              } else {
-                toast({ title: "You must first be attending the event before you can invite someone." });
-              }
-            }}
-            className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold border"
-            style={{ borderColor: FB, color: FB }}
-          >
-            <UserPlus size={16} /> Invite
-          </button>
+          {isCreator ? (
+            <button
+              onClick={() => setInviteOpen(true)}
+              className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold border"
+              style={{ borderColor: FB, color: FB }}
+            >
+              <UserPlus size={16} /> Invite People
+            </button>
+          ) : attending ? (
+            <button
+              onClick={() => setInviteOpen(true)}
+              className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold border"
+              style={{ borderColor: FB, color: FB }}
+            >
+              <UserPlus size={16} /> Invite
+            </button>
+          ) : myAttendance?.status === "interested" ? (
+            <div
+              className="mt-3 w-full rounded-xl py-3 text-sm font-semibold border flex items-center justify-center gap-2"
+              style={{ borderColor: "#f59e0b", color: "#b45309", background: "#fffbeb" }}
+            >
+              <Clock size={16} /> Attendance requested — awaiting host approval
+            </div>
+          ) : (
+            <button
+              onClick={requestAttendance}
+              className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-xl py-4 text-base font-bold text-white shadow-md"
+              style={{ background: FB }}
+            >
+              <UserCheck size={20} /> Request Attendance
+            </button>
+          )}
 
-          {attending && !isCreator && (
+          {myAttendance && !isCreator && (
             <button
               onClick={removeAttendance}
               className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold border"
               style={{ borderColor: "#e11d48", color: "#e11d28" }}
             >
-              Remove attendance
+              {myAttendance.status === "interested" ? "Cancel request" : "Remove attendance"}
             </button>
           )}
 
@@ -281,6 +354,9 @@ export default function EventDetail() {
 
       <div className="p-3 space-y-3 max-w-2xl mx-auto">
         <EventAttending eventId={event.id} hostId={event.created_by_id} refreshKey={attendingVersion} />
+        {isCreator && !event.auto_approve && (
+          <EventPendingRequests eventId={event.id} hostId={event.created_by_id} refreshKey={attendingVersion} onChanged={() => setAttendingVersion((v) => v + 1)} />
+        )}
         <EventPhotos eventId={event.id} />
         <VideoGallery title="Event Videos" scope={{ event_id: event.id }} />
         <EventPosts eventId={event.id} />

@@ -86,6 +86,24 @@
         "type": "string"
       },
       "title": "Visible To"
+    },
+    "host_name": {
+      "type": "string",
+      "title": "Host Name"
+    },
+    "host_avatar": {
+      "type": "string",
+      "title": "Host Avatar"
+    },
+    "auto_approve": {
+      "type": "boolean",
+      "default": false,
+      "title": "Auto Approve"
+    },
+    "is_seeded": {
+      "type": "boolean",
+      "default": false,
+      "title": "Is Seeded"
     }
   },
   "required": [

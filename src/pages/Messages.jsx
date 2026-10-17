@@ -16,6 +16,7 @@ const DIRECTIONS = [
   { key: "incoming", label: "Incoming" },
   { key: "sent", label: "Sent" },
   { key: "drafts", label: "Drafts" },
+  { key: "archived", label: "Archived" },
 ];
 
 export default function Messages() {
@@ -165,6 +166,7 @@ export default function Messages() {
             <ConversationList
               me={me}
               onOpen={(c, peer) => { setActiveConv(c); setActivePeer(peer); }}
+              onGroupOpened={(conv) => { setActiveConv(conv); setActivePeer(null); setRefreshKey((k) => k + 1); }}
               refreshKey={refreshKey}
               scope={scope}
               direction={direction}

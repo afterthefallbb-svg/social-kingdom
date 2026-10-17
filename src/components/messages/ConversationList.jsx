@@ -1,30 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
-import { presenceBadge } from "@/lib/presence";
-import PresenceBadge from "@/components/presence/PresenceBadge";
-import { getAllDrafts } from "@/lib/messaging";
+import { getAllDrafts, createGroupConversation } from "@/lib/messaging";
+import { toast } from "@/components/ui/use-toast";
+import ConversationRow from "@/components/messages/ConversationRow";
+import ConversationSelectBar from "@/components/messages/ConversationSelectBar";
 
 const FB = "#1877f2";
 
-function timeAgo(iso) {
-  if (!iso) return "";
-  const m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-  if (m < 1) return "now";
-  if (m < 60) return `${m}m`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h`;
-  const d = Math.floor(h / 24);
-  return `${d}d`;
-}
-
-export default function ConversationList({ me, onOpen, refreshKey, scope = "all", direction = "incoming" }) {
+export default function ConversationList({ me, onOpen, refreshKey, scope = "all", direction = "incoming", onGroupOpened }) {
   const [convs, setConvs] = useState([]);
   const [peers, setPeers] = useState({});
   const [friendIds, setFriendIds] = useState(new Set());
   const [clickmateIds, setClickmateIds] = useState(new Set());
   const [drafts, setDrafts] = useState({});
   const [loading, setLoading] = useState(true);
+  const [selecting, setSelecting] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [busy, setBusy] = useState(false);
+  const [localRefresh, setLocalRefresh] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -66,6 +59,9 @@ export default function ConversationList({ me, onOpen, refreshKey, scope = "all"
         return { ...c, unread: cnt };
       }));
       withUnread.sort((a, b) => {
+        const aAr = (a.archived_by_ids || []).includes(me.id);
+        const bAr = (b.archived_by_ids || []).includes(me.id);
+        if (aAr !== bAr) return aAr ? 1 : -1;
         if ((a.unread > 0) !== (b.unread > 0)) return a.unread > 0 ? -1 : 1;
         return new Date(b.last_message_at || 0) - new Date(a.last_message_at || 0);
       });
@@ -73,7 +69,7 @@ export default function ConversationList({ me, onOpen, refreshKey, scope = "all"
       setLoading(false);
     })();
     return () => { active = false; };
-  }, [me?.id, refreshKey]);
+  }, [me?.id, refreshKey, localRefresh]);
 
   function peerFor(c) {
     if (c.is_group) return null;
@@ -96,7 +92,75 @@ export default function ConversationList({ me, onOpen, refreshKey, scope = "all"
     return "other";
   }
 
+  function reload() { setLocalRefresh((k) => k + 1); }
+
+  async function archiveToggle(c) {
+    const cur = c.archived_by_ids || [];
+    const isAr = cur.includes(me.id);
+    const next = isAr ? cur.filter((id) => id !== me.id) : [...cur, me.id];
+    await base44.entities.Conversation.update(c.id, { archived_by_ids: next }).catch(() => {});
+    toast({ title: isAr ? "Conversation unarchived" : "Conversation archived" });
+    reload();
+  }
+
+  function startSelect(c) {
+    setSelecting(true);
+    setSelected([c.id]);
+  }
+  function toggleSelect(c) {
+    setSelected((s) => (s.includes(c.id) ? s.filter((x) => x !== c.id) : [...s, c.id]));
+  }
+  function exitSelect() { setSelecting(false); setSelected([]); }
+
+  async function deleteSelected() {
+    if (!selected.length) return;
+    setBusy(true);
+    try {
+      await Promise.all(selected.map(async (id) => {
+        const msgs = await base44.entities.Message.filter({ conversation_id: id }, { limit: 500 }).catch(() => ({ items: [] }));
+        if (msgs.items?.length) await base44.entities.Message.deleteMany({ conversation_id: id }).catch(() => {});
+        await base44.entities.Conversation.delete(id).catch(() => {});
+      }));
+      toast({ title: `Deleted ${selected.length} conversation${selected.length > 1 ? "s" : ""}` });
+      exitSelect();
+      reload();
+    } catch (e) {
+      toast({ title: "Could not delete", description: String(e.message || e) });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function groupFromSelected() {
+    if (!selected.length) return;
+    setBusy(true);
+    try {
+      const peerIds = new Set();
+      selected.forEach((id) => {
+        const c = convs.find((x) => x.id === id);
+        (c?.member_ids || []).forEach((mid) => mid !== me.id && peerIds.add(mid));
+      });
+      const members = [...peerIds].map((id) => ({ id }));
+      if (!members.length) {
+        toast({ title: "No other members to add" });
+        setBusy(false);
+        return;
+      }
+      const conv = await createGroupConversation(me, members);
+      exitSelect();
+      onGroupOpened?.(conv);
+      reload();
+    } catch (e) {
+      toast({ title: "Could not create group", description: String(e.message || e) });
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const filtered = convs.filter((c) => {
+    const isAr = (c.archived_by_ids || []).includes(me.id);
+    if (direction === "archived") return isAr;
+    if (isAr) return false;
     if (scope !== "all" && scopeOf(c) !== scope) return false;
     if (direction === "incoming") {
       if (c.last_sender_id === me.id) return false;
@@ -110,44 +174,58 @@ export default function ConversationList({ me, onOpen, refreshKey, scope = "all"
 
   if (loading) return <div className="p-6 text-center text-sm text-gray-400">Loading chats…</div>;
   if (filtered.length === 0) {
-    const scopeLabel = scope === "clicks" ? "CliQs"
-      : scope === "friends" ? "friends"
-      : scope === "other" ? "other people"
-      : scope;
-    const msg = direction === "drafts"
-      ? "No drafts."
-      : direction === "sent"
-        ? `No sent messages${scope === "all" ? "" : ` in ${scopeLabel}`}.`
-        : `No incoming messages${scope === "all" ? "" : ` from ${scopeLabel}`}.`;
+    const scopeLabel = scope === "clicks" ? "CliQs" : scope === "friends" ? "friends" : scope === "other" ? "other people" : scope;
+    const msg = direction === "archived"
+      ? "No archived conversations."
+      : direction === "drafts"
+        ? "No drafts."
+        : direction === "sent"
+          ? `No sent messages${scope === "all" ? "" : ` in ${scopeLabel}`}.`
+          : `No incoming messages${scope === "all" ? "" : ` from ${scopeLabel}`}.`;
     return <div className="p-6 text-center text-sm text-gray-400">{msg}</div>;
   }
 
   return (
-    <div className="divide-y divide-gray-100">
-      {filtered.map((c) => {
-        const peer = peerFor(c);
-        const draftText = drafts[c.id];
-        return (
-          <button key={c.id} onClick={() => onOpen(c, peer)} className="w-full flex items-center gap-3 px-3 py-3 hover:bg-gray-50 text-left">
-            <span className="relative w-12 h-12 rounded-full overflow-hidden border-2 flex items-center justify-center text-base font-bold shrink-0" style={{ borderColor: FB + "55", background: FB + "22", color: FB }}>
-              {avatarFor(c) ? <Image src={avatarFor(c)} fittingType="fill" className="w-full h-full" /> : (titleFor(c).charAt(0) || "?")}
-              {!c.is_group && <PresenceBadge badge={presenceBadge(peer)} className="-bottom-1 -right-1 text-xs" />}
-            </span>
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-center">
-                <p className="font-semibold text-gray-900 truncate">{titleFor(c)}</p>
-                <span className="text-[10px] text-gray-400 shrink-0">{timeAgo(c.last_message_at)}</span>
-              </div>
-              <p className="text-xs text-gray-500 truncate">
-                {draftText ? <span className="text-amber-600">Draft: {draftText}</span> : (c.last_message || "Say hello 👋")}
-              </p>
-            </div>
-            {c.unread > 0 && direction !== "sent" && direction !== "drafts" && (
-              <span className="text-[10px] font-bold text-white rounded-full px-2 py-0.5" style={{ background: FB }}>{c.unread}</span>
-            )}
-          </button>
-        );
-      })}
-    </div>
+    <>
+      {selecting && (
+        <div className="sticky top-0 z-20 bg-white border-b px-3 py-2 flex items-center gap-2 shadow-sm">
+          <span className="flex-1 text-sm font-semibold text-gray-900">Select chats ({selected.length})</span>
+          <button onClick={exitSelect} className="text-sm text-gray-500">Done</button>
+        </div>
+      )}
+      <div>
+        {filtered.map((c) => (
+          <ConversationRow
+            key={c.id}
+            conv={c}
+            peer={peerFor(c)}
+            title={titleFor(c)}
+            avatar={avatarFor(c)}
+            draftText={drafts[c.id]}
+            selecting={selecting}
+            isSelected={selected.includes(c.id)}
+            direction={direction}
+            me={me}
+            onOpen={onOpen}
+            onArchiveToggle={archiveToggle}
+            onLongPress={startSelect}
+            onToggleSelect={toggleSelect}
+          />
+        ))}
+      </div>
+      {selecting && (
+        <ConversationSelectBar
+          count={selected.length}
+          onCancel={exitSelect}
+          onDelete={deleteSelected}
+          onGroup={groupFromSelected}
+        />
+      )}
+      {busy && (
+        <div className="fixed inset-0 z-40 bg-black/30 flex items-center justify-center">
+          <div className="bg-white rounded-xl px-4 py-3 text-sm font-semibold text-gray-800">Working…</div>
+        </div>
+      )}
+    </>
   );
 }

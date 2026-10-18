@@ -1,0 +1,71 @@
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Menu, MessageSquare, LifeBuoy, LogOut } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+
+const FB = "#1877f2";
+
+export default function HubMenu({ me }) {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const go = (path) => {
+    setOpen(false);
+    navigate(path);
+  };
+
+  const handleLogout = () => {
+    setOpen(false);
+    base44.auth.logout(window.location.origin + "/login");
+  };
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-label="Menu"
+        className="inline-flex items-center justify-center rounded-full p-2"
+      >
+        <Menu size={24} style={{ color: "#000000" }} />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-11 z-50 w-44 rounded-xl border border-gray-200 bg-white shadow-lg py-1">
+          <button
+            onClick={() => go("/contact")}
+            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50"
+          >
+            <MessageSquare size={18} style={{ color: FB }} /> Feedback
+          </button>
+          <button
+            onClick={() => go("/support")}
+            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50"
+          >
+            <LifeBuoy size={18} style={{ color: FB }} /> Support
+          </button>
+          {me && (
+            <>
+              <div className="my-1 h-px bg-gray-100" />
+              <button
+                onClick={handleLogout}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50"
+              >
+                <LogOut size={18} style={{ color: FB }} /> Log Out
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

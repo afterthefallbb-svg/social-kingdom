@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Search, ChevronLeft, Plus } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
@@ -7,6 +7,7 @@ import { Image } from "@/components/ui/image";
 import CategoryRow from "@/components/hub/CategoryRow";
 import { STREAM_SAMPLES, EVENT_SAMPLES, ARTIST_SAMPLES, CLIQ_SAMPLES } from "@/lib/hubSamples";
 import VideoPlayer from "@/components/video/VideoPlayer";
+import HubMenu from "@/components/hub/HubMenu";
 
 const FB = "#1877f2";
 
@@ -148,13 +149,16 @@ export default function SocialHub() {
         <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold" style={{ color: "#000000" }}>
           <ChevronLeft size={22} /> Back
         </button>
-        <button
-          onClick={() => navigate("/clicks/create")}
-          className="inline-flex items-center gap-1 rounded-full pl-3 pr-2 py-1.5 text-sm font-semibold text-white"
-          style={{ background: FB }}
-        >
-          CliQ <Plus size={16} />
-        </button>
+        <div className="flex items-center gap-1">
+          <HubMenu me={me} />
+          <button
+            onClick={() => navigate("/clicks/create")}
+            className="inline-flex items-center gap-1 rounded-full pl-3 pr-2 py-1.5 text-sm font-semibold text-white"
+            style={{ background: FB }}
+          >
+            CliQ <Plus size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Header: avatar + name stacked on the left, logo filling from the avatar's right edge to the right side of the screen */}
@@ -294,11 +298,6 @@ export default function SocialHub() {
         />
       )}
 
-      {/* Footer links */}
-      <div className="mt-4 flex justify-center gap-8 pb-4 text-xs">
-        <Link to="/support" className="font-medium" style={{ color: FB }}>Support</Link>
-        <Link to="/contact" className="font-medium" style={{ color: FB }}>Feedback</Link>
-      </div>
     </div>
   );
 }

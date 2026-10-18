@@ -160,29 +160,49 @@ export default function SocialHub() {
       {/* Header: avatar + name stacked on the left, logo filling from the avatar's right edge to the right side of the screen */}
       <div className="flex items-stretch pl-4">
         <div className="shrink-0 pt-2">
-          <button onClick={() => navigate("/profile")} className="block">
-            <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
-              {me?.avatar_url ? (
-                <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
-              ) : (
-                "🙂"
-              )}
-            </span>
-          </button>
-          <button onClick={() => navigate("/profile")} className="block text-left mt-1 max-w-[80px]">
-            {(() => {
-              const full = me?.full_name || me?.email || "You";
-              const parts = full.split(" ");
-              const first = parts[0];
-              const last = parts.slice(1).join(" ");
-              return (
-                <span className="flex flex-wrap items-baseline gap-x-1.5 leading-tight">
-                  <span className="text-[15px] font-semibold text-gray-800 break-words">{first}</span>
-                  {last && <span className="text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
+          {me ? (
+            <>
+              <button onClick={() => navigate("/profile")} className="block">
+                <span className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-4xl bg-gray-100">
+                  {me.avatar_url ? (
+                    <Image src={me.avatar_url} fittingType="fill" className="w-full h-full" />
+                  ) : (
+                    "🙂"
+                  )}
                 </span>
-              );
-            })()}
-          </button>
+              </button>
+              <button onClick={() => navigate("/profile")} className="block text-left mt-1 max-w-[80px]">
+                {(() => {
+                  const full = me.full_name || me.email || "You";
+                  const parts = full.split(" ");
+                  const first = parts[0];
+                  const last = parts.slice(1).join(" ");
+                  return (
+                    <span className="flex flex-wrap items-baseline gap-x-1.5 leading-tight">
+                      <span className="text-[15px] font-semibold text-gray-800 break-words">{first}</span>
+                      {last && <span className="text-[15px] font-semibold text-gray-700 break-words">{last}</span>}
+                    </span>
+                  );
+                })()}
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => navigate("/register")}
+              className="block text-left"
+              aria-label="Sign up or log in"
+            >
+              <span
+                className="w-20 h-20 rounded-full flex items-center justify-center text-4xl bg-blue-50 border-2"
+                style={{ borderColor: FB, color: FB }}
+              >
+                👋
+              </span>
+              <span className="block mt-1 text-sm font-bold" style={{ color: FB }}>
+                Sign Up
+              </span>
+            </button>
+          )}
         </div>
         {/* Crop the logo's built-in blank space without letting its square canvas set the header height. */}
         <div className="relative flex-1 min-w-0 min-h-0 ml-3 overflow-hidden">

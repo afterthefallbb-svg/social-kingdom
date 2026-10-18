@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, LocateFixed } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
 import CategoryFilter from "@/components/CategoryFilter";
@@ -62,6 +62,14 @@ export default function Home() {
   }, [events, activeCat, query, center]);
 
   const goEvent = (ev) => navigate(`/event/${ev.id}`);
+  const [locating, setLocating] = useState(false);
+  function recenterMe() {
+    setLocating(true);
+    getUserLocation().then((loc) => {
+      setLocating(false);
+      if (loc) setCenter([loc.latitude, loc.longitude]);
+    });
+  }
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[#aadaff]">
@@ -72,6 +80,15 @@ export default function Home() {
         mode={mode}
         center={center}
       />
+
+      <button
+        onClick={recenterMe}
+        aria-label="Center on my location"
+        className="absolute right-3 z-[500] w-11 h-11 rounded-full bg-white shadow-lg flex items-center justify-center border border-gray-200"
+        style={{ bottom: "calc(env(safe-area-inset-bottom) + 7.5rem)" }}
+      >
+        <LocateFixed size={22} className={locating ? "text-gray-400 animate-pulse" : "text-blue-600"} />
+      </button>
 
       {/* Top stack: search + count + filters */}
       <div className="absolute top-0 left-0 right-0 z-[500] px-3 pt-3">

@@ -8,7 +8,10 @@ const BOX = "w-12 h-12 flex items-center justify-center";
 
 export default function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-[600] flex justify-around items-center pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pointer-events-none">
+    <nav
+      className="fixed bottom-0 left-0 right-0 z-[650] bg-white/95 backdrop-blur border-t border-gray-200 flex justify-around items-center pt-2 pointer-events-none"
+      style={{ paddingBottom: "max(1.5rem, calc(env(safe-area-inset-bottom) + 0.75rem))" }}
+    >
       {/* Left — person silhouette in a circular badge */}
       <NavLink to="/browse" className="pointer-events-auto" aria-label="Browse">
         {({ isActive }) => (

@@ -218,8 +218,8 @@ export default function SocialHub() {
           <button
             key={l.label}
             onClick={() => navigate(l.to)}
-            className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
-            style={{ background: FB, color: "#e8edf3", scrollSnapAlign: "start", scrollSnapStop: "always" }}
+            className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-white"
+            style={{ background: FB, scrollSnapAlign: "start", scrollSnapStop: "always" }}
           >
             {l.label}
           </button>

@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, MessageSquare, LifeBuoy, LogOut } from "lucide-react";
+import { Menu, MessageSquare, LifeBuoy, LogOut, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import DeleteAccountDialog from "@/components/account/DeleteAccountDialog";
 
 const FB = "#1877f2";
 
 export default function HubMenu({ me }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -62,9 +64,22 @@ export default function HubMenu({ me }) {
               >
                 <LogOut size={18} style={{ color: FB }} /> Log Out
               </button>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  setDeleteOpen(true);
+                }}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50"
+              >
+                <Trash2 size={18} className="text-red-600" /> Delete My Account
+              </button>
             </>
           )}
         </div>
+      )}
+
+      {deleteOpen && me && (
+        <DeleteAccountDialog userId={me.id} onClose={() => setDeleteOpen(false)} />
       )}
     </div>
   );

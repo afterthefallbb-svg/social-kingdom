@@ -46,6 +46,11 @@
     "music_artwork": {
       "type": "string",
       "title": "Music Artwork"
+    },
+    "is_example": {
+      "type": "boolean",
+      "default": false,
+      "title": "Is Example"
     }
   },
   "required": [

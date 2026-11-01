@@ -2,7 +2,7 @@ import React from "react";
 
 const FB = "#1877f2";
 
-export default function AnnouncementModal({ onNext, onSkip }) {
+export default function AnnouncementModal({ onNext, onSkip, seeded = true }) {
   return (
     <div className="fixed inset-0 z-[900] bg-black/60 flex items-center justify-center p-4">
       <div
@@ -19,14 +19,28 @@ export default function AnnouncementModal({ onNext, onSkip }) {
           <h2 className="text-xl font-bold text-gray-900 mt-3">Welcome to Social Kingdom!</h2>
         </div>
         <div className="px-6 pb-4 overflow-y-auto text-sm text-gray-700 leading-relaxed space-y-3">
-          <p>
-            We set up <strong>5 real public parties and gatherings within a few miles of you</strong> to
-            show you exactly how Social Kingdom works.
-          </p>
-          <p>
-            <strong>Social Kingdom is hosting these events itself</strong> as a demonstration — so go
-            ahead and <strong>invite your friends and family</strong> to join you.
-          </p>
+          {seeded ? (
+            <>
+              <p>
+                We set up <strong>5 real public parties and gatherings within a few miles of you</strong> to
+                show you exactly how Social Kingdom works.
+              </p>
+              <p>
+                <strong>Social Kingdom is hosting these events itself</strong> as a demonstration — so go
+                ahead and <strong>invite your friends and family</strong> to join you.
+              </p>
+            </>
+          ) : (
+            <>
+              <p>
+                Social Kingdom connects you with real people through the gatherings happening near you.
+              </p>
+              <p>
+                Go ahead and <strong>invite your friends and family</strong> — the more people join, the
+                better it works for everyone near you.
+              </p>
+            </>
+          )}
           <p>
             These are real get-togethers. More people are joining every day, and the more people on the
             app, the better it works for everyone near you!

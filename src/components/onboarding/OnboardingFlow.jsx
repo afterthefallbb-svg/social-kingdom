@@ -26,6 +26,7 @@ export default function OnboardingFlow() {
   const [phase, setPhase] = useState("announcement");
   const [tourIndex, setTourIndex] = useState(0);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [seeded, setSeeded] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -39,7 +40,9 @@ export default function OnboardingFlow() {
       const welcomeKey = `welcome_seen_${u.id}`;
       if (localStorage.getItem(doneKey)) return;
 
+      const seededKey = `onboarding_seeded_${u.id}`;
       if (localStorage.getItem(pendingKey)) {
+        setSeeded(localStorage.getItem(seededKey) === "1");
         setActive(true);
         setPhase("announcement");
         setTourIndex(0);
@@ -49,9 +52,21 @@ export default function OnboardingFlow() {
       sessionStorage.setItem(seedKey, "1");
       const res = await seedLocalEventsForUser();
       if (!alive) return;
+      const isNew = u.created_date
+        ? Date.now() - new Date(u.created_date).getTime() < 24 * 60 * 60 * 1000
+        : false;
       if (res?.firstInArea) {
         localStorage.setItem(pendingKey, "1");
+        localStorage.setItem(seededKey, "1");
         window.dispatchEvent(new CustomEvent("sk:area_seeded", { detail: { firstInArea: true } }));
+        setSeeded(true);
+        setActive(true);
+        setPhase("announcement");
+        setTourIndex(0);
+      } else if (isNew && !u.sk_onboarded) {
+        localStorage.setItem(pendingKey, "1");
+        localStorage.setItem(seededKey, "0");
+        setSeeded(false);
         setActive(true);
         setPhase("announcement");
         setTourIndex(0);
@@ -132,6 +147,7 @@ export default function OnboardingFlow() {
   if (phase === "announcement") {
     return (
       <AnnouncementModal
+        seeded={seeded}
         onNext={() => {
           setPhase("tour");
           setTourIndex(0);

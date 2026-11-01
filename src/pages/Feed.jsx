@@ -59,14 +59,23 @@ export default function Feed() {
       if (authorIds.length) clauses.push({ author_id: { $in: authorIds } });
       if (eventIds.length) clauses.push({ event_id: { $in: eventIds } });
 
-      const res = clauses.length
-        ? await base44.entities.Post.filter(
-            { $or: clauses },
-            { sort: "-created_date", limit: 50 }
-          )
-        : await base44.entities.Post.filter({}, { sort: "-created_date", limit: 50 });
+      const [res, examples] = await Promise.all([
+        clauses.length
+          ? base44.entities.Post.filter(
+              { $or: clauses },
+              { sort: "-created_date", limit: 50 }
+            )
+          : base44.entities.Post.filter({}, { sort: "-created_date", limit: 50 }),
+        base44.entities.Post
+          .filter({ is_example: true }, { sort: "-created_date", limit: 50 })
+          .catch(() => ({ items: [] })),
+      ]);
+      const seen = new Set();
+      const merged = [...(examples.items || []), ...(res.items || [])]
+        .filter((p) => (seen.has(p.id) ? false : (seen.add(p.id), true)))
+        .sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
       setAuthorIds(authorIds);
-      setPosts(res.items || []);
+      setPosts(merged);
     } catch {
       setPosts([]);
     } finally {

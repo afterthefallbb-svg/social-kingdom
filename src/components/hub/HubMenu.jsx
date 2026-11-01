@@ -6,11 +6,28 @@ import DeleteAccountDialog from "@/components/account/DeleteAccountDialog";
 
 const FB = "#1877f2";
 
-export default function HubMenu({ me }) {
+export default function HubMenu({ me: meProp }) {
   const navigate = useNavigate();
+  const [me, setMe] = useState(meProp || null);
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const ref = useRef(null);
+
+  // The menu always knows who is signed in, even before the page finishes loading.
+  useEffect(() => {
+    if (meProp) {
+      setMe(meProp);
+      return;
+    }
+    let active = true;
+    base44.auth
+      .me()
+      .then((u) => active && setMe(u))
+      .catch(() => active && setMe(null));
+    return () => {
+      active = false;
+    };
+  }, [meProp]);
 
   useEffect(() => {
     if (!open) return;
@@ -72,6 +89,17 @@ export default function HubMenu({ me }) {
                 className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50"
               >
                 <Trash2 size={18} className="text-red-600" /> Delete My Account
+              </button>
+            </>
+          )}
+          {!me && (
+            <>
+              <div className="my-1 h-px bg-gray-100" />
+              <button
+                onClick={() => go("/login")}
+                className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50"
+              >
+                <LogOut size={18} style={{ color: FB }} /> Log In
               </button>
             </>
           )}

@@ -8,6 +8,7 @@ import { UserPlus, Mail, Lock, Loader2 } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
+import AppleIcon from "@/components/AppleIcon";
 import SelfieCapture from "@/components/auth/SelfieCapture";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
@@ -69,13 +70,20 @@ export default function Register() {
     }
   };
 
-  const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", safeReturnTo());
+  const embedded = typeof window !== "undefined" && window !== window.parent;
+
+  const startProvider = (provider, name) => {
+    setError("");
+    try {
+      base44.auth.loginWithProvider(provider, safeReturnTo());
+    } catch (err) {
+      setError(err?.message || `Could not start ${name} sign-in.`);
+    }
   };
 
-  const handleApple = () => {
-    base44.auth.loginWithProvider("apple", safeReturnTo());
-  };
+  const handleGoogle = () => startProvider("google", "Google");
+
+  const handleApple = () => startProvider("apple", "Apple");
 
   async function handleSelfie(fileUri) {
     try {
@@ -180,9 +188,15 @@ export default function Register() {
         className="w-full h-12 text-sm font-medium mb-6"
         onClick={handleApple}
       >
-        <span className="w-5 h-5 mr-2 inline-flex items-center justify-center font-bold"></span>
+        <AppleIcon className="w-5 h-5 mr-2" />
         Continue with Apple
       </Button>
+
+      {embedded && (
+        <p className="mb-4 text-xs text-muted-foreground text-center leading-relaxed">
+          Sign-in opens a secure window. If nothing appears, open the app in a new tab and try again.
+        </p>
+      )}
 
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">

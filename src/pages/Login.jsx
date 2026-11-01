@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
+import AppleIcon from "@/components/AppleIcon";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
 export default function Login() {
@@ -32,13 +33,20 @@ export default function Login() {
     }
   };
 
-  const handleGoogle = () => {
-    base44.auth.loginWithProvider("google", returnTo);
+  const embedded = typeof window !== "undefined" && window !== window.parent;
+
+  const startProvider = (provider, name) => {
+    setError("");
+    try {
+      base44.auth.loginWithProvider(provider, returnTo);
+    } catch (err) {
+      setError(err?.message || `Could not start ${name} sign-in.`);
+    }
   };
 
-  const handleApple = () => {
-    base44.auth.loginWithProvider("apple", returnTo);
-  };
+  const handleGoogle = () => startProvider("google", "Google");
+
+  const handleApple = () => startProvider("apple", "Apple");
 
   return (
     <AuthLayout
@@ -70,9 +78,15 @@ export default function Login() {
         className="w-full h-12 text-sm font-medium mb-6"
         onClick={handleApple}
       >
-        <span className="w-5 h-5 mr-2 inline-flex items-center justify-center font-bold"></span>
+        <AppleIcon className="w-5 h-5 mr-2" />
         Continue with Apple
       </Button>
+
+      {embedded && (
+        <p className="mb-4 text-xs text-muted-foreground text-center leading-relaxed">
+          Sign-in opens a secure window. If nothing appears, open the app in a new tab and try again.
+        </p>
+      )}
 
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">

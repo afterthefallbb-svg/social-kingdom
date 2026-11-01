@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { MousePointerClick } from "lucide-react";
 
 const FB = "#1877f2";
 
@@ -68,19 +69,34 @@ export default function TourOverlay({ step, index, total, onNext, onBack, onSkip
     <div className="fixed inset-0 z-[900]">
       <div className="absolute inset-0" />
       {rect ? (
-        <div
-          style={{
-            position: "fixed",
-            top: rect.top - 6,
-            left: rect.left - 6,
-            width: rect.width + 12,
-            height: rect.height + 12,
-            borderRadius: 14,
-            border: `3px solid ${FB}`,
-            boxShadow: "0 0 0 9999px rgba(0,0,0,0.55)",
-            pointerEvents: "none"
-          }}
-        />
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: rect.top - 6,
+              left: rect.left - 6,
+              width: rect.width + 12,
+              height: rect.height + 12,
+              borderRadius: 14,
+              border: `3px solid ${FB}`,
+              boxShadow: "0 0 0 9999px rgba(0,0,0,0.55)",
+              pointerEvents: "none"
+            }}
+          />
+          <MousePointerClick
+            size={32}
+            className="fixed animate-bounce"
+            style={{
+              left: Math.min(Math.max(8, rect.left + rect.width - 22), vw - 40),
+              top: Math.min(Math.max(8, rect.top + rect.height - 22), vh - 42),
+              color: FB,
+              filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.45))",
+              pointerEvents: "none",
+              zIndex: 901
+            }}
+            aria-hidden="true"
+          />
+        </>
       ) : (
         <div className="absolute inset-0 bg-black/55" />
       )}

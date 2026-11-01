@@ -83,7 +83,7 @@ export default function EventDetail() {
   const seededHost = event.is_seeded && event.host_name
     ? { full_name: event.host_name, avatar_url: event.host_avatar, location: event.address }
     : null;
-  const showHost = host || seededHost;
+  const showHost = seededHost || host;
 
   async function removeAttendance() {
     if (!myAttendanceId) return;
@@ -180,7 +180,7 @@ export default function EventDetail() {
         <div className="p-4">
           {showHost && (
             <div className="flex items-end gap-3 mb-4">
-              {host ? (
+              {host && !seededHost ? (
                 <Link
                   to={`/profile/${host.id}`}
                   state={{ name: host.full_name, avatar: host.avatar_url, city: host.location }}

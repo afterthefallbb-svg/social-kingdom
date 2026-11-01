@@ -116,7 +116,7 @@ export default function Home() {
         </div>
 
         {mode === "events" && (
-          <div className="mt-1">
+          <div className="mt-1" data-tour="categories">
             <CategoryFilter active={activeCat} onSelect={setActiveCat} />
           </div>
         )}

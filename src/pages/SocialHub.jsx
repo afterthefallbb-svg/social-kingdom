@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, ChevronLeft, Plus } from "lucide-react";
+import { Search, ChevronLeft, Plus, User } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import { Image } from "@/components/ui/image";
@@ -150,7 +150,14 @@ export default function SocialHub() {
           <ChevronLeft size={22} /> Back
         </button>
         <div className="flex items-center gap-1">
-          <HubMenu me={me} />
+          <button
+            data-tour="profile-link"
+            onClick={() => navigate("/profile")}
+            className="inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-sm font-semibold border"
+            style={{ color: FB, borderColor: FB }}
+          >
+            <User size={15} /> My Profile
+          </button>
           <button
             onClick={() => navigate("/clicks/create")}
             className="inline-flex items-center gap-1 rounded-full pl-3 pr-2 py-1.5 text-sm font-semibold text-white"
@@ -158,6 +165,7 @@ export default function SocialHub() {
           >
             CliQ <Plus size={16} />
           </button>
+          <HubMenu me={me} />
         </div>
       </div>
 

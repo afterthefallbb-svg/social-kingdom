@@ -35,7 +35,7 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-sm overflow-hidden" data-tour="profile-header">
       {/* Cover — tap to upload */}
       <button
         onClick={() => isMe && setUploading("cover")}

@@ -13,7 +13,7 @@ export default function BottomNav() {
       style={{ paddingBottom: "max(1.5rem, calc(env(safe-area-inset-bottom) + 0.75rem))" }}
     >
       {/* Left — person silhouette in a circular badge */}
-      <NavLink to="/browse" className="pointer-events-auto" aria-label="Browse">
+      <NavLink to="/browse" className="pointer-events-auto" data-tour="hub-button" aria-label="Browse">
         {({ isActive }) => (
           <span
             className={`${BOX} rounded-full border-2`}
@@ -44,7 +44,7 @@ export default function BottomNav() {
       </NavLink>
 
       {/* Right — rounded square with plus */}
-      <NavLink to="/create" className="pointer-events-auto" aria-label="Create event">
+      <NavLink to="/create" className="pointer-events-auto" data-tour="create-button" aria-label="Create event">
         {({ isActive }) => (
           <span
             className={`${BOX} rounded-2xl`}

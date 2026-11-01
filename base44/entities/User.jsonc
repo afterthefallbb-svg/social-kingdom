@@ -18,6 +18,19 @@
       "type": "string",
       "title": "Location"
     },
+    "latitude": {
+      "type": "number",
+      "title": "Latitude"
+    },
+    "longitude": {
+      "type": "number",
+      "title": "Longitude"
+    },
+    "sk_onboarded": {
+      "type": "boolean",
+      "default": false,
+      "title": "Onboarded"
+    },
     "avatar_url": {
       "type": "string",
       "title": "Avatar Url"

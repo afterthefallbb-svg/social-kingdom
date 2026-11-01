@@ -103,7 +103,8 @@ export default function VideoComposer({ category, eventId, clickId, onCreated, o
       try {
         const thumbBlob = await generateThumbnail(videoUrl);
         if (thumbBlob) {
-          const { file_url: tUrl } = await base44.integrations.Core.UploadPublicFile({ file: thumbBlob });
+          const thumbFile = new File([thumbBlob], "thumbnail.jpg", { type: "image/jpeg" });
+          const { file_url: tUrl } = await base44.integrations.Core.UploadPublicFile({ file: thumbFile });
           thumbUrl = tUrl;
         }
       } catch {}

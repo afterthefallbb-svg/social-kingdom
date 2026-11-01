@@ -121,7 +121,8 @@ export default function PhotoComposer({ me, onPosted, open, onOpenChange }) {
       if (imgEl) {
         const blob = await bake();
         if (!blob) throw new Error("Could not process image");
-        const { file_url } = await base44.integrations.Core.UploadPublicFile({ file: blob });
+        const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+        const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
         image_url = file_url;
       }
       await base44.entities.Post.create({

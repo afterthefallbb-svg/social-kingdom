@@ -116,7 +116,8 @@ export default function PhotoEditor({
     try {
       const blob = await bakeImage(imgEl, filter.css, texts);
       if (!blob) throw new Error("Could not process image");
-      const { file_url } = await base44.integrations.Core.UploadPublicFile({ file: blob });
+      const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+      const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
       onUploaded(
         file_url,
         "image",

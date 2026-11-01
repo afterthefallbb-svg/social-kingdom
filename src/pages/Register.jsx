@@ -85,11 +85,14 @@ export default function Register() {
 
   const handleApple = () => startProvider("apple", "Apple");
 
+  const [selfieError, setSelfieError] = useState("");
+
   async function handleSelfie(fileUri) {
     try {
       await base44.auth.updateMe({ selfie_verified: true, selfie_uri: fileUri });
     } catch {
-      /* verification still recorded server-side; continue */
+      setSelfieError("We couldn't save your verification. Please try again.");
+      return;
     }
     window.location.href = safeReturnTo();
   }
@@ -98,7 +101,16 @@ export default function Register() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <div className="w-full max-w-md">
-          <SelfieCapture onCaptured={handleSelfie} />
+          <SelfieCapture
+            onCaptured={handleSelfie}
+            subtitle="A selfie is required to finish creating your account. It proves you're a real person and stays private on your account."
+          />
+          {selfieError && (
+            <p className="mt-4 text-center text-sm text-destructive">{selfieError}</p>
+          )}
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Selfie verification is required — your account can't be completed without it.
+          </p>
         </div>
       </div>
     );

@@ -69,18 +69,8 @@ export default async function (req) {
       return Response.json({ seeded: false, firstInArea: false });
     }
 
-    // Any other people on the app within 5 miles?
-    let nearbyUsers = 0;
-    try {
-      const users = await svc.entities.User.list();
-      const arr = Array.isArray(users) ? users : (users?.items || []);
-      nearbyUsers = arr.filter((u) =>
-        u && u.id !== user.id && isFinite(u.latitude) && isFinite(u.longitude) &&
-        distKm(lat, lng, u.latitude, u.longitude) <= MI5_KM
-      ).length;
-    } catch {}
-
-    // Any public events already nearby (so the map isn't empty)?
+    // Count the public events already near this person so the map is never empty:
+    // top up to five Social Kingdom hosted gatherings when fewer exist.
     let nearbyEvents = 0;
     try {
       const latDelta = MI5_KM / 111;
@@ -93,18 +83,19 @@ export default async function (req) {
       nearbyEvents = (existing?.items || []).length;
     } catch {}
 
-    if (nearbyUsers > 0 || nearbyEvents > 0) {
+    const need = Math.max(0, 5 - nearbyEvents);
+    if (need === 0) {
       await svc.entities.User.update(user.id, { sk_onboarded: true }).catch(() => {});
       return Response.json({ seeded: false, firstInArea: false });
     }
 
-    // First person in the area — seed five Social Kingdom hosted gatherings.
-    const templates = shuffle(TEMPLATES).slice(0, 5);
+    // Seed the missing Social Kingdom hosted gatherings near this person.
+    const templates = shuffle(TEMPLATES).slice(0, need);
     const parks = shuffle(PARKS);
     const now = Date.now();
     const eventIds = [];
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < need; i++) {
       const t = templates[i];
       const bearing = rand(0, Math.PI * 2);
       const dKm = Math.min(DIST_MI[i] * 1.609344, MAX_KM);

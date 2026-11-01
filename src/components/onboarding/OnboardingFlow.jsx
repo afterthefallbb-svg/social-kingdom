@@ -27,6 +27,7 @@ export default function OnboardingFlow() {
   const [tourIndex, setTourIndex] = useState(0);
   const [showWelcome, setShowWelcome] = useState(false);
   const [seeded, setSeeded] = useState(false);
+  const [selfieError, setSelfieError] = useState("");
 
   useEffect(() => {
     let alive = true;
@@ -109,8 +110,11 @@ export default function OnboardingFlow() {
     try {
       const updated = await base44.auth.updateMe({ selfie_uri: fileUri, selfie_verified: true });
       setMe(updated);
-    } catch {}
-    setPhase("photo");
+      setSelfieError("");
+      setPhase("photo");
+    } catch {
+      setSelfieError("We couldn't save your verification. Check your connection and try again.");
+    }
   }
 
   async function onPhoto(url) {
@@ -152,7 +156,7 @@ export default function OnboardingFlow() {
           setPhase("tour");
           setTourIndex(0);
         }}
-        onSkip={finish}
+        onSkip={() => setPhase("selfie")}
       />
     );
   }
@@ -165,12 +169,12 @@ export default function OnboardingFlow() {
         total={TOUR.length}
         onNext={() => {
           if (tourIndex < TOUR.length - 1) setTourIndex(tourIndex + 1);
-          else setPhase("selfie");
+          else setPhase(me?.selfie_verified ? "photo" : "selfie");
         }}
         onBack={() => {
           if (tourIndex > 0) setTourIndex(tourIndex - 1);
         }}
-        onSkip={finish}
+        onSkip={() => setPhase(me?.selfie_verified ? "photo" : "selfie")}
       />
     );
   }
@@ -182,11 +186,14 @@ export default function OnboardingFlow() {
           <SelfieCapture
             onCaptured={onSelfie}
             title="Verify with a selfie"
-            subtitle="Take a quick selfie so we know you're a real person. This stays private on your account."
+            subtitle="A selfie is required to finish setting up your account. It proves you're a real person and stays private on your account."
           />
-          <button onClick={() => setPhase("photo")} className="mt-4 w-full text-xs text-gray-400">
-            Skip for now
-          </button>
+          {selfieError && (
+            <p className="mt-4 text-center text-xs text-destructive">{selfieError}</p>
+          )}
+          <p className="mt-3 text-center text-xs text-gray-400">
+            Selfie verification is required — you can't finish your account without it.
+          </p>
         </div>
       </div>
     );

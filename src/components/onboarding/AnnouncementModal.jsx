@@ -22,8 +22,8 @@ export default function AnnouncementModal({ onNext, onSkip, seeded = true }) {
           {seeded ? (
             <>
               <p>
-                We set up <strong>5 real public parties and gatherings within a few miles of you</strong> to
-                show you exactly how Social Kingdom works.
+                We created <strong>5 real local parties and events near you</strong> to demonstrate how
+                Social Kingdom works — they're already on your map.
               </p>
               <p>
                 <strong>Social Kingdom is hosting these events itself</strong> as a demonstration — so go
@@ -42,8 +42,8 @@ export default function AnnouncementModal({ onNext, onSkip, seeded = true }) {
             </>
           )}
           <p>
-            These are real get-togethers. More people are joining every day, and the more people on the
-            app, the better it works for everyone near you!
+            These are real parties, events, and get-togethers. More people are joining every day, and the
+            more people on the app, the better it works for everyone near you!
           </p>
           <p>
             You can also <strong>create your own event, party, or gathering</strong> of any kind, anytime.

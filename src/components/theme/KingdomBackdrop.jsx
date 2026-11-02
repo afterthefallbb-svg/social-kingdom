@@ -1,5 +1,6 @@
 import React from "react";
 import "./kingdom-theme.css";
+import "./kingdom-chrome.css";
 import KingdomAccents from "@/components/hub/KingdomAccents";
 
 /* App-wide kingdom backdrop: no city skyline on inner pages, just the deep

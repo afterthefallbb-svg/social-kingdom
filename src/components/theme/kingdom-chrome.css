@@ -1,0 +1,348 @@
+/* Social Kingdom chrome layer — the detail pass that carries the hub's neón /
+   glass language into every inner window: header bands, links, icon buttons,
+   list cards, pills, toggles, borders, dividers, dialogs and menus.
+   Scoped to .sk-theme (all pages except the map) plus portal surfaces, which
+   Radix renders outside that scope. */
+
+/* ---------------------------------------------------------------- header bands
+   The legacy Facebook-blue bands and primary buttons are inline
+   `background: rgb(24, 119, 242)`; re-skin them to a translucent sapphire
+   slab with a gold hairline and halo. */
+.sk-theme [style*="background: rgb(24, 119, 242)"],
+.sk-theme [style*="background-color: rgb(24, 119, 242)"],
+.sk-theme .bg-\[\#1877f2\] {
+  background:
+    radial-gradient(ellipse 70% 140% at 50% -40%, hsl(var(--kingdom-blue) / .85), transparent 70%),
+    linear-gradient(170deg, hsl(var(--kingdom-surface) / .94), hsl(var(--kingdom-ink) / .96)) !important;
+  border: 1px solid hsl(var(--kingdom-gold) / .5) !important;
+  box-shadow:
+    inset 0 1px 0 hsl(var(--kingdom-text) / .35),
+    inset 0 -1px 0 hsl(var(--kingdom-gold) / .45),
+    0 0 12px hsl(var(--kingdom-cyan) / .35),
+    0 6px 18px hsl(var(--kingdom-ink) / .6) !important;
+  color: hsl(var(--kingdom-text)) !important;
+}
+
+/* Tinted blue chips (FB + alpha) — gold/cyan glass instead. */
+.sk-theme [style*="background: rgba(24, 119, 242"],
+.sk-theme [style*="background-color: rgba(24, 119, 242"],
+.sk-theme [style*="background: rgb(238, 244, 255)"] {
+  background-color: hsl(var(--kingdom-cyan) / .16) !important;
+  border-color: hsl(var(--kingdom-cyan) / .45) !important;
+  color: hsl(var(--kingdom-cyan)) !important;
+}
+
+/* --------------------------------------------------------------- links / icons
+   Inline blue text and icons become neon cyan with a halo. */
+.sk-theme [style*="color: rgb(24, 119, 242)"],
+.sk-theme .text-\[\#1877f2\] {
+  color: hsl(var(--kingdom-cyan)) !important;
+  filter: drop-shadow(0 0 5px hsl(var(--kingdom-cyan) / .75));
+}
+.sk-theme [style*="border-color: rgb(24, 119, 242)"],
+.sk-theme .border-\[\#1877f2\] {
+  border-color: hsl(var(--kingdom-gold) / .85) !important;
+  box-shadow: 0 0 8px hsl(var(--kingdom-gold) / .45);
+}
+.sk-theme [style*="border-color: rgb(241, 245, 249)"] {
+  border-color: hsl(var(--kingdom-cyan) / .3) !important;
+}
+.sk-theme [style*="border-color: rgb(238, 240, 243)"],
+.sk-theme [style*="border-color: rgb(229, 231, 235)"] {
+  border-color: hsl(var(--kingdom-cyan) / .22) !important;
+}
+
+/* Every icon inside a control glows like the hub tiles. */
+.sk-theme button svg,
+.sk-theme a svg,
+.sk-theme svg.text-gray-400,
+.sk-theme svg.text-gray-500,
+.sk-theme svg.text-gray-300 {
+  filter: drop-shadow(0 0 3px hsl(var(--kingdom-cyan) / .55));
+}
+
+/* Search / input pills keep their rounded glass shell with a neon rim. */
+.sk-theme .rounded-full.bg-gray-100 {
+  border: 1px solid hsl(var(--kingdom-cyan) / .4);
+  box-shadow: inset 0 0 12px hsl(var(--kingdom-blue) / .5), 0 0 8px hsl(var(--kingdom-cyan) / .18);
+}
+.sk-theme button:disabled svg {
+  filter: none;
+  opacity: .45;
+}
+
+/* --------------------------------------------------------------- toggle pills
+   The off state of every toggle / filter chip / segmented control. */
+.sk-theme [style*="background: rgb(238, 242, 247)"],
+.sk-theme [style*="background-color: rgb(238, 242, 247)"],
+.sk-theme [style*="background: rgb(255, 255, 255)"],
+.sk-theme [style*="background-color: rgb(255, 255, 255)"] {
+  background-color: hsl(var(--kingdom-surface) / .55) !important;
+  border-color: hsl(var(--kingdom-cyan) / .35) !important;
+  color: hsl(var(--kingdom-muted)) !important;
+}
+
+/* ------------------------------------------------------------- cards / surfaces
+   Bordered rounded blocks (list rows, category bubbles, glass panels) get the
+   kingdom edge: cyan rim, gold heat on the left, inner top light. */
+.sk-theme .rounded-xl.border,
+.sk-theme .rounded-2xl.border,
+.sk-theme .rounded-lg.border {
+  background:
+    linear-gradient(150deg, hsl(var(--kingdom-surface) / .72), hsl(var(--kingdom-ink) / .82)) !important;
+  border-color: hsl(var(--kingdom-cyan) / .38) !important;
+  box-shadow:
+    inset 0 1px 0 hsl(var(--kingdom-text) / .18),
+    inset 0 0 14px hsl(var(--kingdom-blue) / .3),
+    -2px 0 9px hsl(var(--kingdom-gold) / .22),
+    0 0 10px hsl(var(--kingdom-cyan) / .18);
+  backdrop-filter: blur(6px);
+}
+.sk-theme .rounded-xl.border:hover,
+.sk-theme .rounded-2xl.border:hover,
+.sk-theme .rounded-lg.border:hover {
+  border-color: hsl(var(--kingdom-gold) / .7) !important;
+  box-shadow:
+    inset 0 1px 0 hsl(var(--kingdom-text) / .25),
+    0 0 14px hsl(var(--kingdom-cyan) / .35),
+    -2px 0 10px hsl(var(--kingdom-gold) / .35);
+}
+
+/* Plain grey fills used as cards / empty slots. */
+.sk-theme .bg-gray-100 {
+  background-color: hsl(var(--kingdom-ink) / .45) !important;
+  box-shadow: inset 0 0 10px hsl(var(--kingdom-blue) / .3);
+}
+.sk-theme .bg-gray-50 {
+  background-color: hsl(var(--kingdom-surface) / .3) !important;
+}
+.sk-theme .hover\:bg-gray-50:hover,
+.sk-theme .hover\:bg-gray-100:hover {
+  background-color: hsl(var(--kingdom-blue) / .28) !important;
+}
+.sk-theme .bg-blue-100 {
+  background-color: hsl(var(--kingdom-cyan) / .18) !important;
+  color: hsl(var(--kingdom-cyan)) !important;
+}
+.sk-theme .text-blue-600,
+.sk-theme .text-blue-500 {
+  color: hsl(var(--kingdom-cyan)) !important;
+}
+
+/* Page-title accent bar under window headings. */
+.sk-theme .w-12.bg-gray-900 {
+  background: linear-gradient(90deg, hsl(var(--kingdom-gold)), hsl(var(--kingdom-cyan))) !important;
+  box-shadow: 0 0 10px hsl(var(--kingdom-gold) / .8);
+}
+.sk-theme .bg-gray-900 {
+  background-color: hsl(var(--kingdom-surface) / .8) !important;
+}
+
+/* ------------------------------------------------------------------- edges
+   Hairlines between rows, and dividers. */
+.sk-theme .border,
+.sk-theme .border-t,
+.sk-theme .border-b,
+.sk-theme .border-l,
+.sk-theme .border-r {
+  border-color: hsl(var(--kingdom-cyan) / .26);
+}
+.sk-theme hr,
+.sk-theme .divide-y > * + *,
+.sk-theme .divide-x > * + * {
+  border-color: hsl(var(--kingdom-cyan) / .22);
+}
+
+/* -------------------------------------------------------------- form controls */
+.sk-theme input:not([type="checkbox"]):not([type="radio"]):not(.bg-transparent),
+.sk-theme textarea,
+.sk-theme select {
+  background-color: hsl(var(--kingdom-ink) / .55);
+  border: 1px solid hsl(var(--kingdom-cyan) / .32);
+  color: hsl(var(--kingdom-text));
+  border-radius: 0.75rem;
+}
+.sk-theme input:not([type="checkbox"]):not([type="radio"]):focus,
+.sk-theme textarea:focus,
+.sk-theme select:focus {
+
+  border-color: hsl(var(--kingdom-gold) / .8);
+  box-shadow: 0 0 10px hsl(var(--kingdom-cyan) / .45);
+}
+.sk-theme input[type="checkbox"],
+.sk-theme input[type="radio"] {
+  accent-color: hsl(var(--kingdom-cyan));
+}
+.sk-theme label {
+  color: hsl(var(--kingdom-muted));
+}
+
+/* --------------------------------------------------------------- dialogs/menus
+   Radix renders these in a body-level portal, so they are matched globally. */
+[role="dialog"],
+[role="alertdialog"],
+[data-radix-popper-content-wrapper] > *,
+[role="menu"],
+[role="listbox"] {
+  background: linear-gradient(160deg, hsl(var(--kingdom-surface) / .97), hsl(var(--kingdom-ink) / .98)) !important;
+  border-color: hsl(var(--kingdom-cyan) / .38) !important;
+  color: hsl(var(--kingdom-text)) !important;
+  box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .18), 0 18px 44px hsl(var(--kingdom-ink) / .75), 0 0 22px hsl(var(--kingdom-blue) / .3) !important;
+  backdrop-filter: blur(12px);
+}
+[role="menu"] [role="menuitem"]:focus,
+[role="menu"] [role="menuitem"]:hover,
+[role="option"]:focus {
+  background-color: hsl(var(--kingdom-blue) / .35) !important;
+  color: hsl(var(--kingdom-text)) !important;
+}
+[role="dialog"] input:not(.bg-transparent),
+[role="dialog"] textarea,
+[role="dialog"] select {
+  background-color: hsl(var(--kingdom-ink) / .6) !important;
+  border: 1px solid hsl(var(--kingdom-cyan) / .3) !important;
+  color: hsl(var(--kingdom-text)) !important;
+}
+[role="dialog"] .bg-white,
+[role="dialog"] .bg-gray-50,
+[role="dialog"] .bg-gray-100 {
+  background-color: hsl(var(--kingdom-surface) / .5) !important;
+}
+
+/* ------------------------------------------------------- sheets / full windows
+   In-page sheets (fixed panels) are translucent glass over the backdrop. */
+.sk-theme .fixed .bg-white,
+.sk-theme .fixed.bg-white {
+  background: linear-gradient(165deg, hsl(var(--kingdom-surface) / .96), hsl(var(--kingdom-ink) / .97)) !important;
+  border-color: hsl(var(--kingdom-cyan) / .3) !important;
+  backdrop-filter: blur(14px);
+}
+
+/* ------------------------------------------------- shadcn tokens → kingdom
+   The shared ui components resolve their colours from the light theme tokens;
+   inside a window they take the obsidian / sapphire / gold palette instead. */
+.sk-theme .bg-background,
+.sk-theme .bg-card,
+.sk-theme .bg-popover,
+.sk-theme .bg-secondary,
+.sk-theme .bg-accent,
+.sk-theme .bg-muted {
+  background-color: hsl(var(--kingdom-surface) / .5) !important;
+  color: hsl(var(--kingdom-text)) !important;
+}
+.sk-theme .bg-primary {
+  background: linear-gradient(170deg, hsl(var(--kingdom-blue) / .7), hsl(var(--kingdom-surface) / .9)) !important;
+  border: 1px solid hsl(var(--kingdom-gold) / .6);
+  color: hsl(var(--kingdom-text)) !important;
+  box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .35), 0 0 10px hsl(var(--kingdom-cyan) / .35) !important;
+}
+.sk-theme .text-foreground,
+.sk-theme .text-card-foreground,
+.sk-theme .text-popover-foreground,
+.sk-theme .text-accent-foreground,
+.sk-theme .text-secondary-foreground {
+  color: hsl(var(--kingdom-text)) !important;
+}
+.sk-theme .text-muted-foreground {
+  color: hsl(var(--kingdom-muted) / .7) !important;
+}
+.sk-theme .text-primary {
+  color: hsl(var(--kingdom-cyan)) !important;
+}
+.sk-theme .border-input,
+.sk-theme .border-border {
+  border-color: hsl(var(--kingdom-cyan) / .32) !important;
+}
+
+/* Switches */
+.sk-theme [role="switch"] {
+  border: 1px solid hsl(var(--kingdom-cyan) / .45) !important;
+  background: hsl(var(--kingdom-surface) / .7) !important;
+  box-shadow: inset 0 0 8px hsl(var(--kingdom-blue) / .5);
+}
+.sk-theme [role="switch"][data-state="checked"] {
+  background: linear-gradient(120deg, hsl(var(--kingdom-gold)), hsl(var(--kingdom-cyan))) !important;
+  border-color: hsl(var(--kingdom-gold-bright)) !important;
+  box-shadow: 0 0 10px hsl(var(--kingdom-gold) / .7), inset 0 0 6px hsl(var(--kingdom-ink) / .3);
+}
+.sk-theme [role="switch"] span {
+  background: hsl(var(--kingdom-text)) !important;
+  box-shadow: 0 0 6px hsl(var(--kingdom-cyan) / .8);
+}
+
+/* Tabs */
+.sk-theme [role="tablist"] {
+  background-color: hsl(var(--kingdom-ink) / .6) !important;
+  border: 1px solid hsl(var(--kingdom-cyan) / .25);
+}
+.sk-theme [role="tab"] {
+  color: hsl(var(--kingdom-muted) / .8) !important;
+}
+.sk-theme [role="tab"][data-state="active"] {
+  background: linear-gradient(170deg, hsl(var(--kingdom-blue) / .6), hsl(var(--kingdom-surface) / .85)) !important;
+  color: hsl(var(--kingdom-text)) !important;
+  box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .3), 0 0 8px hsl(var(--kingdom-cyan) / .4);
+}
+
+/* Progress / checkbox accents */
+.sk-theme [role="progressbar"] > div {
+  background: linear-gradient(90deg, hsl(var(--kingdom-cyan)), hsl(var(--kingdom-gold)));
+  box-shadow: 0 0 8px hsl(var(--kingdom-cyan) / .7);
+}
+
+/* Black text / icons supplied by older pages read as gold neon so they stay
+   visible on the ink field, and full-page wrappers let the backdrop through. */
+.sk-theme .text-black,
+.sk-theme [style*="color: rgb(0, 0, 0)"] {
+  color: hsl(var(--kingdom-gold-bright)) !important;
+  filter: drop-shadow(0 0 5px hsl(var(--kingdom-gold) / .7));
+}
+.sk-theme .bg-foreground {
+  background: linear-gradient(90deg, hsl(var(--kingdom-gold)), hsl(var(--kingdom-cyan))) !important;
+  box-shadow: 0 0 10px hsl(var(--kingdom-gold) / .8);
+}
+.sk-theme .min-h-screen.bg-white,
+.sk-theme .min-h-screen.bg-background {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+/* Slate / translucent-white variants used by a few windows. */
+.sk-theme .bg-slate-50,
+.sk-theme .bg-slate-100 {
+  background-color: hsl(var(--kingdom-surface) / .4) !important;
+}
+.sk-theme .bg-slate-200 {
+  background-color: hsl(var(--kingdom-ink) / .45) !important;
+}
+.sk-theme .bg-white\/80,
+.sk-theme .bg-white\/90 {
+  background-color: hsl(var(--kingdom-surface) / .72) !important;
+  backdrop-filter: blur(8px);
+}
+.sk-theme .border-slate-100,
+.sk-theme .border-slate-200,
+.sk-theme .border-slate-300 {
+  border-color: hsl(var(--kingdom-cyan) / .28) !important;
+}
+.sk-theme .text-slate-800,
+.sk-theme .text-slate-900 {
+  color: hsl(var(--kingdom-text)) !important;
+}
+
+/* ------------------------------------------------------------ neon accents
+   Body copy stays readable; muted greys carry a slight cyan cast. */
+.sk-theme .text-gray-700,
+.sk-theme .text-gray-600,
+.sk-theme .text-slate-700,
+.sk-theme .text-slate-600 {
+  color: hsl(var(--kingdom-muted) / .92) !important;
+}
+.sk-theme .text-gray-500,
+.sk-theme .text-gray-400 {
+  color: hsl(var(--kingdom-muted) / .7) !important;
+}
+.sk-theme .bg-green-500,
+.sk-theme .bg-red-500 {
+  box-shadow: 0 0 10px currentColor;
+}

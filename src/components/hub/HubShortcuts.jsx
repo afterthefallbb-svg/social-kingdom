@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, CalendarDays, ChevronRight, Folder, Gamepad2, Megaphone, MessageSquare, Music2, Newspaper, ShoppingBag, UserRound, Users } from "lucide-react";
 import FriendsBrowserDialog from "@/components/friends/FriendsBrowserDialog";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import KingdomSurface from "@/components/hub/KingdomSurface";
 import HubSearch from "@/components/hub/HubSearch";
@@ -21,8 +21,22 @@ const links = [
 
 export default function HubShortcuts({ me, onOpenVideo }) {
   const [friendsOpen, setFriendsOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const badgeKey = ["hub-unread", me?.id];
+
+  // Keep the bubbles live: a new message or notification refreshes the counts.
+  useEffect(() => {
+    if (!me?.id) return;
+    const unsubs = [
+      base44.entities.Message.subscribe(() => queryClient.invalidateQueries({ queryKey: badgeKey })),
+      base44.entities.Notification.subscribe(() => queryClient.invalidateQueries({ queryKey: badgeKey })),
+    ];
+    return () => unsubs.forEach((unsub) => unsub?.());
+  }, [me?.id]);
   const { data: badges = {} } = useQuery({
-    queryKey: ["hub-unread", me?.id], enabled: !!me?.id,
+    queryKey: badgeKey, enabled: !!me?.id,
+    refetchInterval: 20000,
+    refetchOnWindowFocus: true,
     queryFn: async () => {
       const [messages, notifications] = await Promise.all([
         base44.entities.Message.count({ member_ids: me.id, sender_id: { $ne: me.id }, read: false }),

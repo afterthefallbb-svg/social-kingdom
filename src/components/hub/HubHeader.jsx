@@ -11,12 +11,12 @@ export default function HubHeader({ me }) {
       <div className="kingdom-skyline" aria-hidden="true">
         <Image src="https://media.base44.com/images/public/6ac40db708d83e8619ab9efd/347f80081_generated_image.png" alt="" className="kingdom-skyline-image" focalPointX={0.5} focalPointY={1} quality={100} loading="eager" />
       </div>
-      <Link to={me ? "/profile" : "/register"} className="kingdom-profile" data-tour="profile-link" aria-label={me ? "My Profile" : "Sign up or log in"}>
+      <Link to={me ? "/profile" : "/login?returnTo=" + encodeURIComponent("/profile")} className="kingdom-profile" data-tour="profile-link" aria-label={me ? "My Profile" : "Log in"}>
         <span className="kingdom-avatar">
           <span className="kingdom-avatar-image">{me?.avatar_url ? <Image src={me.avatar_url} alt="" className="h-full w-full" /> : <UserRound className="kingdom-avatar-placeholder" />}</span>
           <span className="kingdom-camera" aria-hidden="true"><Camera /></span>
         </span>
-        <span className="kingdom-profile-name">{me ? me.full_name || "My Profile" : "Sign Up"}</span>
+        <span className="kingdom-profile-name">{me ? me.full_name || "My Profile" : "Log In"}</span>
       </Link>
       <KingdomBrand />
       <div className="kingdom-header-actions">

@@ -34,6 +34,11 @@ export default function Profile() {
     (async () => {
       const current = await base44.auth.me().catch(() => null);
       if (!active) return;
+      // Own profile with no session: ask to log in instead of rendering an empty page.
+      if (!current && !id) {
+        base44.auth.redirectToLogin(window.location.href);
+        return;
+      }
       setMe(current);
       const targetId = id || current?.id;
       const viewingMe = !id || id === current?.id;

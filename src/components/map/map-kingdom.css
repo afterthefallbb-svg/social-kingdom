@@ -300,15 +300,14 @@
   height: 100%;
   display: grid;
   place-items: center;
-  border-radius: 999px;
-  border: 2px solid hsl(var(--kingdom-gold));
-  background: radial-gradient(circle at 50% 28%, hsl(var(--kingdom-blue) / 0.92), hsl(var(--kingdom-ink)) 80%);
-  box-shadow: 0 0 9px hsl(var(--kingdom-gold) / 0.75), inset 0 0 7px hsl(var(--kingdom-cyan) / 0.45);
+  border: 0;
+  background: none;
   line-height: 1;
+  /* The graphic itself floats above the map on its own shadow */
+  filter: drop-shadow(0 2px 2px hsl(var(--kingdom-ink) / 0.5)) drop-shadow(0 4px 6px hsl(var(--kingdom-ink) / 0.25));
 }
 .sk-pin-active {
-  border-color: hsl(var(--kingdom-gold-bright));
-  box-shadow: 0 0 14px hsl(var(--kingdom-gold)), inset 0 0 9px hsl(var(--kingdom-gold) / 0.5);
+  filter: drop-shadow(0 2px 2px hsl(var(--kingdom-ink) / 0.55)) drop-shadow(0 0 6px hsl(var(--kingdom-gold) / 0.6));
 }
 .sk-pin-emoji {
   filter: grayscale(1) sepia(1) saturate(6) hue-rotate(-8deg) brightness(1.3);

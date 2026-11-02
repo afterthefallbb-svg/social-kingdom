@@ -77,13 +77,14 @@
   box-shadow: inset 0 1px 0 rgb(234 243 255 / .16), 0 0 10px rgb(22 139 255 / .24), 0 4px 12px rgb(5 11 36 / .4);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
 }
-.sk-map .sk-pin {
-  background: radial-gradient(circle at 45% 25%, rgb(20 88 212 / .74), rgb(var(--map-glass) / .92) 80%);
-  border: 1px solid var(--map-gold);
-  box-shadow: 0 0 8px rgb(22 139 255 / .48), 0 0 14px rgb(0 217 232 / .13), inset 0 1px 0 rgb(234 243 255 / .2);
-}
+/* Pins are the bare category graphic — no box, circle or backdrop of any kind. */
+.sk-map .sk-pin { background: none; border: 0; box-shadow: none; }
 .sk-map .sk-pin-emoji { filter: none; }
-.sk-map .sk-pin-active { border: 2px solid var(--map-champagne); box-shadow: 0 0 0 2px rgb(217 166 60 / .3), 0 0 17px rgb(22 139 255 / .6); }
+.sk-map .sk-pin-active {
+  border: 0;
+  box-shadow: none;
+  filter: drop-shadow(0 3px 3px rgb(5 11 36 / .45)) drop-shadow(0 0 5px rgb(255 215 122 / .8));
+}
 .sk-map .leaflet-control-attribution { background: var(--map-day-surface); color: var(--map-day-muted); font-size: 8px; }
 .sk-map .leaflet-control-attribution a { color: var(--map-road-major); }
 @media (prefers-reduced-motion: reduce) {

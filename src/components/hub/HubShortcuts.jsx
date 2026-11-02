@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Bell, CalendarDays, ChevronRight, Folder, Gamepad2, Globe, Megaphone, MessageSquare, Music2, Newspaper, Search, ShoppingBag, SlidersHorizontal, UserRound, Users } from "lucide-react";
+import { Bell, CalendarDays, ChevronRight, Folder, Gamepad2, Globe, Megaphone, MessageSquare, Music2, Newspaper, ShoppingBag, UserRound, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import KingdomSurface from "@/components/hub/KingdomSurface";
+import HubSearch from "@/components/hub/HubSearch";
 
 const links = [
   { label: "Feed", to: "/feed", icon: Newspaper, tone: "blue" },
@@ -18,7 +19,7 @@ const links = [
   { label: "Announcements", to: "/announcements", icon: Megaphone, tone: "gold" },
 ];
 
-export default function HubShortcuts({ me }) {
+export default function HubShortcuts({ me, onOpenVideo }) {
   const { data: badges = {} } = useQuery({
     queryKey: ["hub-unread", me?.id], enabled: !!me?.id,
     queryFn: async () => {
@@ -41,7 +42,7 @@ export default function HubShortcuts({ me }) {
           <Link key={label} to={to} className={`kingdom-app kingdom-app-${tone}`}><KingdomSurface /><Icon /><span>{label}</span>{badges[badge] > 0 && <b className="kingdom-unread">{badges[badge] > 99 ? "99+" : badges[badge]}</b>}</Link>
         ))}
       </nav>
-      <Link to="/" className="kingdom-search" aria-label="Search and filter nearby events"><KingdomSurface /><Search /><span>Search...</span><SlidersHorizontal /></Link>
+      <HubSearch onOpenVideo={onOpenVideo} />
     </div>
   );
 }

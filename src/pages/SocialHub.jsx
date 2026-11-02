@@ -24,7 +24,7 @@ export default function SocialHub() {
       <div className="kingdom-shell">
         <div className="kingdom-pinned">
           <HubHeader me={me} />
-          <HubShortcuts me={me} />
+          <HubShortcuts me={me} onOpenVideo={(video) => setPlayerState({ videos: [video], index: 0 })} />
         </div>
         <div className="kingdom-feed">
           <div className="kingdom-sections">

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { getCategory } from "@/lib/categories";
-import { Image } from "@/components/ui/image";
+import ProfileEventCard from "@/components/profile/ProfileEventCard";
 
 const FB = "#1877f2";
 
@@ -28,28 +27,10 @@ export default function EventsAttendedSection({ events, onSelect }) {
           {events.length === 0 ? (
             <p className="text-xs text-gray-400">No past events yet.</p>
           ) : (
-            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-              {events.map((e) => {
-                const cat = getCategory(e.category);
-                return (
-                  <button
-                    key={e.id}
-                    onClick={() => onSelect(e)}
-                    className="flex flex-col items-center gap-1 shrink-0 w-16"
-                  >
-                    <span className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center text-xl shrink-0">
-                      {e.image_url ? (
-                        <Image src={e.image_url} fittingType="fill" className="w-full h-full" />
-                      ) : (
-                        cat.emoji
-                      )}
-                    </span>
-                    <span className="text-[10px] text-center leading-tight truncate w-full" style={{ color: FB }}>
-                      {e.title}
-                    </span>
-                  </button>
-                );
-              })}
+            <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
+              {events.map((e) => (
+                <ProfileEventCard key={e.id} event={e} onSelect={onSelect} />
+              ))}
             </div>
           )}
         </div>

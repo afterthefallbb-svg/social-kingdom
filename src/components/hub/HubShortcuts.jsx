@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, CalendarDays, ChevronRight, Folder, Gamepad2, Globe, Megaphone, MessageSquare, Music2, Newspaper, ShoppingBag, UserRound, Users } from "lucide-react";
+import { Bell, CalendarDays, ChevronRight, Folder, Gamepad2, Megaphone, MessageSquare, Music2, Newspaper, ShoppingBag, UserRound, Users } from "lucide-react";
+import FriendsBrowserDialog from "@/components/friends/FriendsBrowserDialog";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import KingdomSurface from "@/components/hub/KingdomSurface";
@@ -11,8 +12,7 @@ const links = [
   { label: "Messages", to: "/messages", icon: MessageSquare, tone: "violet", badge: "messages" },
   { label: "Notifications", to: "/notifications", icon: Bell, tone: "gold", badge: "notifications" },
   { label: "Groups", to: "/groups", icon: Users, tone: "blue" },
-  { label: "Friends", to: "/profile", icon: UserRound, tone: "teal" },
-  { label: "Explore", to: "/", icon: Globe, tone: "magenta" },
+  { label: "Friends", icon: UserRound, tone: "teal", action: "friends" },
   { label: "Buy/Sell", to: "/buy-sell", icon: ShoppingBag, tone: "teal" },
   { label: "Music", to: "/music", icon: Music2, tone: "violet" },
   { label: "Games", to: "/games", icon: Gamepad2, tone: "blue" },
@@ -20,6 +20,7 @@ const links = [
 ];
 
 export default function HubShortcuts({ me, onOpenVideo }) {
+  const [friendsOpen, setFriendsOpen] = useState(false);
   const { data: badges = {} } = useQuery({
     queryKey: ["hub-unread", me?.id], enabled: !!me?.id,
     queryFn: async () => {
@@ -38,10 +39,14 @@ export default function HubShortcuts({ me, onOpenVideo }) {
         ))}
       </div>
       <nav className="kingdom-apps no-scrollbar" aria-label="Social hub shortcuts">
-        {links.map(({ label, to, icon: Icon, tone, badge }) => (
-          <Link key={label} to={to} className={`kingdom-app kingdom-app-${tone}`}><KingdomSurface /><Icon /><span>{label}</span>{badges[badge] > 0 && <b className="kingdom-unread">{badges[badge] > 99 ? "99+" : badges[badge]}</b>}</Link>
-        ))}
+        {links.map(({ label, to, icon: Icon, tone, badge, action }) => {
+          const inner = <><KingdomSurface /><Icon /><span>{label}</span>{badges[badge] > 0 && <b className="kingdom-unread">{badges[badge] > 99 ? "99+" : badges[badge]}</b>}</>;
+          return action === "friends"
+            ? <button key={label} type="button" onClick={() => setFriendsOpen(true)} className={`kingdom-app kingdom-app-${tone}`}>{inner}</button>
+            : <Link key={label} to={to} className={`kingdom-app kingdom-app-${tone}`}>{inner}</Link>;
+        })}
       </nav>
+      <FriendsBrowserDialog open={friendsOpen} onClose={() => setFriendsOpen(false)} me={me} />
       <HubSearch onOpenVideo={onOpenVideo} />
     </div>
   );

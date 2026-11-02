@@ -62,18 +62,19 @@ export default function Groups() {
               setOpenCat(c);
               setSubQuery("");
             }}
-            className="flex items-center justify-between rounded-xl border px-3 py-3.5 text-left shadow-[0_2px_10px_rgba(26,115,255,0.18)]"
+            className="flex items-center justify-between rounded-xl border px-3 py-3.5 text-left"
             style={{
-              background: "linear-gradient(155deg, #eaf4ff 0%, #cfe4ff 100%)",
+              background: NEON.chip.background,
               borderColor: NEON.chip.borderColor,
               color: NEON.chip.color,
+              boxShadow: NEON.chip.boxShadow,
             }}
           >
             <span className="flex items-center gap-2 min-w-0">
               <span className="text-xl shrink-0">{c.emoji}</span>
-              <span className="text-sm font-semibold truncate">{c.label}</span>
+              <span className="text-sm font-semibold truncate" style={{ textShadow: "0 1px 3px rgba(0,20,60,0.65)" }}>{c.label}</span>
             </span>
-            <ChevronRight size={18} className="shrink-0" style={{ color: NEON.solid }} />
+            <ChevronRight size={18} className="shrink-0" style={{ color: "#ffffff" }} />
           </button>
         ))}
         {filtered.length === 0 && (
@@ -111,7 +112,7 @@ export default function Groups() {
                   onClick={() => navigate(`/groups/${openCat.id}?sub=${encodeURIComponent(s)}`)}
                   className="flex items-center justify-between w-full px-3 py-3 rounded-lg hover:bg-[#e6f2ff] text-left"
                 >
-                  <span className="text-sm font-medium" style={{ color: NEON.chip.color }}>{s}</span>
+                  <span className="text-sm font-medium" style={{ color: NEON.text }}>{s}</span>
                   <ChevronRight size={16} style={{ color: NEON.solid }} />
                 </button>
               ))}

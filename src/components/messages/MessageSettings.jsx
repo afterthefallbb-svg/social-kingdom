@@ -58,7 +58,7 @@ export default function MessageSettings({ me, onClose, onSaved }) {
             <Switch
               checked={showOnline}
               onCheckedChange={setShowOnline}
-              className="data-[state=unchecked]:bg-[#dcecff] data-[state=unchecked]:border-[#1a73ff] data-[state=checked]:shadow-[0_2px_10px_rgba(26,115,255,0.35)]"
+              className="data-[state=unchecked]:bg-[#2f8bff] data-[state=unchecked]:border-[#8fe9ff] data-[state=checked]:bg-[#0a2f8f] data-[state=checked]:border-[#5fe9ff] data-[state=checked]:shadow-[0_0_10px_rgba(0,214,255,0.6)]"
             />
           </div>
 
@@ -71,11 +71,10 @@ export default function MessageSettings({ me, onClose, onSaved }) {
                   key={e}
                   onClick={() => setEmoji(e)}
                   className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
-                  style={
-                    emoji === e
-                      ? { background: NEON.chip.background, border: `2px solid ${NEON.solid}` }
-                      : { background: NEON.chip.background, border: `2px solid ${NEON.chip.borderColor}` }
-                  }
+                  style={{
+                    ...(emoji === e ? NEON.on : NEON.chip),
+                    border: `2px solid ${emoji === e ? NEON.on.borderColor : NEON.chip.borderColor}`,
+                  }}
                 >
                   {e}
                 </button>

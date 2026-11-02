@@ -209,7 +209,7 @@ export default function ClickInvitePicker({ onSend, onClose }) {
                     className="w-full flex items-center gap-3 p-2 rounded-lg border text-left"
                     style={{
                     borderColor: on ? NEON.solid : "#9cc7ff",
-                    background: on ? NEON.chip.background : "#f7fbff",
+                    background: on ? NEON.soft : "#f7fbff",
                     boxShadow: on ? "0 2px 10px rgba(26,115,255,0.25)" : "none",
                   }}
                   >
@@ -239,7 +239,7 @@ export default function ClickInvitePicker({ onSend, onClose }) {
                     className="w-full flex items-center gap-3 p-2 rounded-lg border text-left"
                     style={{
                     borderColor: on ? NEON.solid : "#9cc7ff",
-                    background: on ? NEON.chip.background : "#f7fbff",
+                    background: on ? NEON.soft : "#f7fbff",
                     boxShadow: on ? "0 2px 10px rgba(26,115,255,0.25)" : "none",
                   }}
                   >
@@ -272,7 +272,7 @@ export default function ClickInvitePicker({ onSend, onClose }) {
                 return (
                   <div key={u.id} className="flex items-center gap-3 p-2 rounded-lg border" style={{
                     borderColor: on ? NEON.solid : "#9cc7ff",
-                    background: on ? NEON.chip.background : "#f7fbff",
+                    background: on ? NEON.soft : "#f7fbff",
                     boxShadow: on ? "0 2px 10px rgba(26,115,255,0.25)" : "none",
                   }}>
                     <span className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-sm font-bold shrink-0">

@@ -11,6 +11,15 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+        kingdom: {
+          ink: 'hsl(var(--kingdom-ink))',
+          surface: 'hsl(var(--kingdom-surface))',
+          blue: 'hsl(var(--kingdom-blue))',
+          cyan: 'hsl(var(--kingdom-cyan))',
+          gold: 'hsl(var(--kingdom-gold))',
+          text: 'hsl(var(--kingdom-text))',
+          muted: 'hsl(var(--kingdom-muted))'
+        },
   			brand: {
   				DEFAULT: 'hsl(var(--brand))',
   				foreground: 'hsl(var(--brand-foreground))'

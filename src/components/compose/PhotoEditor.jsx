@@ -32,6 +32,10 @@ export default function PhotoEditor({
   const fileRef = useRef(null);
   const [capture, setCapture] = useState(false);
   const stageRef = useRef(null);
+  const [directUrl, setDirectUrl] = useState("");
+  const [link, setLink] = useState("");
+
+  const hasImage = Boolean(imgUrl);
 
   useEffect(() => () => { if (imgUrl) URL.revokeObjectURL(imgUrl); }, [imgUrl]);
 
@@ -39,6 +43,26 @@ export default function PhotoEditor({
     if (imgUrl) URL.revokeObjectURL(imgUrl);
     setImgUrl(null); setImgEl(null); setFilter(FILTERS[0]);
     setTexts([]); setMusic(null); setShowText(false); setActiveText(null);
+    setDirectUrl(""); setLink("");
+  }
+
+  function cancel() {
+    reset();
+    onClose();
+  }
+
+  function useLink() {
+    const v = link.trim();
+    if (!/^https?:\/\/\S+/i.test(v)) {
+      toast({ title: "Enter a full image link", description: "It should start with https://" });
+      return;
+    }
+    if (imgUrl && imgUrl.startsWith("blob:")) URL.revokeObjectURL(imgUrl);
+    setDirectUrl(v);
+    setImgUrl(v);
+    setImgEl(null);
+    setFilter(FILTERS[0]);
+    setTexts([]);
   }
 
   function pickFile(useCamera) {
@@ -64,7 +88,8 @@ export default function PhotoEditor({
       }
       return;
     }
-    if (imgUrl) URL.revokeObjectURL(imgUrl);
+    if (imgUrl && imgUrl.startsWith("blob:")) URL.revokeObjectURL(imgUrl);
+    setDirectUrl(""); setLink("");
     const url = URL.createObjectURL(f);
     const im = new Image();
     im.onload = () => setImgEl(im);
@@ -110,7 +135,23 @@ export default function PhotoEditor({
     window.addEventListener("pointerup", up);
   }
 
+  const musicPayload = music
+    ? {
+        previewUrl: music.previewUrl,
+        trackName: music.trackName,
+        artistName: music.artistName,
+        artworkUrl: music.artworkUrl,
+      }
+    : null;
+
   async function save() {
+    // A pasted link is already a live image — save it as-is.
+    if (directUrl) {
+      onUploaded(directUrl, "image", musicPayload);
+      reset();
+      onClose();
+      return;
+    }
     if (!imgEl) return;
     setBusy(true);
     try {
@@ -118,18 +159,7 @@ export default function PhotoEditor({
       if (!blob) throw new Error("Could not process image");
       const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
       const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
-      onUploaded(
-        file_url,
-        "image",
-        music
-          ? {
-              previewUrl: music.previewUrl,
-              trackName: music.trackName,
-              artistName: music.artistName,
-              artworkUrl: music.artworkUrl,
-            }
-          : null
-      );
+      onUploaded(file_url, "image", musicPayload);
       reset();
       onClose();
     } catch (err) {
@@ -160,22 +190,11 @@ export default function PhotoEditor({
         />
 
         <div className="flex items-center justify-between p-3 border-b sticky top-0 bg-white" style={{ borderColor: "#eef0f3" }}>
-          <button onClick={() => { reset(); onClose(); }} className="p-1 text-gray-500">
+          <button onClick={cancel} className="p-1 text-gray-500" aria-label="Cancel">
             <X size={20} />
           </button>
           <h3 className="font-bold text-gray-900">{label}</h3>
-          {imgEl ? (
-            <button
-              onClick={save}
-              disabled={busy}
-              className="text-sm font-semibold text-white px-3 py-1.5 rounded-lg flex items-center gap-1"
-              style={{ background: FB }}
-            >
-              {busy ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Save
-            </button>
-          ) : (
-            <span className="w-8" />
-          )}
+          <span className="w-8" />
         </div>
 
         <div className="p-3">
@@ -277,6 +296,24 @@ export default function PhotoEditor({
             )}
           </div>
 
+          {/* Paste a link instead of uploading a file */}
+          <div className="flex gap-2 mt-2">
+            <input
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              placeholder="Or paste an image link (https://…)"
+              autoComplete="off"
+              className="flex-1 min-w-0 text-xs border rounded-lg px-3 py-2 outline-none"
+            />
+            <button
+              onClick={useLink}
+              className="shrink-0 text-xs font-semibold px-3 rounded-lg border"
+              style={{ borderColor: FB, color: FB }}
+            >
+              Use link
+            </button>
+          </div>
+
           {/* Filters */}
           {imgEl && (
             <div className="flex gap-2 overflow-x-auto no-scrollbar mt-2 pb-1" style={{ scrollSnapType: "x mandatory" }}>
@@ -335,6 +372,24 @@ export default function PhotoEditor({
               <Loader2 className="animate-spin" size={16} /> Saving…
             </div>
           )}
+
+          {/* Save / Cancel */}
+          <div className="flex gap-2 mt-3 sticky bottom-0 bg-white pt-2 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
+            <button
+              onClick={cancel}
+              className="flex-1 rounded-lg py-2.5 text-sm font-semibold border border-gray-300 text-gray-600"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={save}
+              disabled={busy || !hasImage}
+              className="flex-1 rounded-lg py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1 disabled:opacity-50"
+              style={{ background: FB }}
+            >
+              {busy ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Save
+            </button>
+          </div>
         </div>
       </div>
     </div>

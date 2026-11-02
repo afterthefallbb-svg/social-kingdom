@@ -36,6 +36,11 @@ export default function VideoComposer({ category, eventId, clickId, onCreated, o
     setTexts([]); setMusic(null); setCaption(""); setCat(category || ""); setShowText(false); setActiveText(null);
   }
 
+  function cancel() {
+    reset();
+    onClose && onClose();
+  }
+
   function pickFile(useCamera) {
     setCapture(useCamera);
     setTimeout(() => fileRef.current && fileRef.current.click(), 0);
@@ -131,13 +136,9 @@ export default function VideoComposer({ category, eventId, clickId, onCreated, o
       <div className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[94vh] overflow-y-auto pb-[env(safe-area-inset-bottom)]" onClick={(e) => e.stopPropagation()}>
         <input ref={fileRef} type="file" accept="video/*" capture={capture ? "environment" : undefined} className="hidden" onChange={onFile} />
         <div className="flex items-center justify-between p-3 border-b sticky top-0 bg-white z-10" style={{ borderColor: "#eef0f3" }}>
-          <button onClick={() => { reset(); onClose && onClose(); }} className="p-1 text-gray-500"><X size={20} /></button>
+          <button onClick={cancel} className="p-1 text-gray-500" aria-label="Cancel"><X size={20} /></button>
           <h3 className="font-bold text-gray-900">Create Video</h3>
-          {videoUrl ? (
-            <button onClick={save} disabled={busy} className="text-sm font-semibold text-white px-3 py-1.5 rounded-lg flex items-center gap-1" style={{ background: FB }}>
-              {busy ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Post
-            </button>
-          ) : <span className="w-8" />}
+          <span className="w-8" />
         </div>
 
         <div className="p-3">
@@ -235,8 +236,23 @@ export default function VideoComposer({ category, eventId, clickId, onCreated, o
 
           {busy && <div className="flex items-center justify-center gap-2 py-4 text-gray-500 text-sm"><Loader2 className="animate-spin" size={16} /> Uploading…</div>}
 
-          {/* Spacer so music search clears the Android nav bar */}
-          <div className="h-20" />
+          {/* Save / Cancel */}
+          <div className="flex gap-2 mt-3 sticky bottom-0 bg-white pt-2 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
+            <button
+              onClick={cancel}
+              className="flex-1 rounded-lg py-2.5 text-sm font-semibold border border-gray-300 text-gray-600"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={save}
+              disabled={busy || !videoUrl}
+              className="flex-1 rounded-lg py-2.5 text-sm font-semibold text-white flex items-center justify-center gap-1 disabled:opacity-50"
+              style={{ background: FB }}
+            >
+              {busy ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Save
+            </button>
+          </div>
         </div>
       </div>
     </div>

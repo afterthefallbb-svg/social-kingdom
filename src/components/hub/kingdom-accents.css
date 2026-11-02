@@ -1,0 +1,48 @@
+.kingdom-backdrop > .kingdom-accents {
+  position: absolute;
+  inset: 0 auto 0 50%;
+  transform: translateX(-50%);
+  width: min(100%, 696px);
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.kingdom-bolt {
+  position: absolute;
+  height: auto;
+  overflow: visible;
+  opacity: .16;
+  animation: kingdom-bolt-flicker 11s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+.kingdom-bolt-cyan { color: hsl(var(--kingdom-cyan)); }
+.kingdom-bolt-gold { color: hsl(var(--kingdom-gold)); }
+
+.kingdom-bolt-halo {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .22;
+  filter: blur(4px);
+}
+.kingdom-bolt-core {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .9;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+@keyframes kingdom-bolt-flicker {
+  0%, 38%, 52%, 100% { opacity: .1; }
+  42% { opacity: .3; }
+  44% { opacity: .13; }
+  47% { opacity: .26; }
+  49% { opacity: .12; }
+}

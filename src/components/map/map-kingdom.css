@@ -218,14 +218,15 @@
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: 9.5px;
-  line-height: 1.25;
+  /* Same size as the event name so the details stay readable up close */
+  font-size: 11.5px;
+  line-height: 1.3;
   color: hsl(var(--kingdom-muted));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.sk-ev-meta svg { width: 9px; height: 9px; flex: 0 0 auto; color: hsl(var(--kingdom-cyan)); }
+.sk-ev-meta svg { width: 10.5px; height: 10.5px; flex: 0 0 auto; color: hsl(var(--kingdom-cyan)); }
 .sk-ev-foot {
   display: flex;
   align-items: center;
@@ -233,7 +234,7 @@
   gap: 4px;
 }
 .sk-ev-dist {
-  font-size: 9.5px;
+  font-size: 11.5px;
   font-weight: 750;
   color: hsl(var(--kingdom-gold-bright));
 }

@@ -7,7 +7,7 @@
   color: hsl(var(--kingdom-text));
 }
 .sk-dark-gold-tiles {
-  filter: sepia(1) saturate(2.6) hue-rotate(-12deg) brightness(1.75) contrast(1.05);
+  filter: brightness(1.22) contrast(1.6) saturate(0.8) sepia(0.2);
 }
 .sk-map-haze {
   position: absolute;
@@ -16,9 +16,8 @@
   pointer-events: none;
   mix-blend-mode: screen;
   background:
-    radial-gradient(ellipse 60% 42% at 18% 4%, hsl(247 90% 44% / 0.5), transparent 68%),
-    radial-gradient(ellipse 52% 40% at 88% 96%, hsl(221 100% 46% / 0.45), transparent 70%),
-    radial-gradient(ellipse 42% 30% at 52% 46%, hsl(var(--kingdom-gold) / 0.1), transparent 72%);
+    radial-gradient(ellipse 55% 34% at 16% 2%, hsl(247 90% 44% / 0.2), transparent 70%),
+    radial-gradient(ellipse 48% 32% at 90% 98%, hsl(221 100% 46% / 0.18), transparent 72%);
 }
 .sk-map-lightning {
   position: absolute;

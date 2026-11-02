@@ -1,11 +1,14 @@
 import React from "react";
-import { Crown } from "lucide-react";
+import { Image } from "@/components/ui/image";
 
 export default function KingdomBrand() {
   return (
     <div className="kingdom-brand" role="img" aria-label="Social Kingdom">
-      <span className="kingdom-brand-social" aria-hidden="true">Social</span>{" "}
-      <span className="kingdom-brand-name" aria-hidden="true"><span className="kingdom-brand-initial">K<Crown className="kingdom-crown" strokeWidth={1.3} /></span>ingdom</span>
+      <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/69f1a50ae_kingdom-precise-social.png" alt="" className="kingdom-brand-social" fittingType="fit" quality={100} loading="eager" />
+      <span className="kingdom-brand-name" aria-hidden="true">
+        <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/5a878db36_kingdom-precise-crown.png" alt="" className="kingdom-crown" fittingType="fit" quality={100} loading="eager" />
+        <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/ec7f4e51f_kingdom-precise-kingdom.png" alt="" className="kingdom-brand-lettering" fittingType="fit" quality={100} loading="eager" />
+      </span>
     </div>
   );
 }

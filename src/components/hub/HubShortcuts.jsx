@@ -10,7 +10,7 @@ const links = [
   { label: "Notifications", to: "/notifications", icon: Bell, tone: "gold", badge: "notifications" },
   { label: "Groups", to: "/groups", icon: Users, tone: "blue" },
   { label: "Friends", to: "/profile", icon: UserRound, tone: "teal" },
-  { label: "Explore", to: "/", icon: Globe, tone: "indigo" },
+  { label: "Explore", to: "/", icon: Globe, tone: "magenta" },
   { label: "Buy/Sell", to: "/buy-sell", icon: ShoppingBag, tone: "teal" },
   { label: "Music", to: "/music", icon: Music2, tone: "violet" },
   { label: "Games", to: "/games", icon: Gamepad2, tone: "blue" },

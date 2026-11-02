@@ -4,19 +4,20 @@
 
 @layer base {
   :root {
-    --kingdom-ink: 225 92% 6%;
-    --kingdom-surface: 218 95% 13%;
-    --kingdom-blue: 220 97% 48%;
-    --kingdom-cyan: 187 100% 72%;
-    --kingdom-gold: 42 100% 65%;
-    --kingdom-gold-bright: 48 100% 86%;
-    --kingdom-amber: 34 100% 36%;
-    --kingdom-violet: 280 100% 49%;
+    --kingdom-ink: 228 100% 4%;
+    --kingdom-surface: 219 96% 11%;
+    --kingdom-blue: 221 100% 55%;
+    --kingdom-cyan: 186 100% 74%;
+    --kingdom-gold: 41 100% 63%;
+    --kingdom-gold-bright: 47 100% 88%;
+    --kingdom-amber: 36 100% 40%;
+    --kingdom-magenta: 316 100% 60%;
+    --kingdom-violet: 274 100% 52%;
     --kingdom-violet-light: 288 100% 87%;
-    --kingdom-teal: 175 100% 32%;
-    --kingdom-indigo: 248 100% 48%;
+    --kingdom-teal: 175 100% 34%;
+    --kingdom-indigo: 248 100% 50%;
     --kingdom-text: 210 100% 98%;
-    --kingdom-muted: 211 72% 85%;
+    --kingdom-muted: 211 80% 87%;
     --kingdom-wordmark-font: Georgia, "Times New Roman", serif;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -60,19 +61,20 @@
   }
 
   .dark {
-    --kingdom-ink: 225 92% 6%;
-    --kingdom-surface: 218 95% 13%;
-    --kingdom-blue: 220 97% 48%;
-    --kingdom-cyan: 187 100% 72%;
-    --kingdom-gold: 42 100% 65%;
-    --kingdom-gold-bright: 48 100% 86%;
-    --kingdom-amber: 34 100% 36%;
-    --kingdom-violet: 280 100% 49%;
+    --kingdom-ink: 228 100% 4%;
+    --kingdom-surface: 219 96% 11%;
+    --kingdom-blue: 221 100% 55%;
+    --kingdom-cyan: 186 100% 74%;
+    --kingdom-gold: 41 100% 63%;
+    --kingdom-gold-bright: 47 100% 88%;
+    --kingdom-amber: 36 100% 40%;
+    --kingdom-magenta: 316 100% 60%;
+    --kingdom-violet: 274 100% 52%;
     --kingdom-violet-light: 288 100% 87%;
-    --kingdom-teal: 175 100% 32%;
-    --kingdom-indigo: 248 100% 48%;
+    --kingdom-teal: 175 100% 34%;
+    --kingdom-indigo: 248 100% 50%;
     --kingdom-text: 210 100% 98%;
-    --kingdom-muted: 211 72% 85%;
+    --kingdom-muted: 211 80% 87%;
     --kingdom-wordmark-font: Georgia, "Times New Roman", serif;
     --brand: 214.68 89.34% 52.16%;
     --brand-foreground: 0 0% 100%;

@@ -1,9 +1,25 @@
 /* The hub's own card track, reused on profile rows so the cards are byte-for-byte
-   the same: container queries size them exactly as on the social hub. */
+   the same. Geometry is pinned to a fixed 8px gutter so every card in every row
+   is the same width and every gap is identical — no cqw rounding, no overflow. */
 .profile-card-track { container-type: inline-size; }
+
 .profile-card-track .kingdom-track {
-  grid-auto-columns: calc((100% - 3.6cqw) / 3);
+  grid-auto-columns: calc((100% - 16px) / 3);
+  gap: 8px;
+  padding: 0 0 2px;
+  align-items: stretch;
   text-shadow: none;
-  padding-bottom: 2px;
 }
-.profile-card-track .kingdom-card { cursor: pointer; }
+
+/* Grid items default to min-width:auto, which lets a long title push a card
+   past its column and into its neighbour. Pinning the item kills that. */
+.profile-card-track .kingdom-track > div {
+  min-width: 0;
+  display: flex;
+}
+
+.profile-card-track .kingdom-card {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}

@@ -30,7 +30,7 @@ export default function ProfileCardRow({ title, badge, items = [], emptyText, re
       {open &&
         (items.length ? (
           <div className="mt-3 profile-card-track">
-            <div className="kingdom-track no-scrollbar">
+            <div className="kingdom-track no-scrollbar" style={{ textShadow: "none" }}>
               {items.map((item) => (
                 <div key={item.id} className="relative">
                   <HubCard item={item} onClick={item.onClick} />

@@ -25,7 +25,7 @@ export default function CliQsSection({ clicks }) {
       items={items}
       emptyText="No CliQs joined yet."
       renderOverlay={(item) => (
-        <ClickPresenceBadge click={item.click} host={hosts[item.id]} className="-top-1 -right-1 text-xs" />
+        <ClickPresenceBadge click={item.click} host={hosts[item.id]} className="top-1 right-1 text-xs" />
       )}
     />
   );

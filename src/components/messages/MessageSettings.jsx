@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { Switch } from "@/components/ui/switch";
+import { NEON } from "@/lib/neonControls";
 import { toast } from "@/components/ui/use-toast";
 
 const FB = "#1877f2";
@@ -54,7 +55,11 @@ export default function MessageSettings({ me, onClose, onSaved }) {
               <p className="font-semibold text-gray-900 text-sm">Show online status</p>
               <p className="text-xs text-gray-500">Others can see when you're active.</p>
             </div>
-            <Switch checked={showOnline} onCheckedChange={setShowOnline} />
+            <Switch
+              checked={showOnline}
+              onCheckedChange={setShowOnline}
+              className="data-[state=unchecked]:bg-[#dcebff] data-[state=unchecked]:border-[#7cc4ff]"
+            />
           </div>
 
           {/* Status emoji */}
@@ -66,7 +71,11 @@ export default function MessageSettings({ me, onClose, onSaved }) {
                   key={e}
                   onClick={() => setEmoji(e)}
                   className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
-                  style={emoji === e ? { background: FB + "22", border: `2px solid ${FB}` } : { background: "#f3f4f6" }}
+                  style={
+                    emoji === e
+                      ? { background: NEON.chip.background, border: `2px solid ${NEON.solid}` }
+                      : { background: NEON.chip.background, border: `2px solid ${NEON.chip.borderColor}` }
+                  }
                 >
                   {e}
                 </button>

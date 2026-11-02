@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import InvitePicker from "@/components/invite/InvitePicker";
 import { getFriendIdsBothDirections } from "@/lib/eventVisibility";
+import { NEON } from "@/lib/neonControls";
 
 const WALLA_WALLA = [46.0646, -118.3425];
 const FB = "#1877f2";
@@ -154,6 +155,7 @@ export default function CreateEvent() {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Walla Walla Hoops"
             className="mt-1.5"
+            style={NEON.field}
           />
         </div>
 
@@ -164,6 +166,7 @@ export default function CreateEvent() {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="What is this gathering about?"
             className="mt-1.5"
+            style={NEON.field}
             rows={3}
           />
         </div>
@@ -180,9 +183,9 @@ export default function CreateEvent() {
                   onClick={() => setCategory(c.id)}
                   className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border transition"
                   style={{
-                    background: on ? c.color : "#ffffff",
-                    color: on ? "#ffffff" : "#374151",
-                    borderColor: on ? c.color : "#e5e7eb"
+                    background: on ? c.color : NEON.chip.background,
+                    color: on ? "#ffffff" : NEON.chip.color,
+                    borderColor: on ? c.color : NEON.chip.borderColor
                   }}
                 >
                   <span>{c.emoji}</span> {c.label}
@@ -200,9 +203,9 @@ export default function CreateEvent() {
               onClick={() => setVisibility("public")}
               className="inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold border transition"
               style={{
-                background: visibility === "public" ? FB : "#ffffff",
-                color: visibility === "public" ? "#ffffff" : "#374151",
-                borderColor: visibility === "public" ? FB : "#e5e7eb"
+                background: visibility === "public" ? NEON.on.background : NEON.chip.background,
+                color: visibility === "public" ? "#ffffff" : NEON.chip.color,
+                borderColor: visibility === "public" ? NEON.on.borderColor : NEON.chip.borderColor
               }}
             >
               <Globe size={16} /> Public
@@ -212,9 +215,9 @@ export default function CreateEvent() {
               onClick={() => setVisibility("personal")}
               className="inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold border transition"
               style={{
-                background: visibility === "personal" ? FB : "#ffffff",
-                color: visibility === "personal" ? "#ffffff" : "#374151",
-                borderColor: visibility === "personal" ? FB : "#e5e7eb"
+                background: visibility === "personal" ? NEON.on.background : NEON.chip.background,
+                color: visibility === "personal" ? "#ffffff" : NEON.chip.color,
+                borderColor: visibility === "personal" ? NEON.on.borderColor : NEON.chip.borderColor
               }}
             >
               <Lock size={16} /> Personal
@@ -235,6 +238,7 @@ export default function CreateEvent() {
               onChange={(e) => setAgeBracket(e.target.value)}
               placeholder="e.g. 18+"
               className="mt-1.5"
+              style={NEON.field}
             />
           </div>
           <div>
@@ -244,6 +248,7 @@ export default function CreateEvent() {
               onChange={(e) => setDressCode(e.target.value)}
               placeholder="e.g. Casual"
               className="mt-1.5"
+              style={NEON.field}
             />
           </div>
         </div>
@@ -261,8 +266,15 @@ export default function CreateEvent() {
                 }
               }}
               placeholder="Type a tag and press Enter"
+              style={NEON.field}
             />
-            <Button type="button" onClick={addTag} variant="outline" className="shrink-0">
+            <Button
+              type="button"
+              onClick={addTag}
+              variant="outline"
+              className="shrink-0"
+              style={{ background: NEON.chip.background, borderColor: NEON.chip.borderColor, color: NEON.chip.color }}
+            >
               <Plus size={16} />
             </Button>
           </div>

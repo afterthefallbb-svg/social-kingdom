@@ -11,6 +11,7 @@ import { markOnline } from "@/lib/presence";
 import { getOrCreateDirectConversation, createGroupConversation } from "@/lib/messaging";
 import { getUser } from "@/lib/users";
 import { toast } from "@/components/ui/use-toast";
+import { NEON } from "@/lib/neonControls";
 
 const FB = "#1877f2";
 const DIRECTIONS = [
@@ -157,7 +158,7 @@ export default function Messages() {
                   key={d.key}
                   onClick={() => setDirection(d.key)}
                   className="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"
-                  style={direction === d.key ? { background: FB, color: "#fff" } : { background: FB + "14", color: FB }}
+                  style={direction === d.key ? NEON.on : { ...NEON.chip, border: `1px solid ${NEON.chip.borderColor}` }}
                 >
                   {d.label}
                 </button>

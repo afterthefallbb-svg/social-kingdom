@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
+import { NEON } from "@/lib/neonControls";
 
 const FB = "#1877f2";
 
@@ -15,7 +16,7 @@ export default function MessageSearchBar({ query, setQuery, scope, setScope, fil
   return (
     <div className="px-3 pb-2">
       <div className="flex gap-2">
-        <div className="flex-1 flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2">
+        <div className="flex-1 flex items-center gap-2 border rounded-lg px-3 py-2" style={NEON.field}>
           <Search size={16} className="text-gray-400" />
           <input
             value={query}
@@ -26,8 +27,8 @@ export default function MessageSearchBar({ query, setQuery, scope, setScope, fil
         </div>
         <button
           onClick={() => setOpen((o) => !o)}
-          className="w-10 h-10 rounded-lg flex items-center justify-center border border-gray-200 bg-white"
-          style={{ color: FB }}
+          className="w-10 h-10 rounded-lg flex items-center justify-center border"
+          style={{ ...NEON.chip, borderColor: NEON.chip.borderColor }}
           aria-label="Filters"
         >
           <SlidersHorizontal size={18} />
@@ -41,7 +42,7 @@ export default function MessageSearchBar({ query, setQuery, scope, setScope, fil
             key={s.id}
             onClick={() => setScope(s.id)}
             className="px-3 py-1 rounded-full text-xs font-semibold"
-            style={scope === s.id ? { background: FB, color: "#fff" } : { background: "#fff", color: FB, border: `1px solid ${FB}` }}
+            style={scope === s.id ? NEON.on : { ...NEON.chip, border: `1px solid ${NEON.chip.borderColor}` }}
           >
             {s.label}
           </button>
@@ -49,26 +50,29 @@ export default function MessageSearchBar({ query, setQuery, scope, setScope, fil
       </div>
 
       {open && (
-        <div className="mt-2 bg-white rounded-lg border border-gray-200 p-3 space-y-2">
+        <div className="mt-2 bg-white rounded-lg border p-3 space-y-2" style={{ borderColor: NEON.border }}>
           <input
             value={filters.city}
             onChange={(e) => setFilters({ ...filters, city: e.target.value })}
             placeholder="City"
-            className="w-full text-sm border border-gray-200 rounded-md px-2 py-1.5"
+            className="w-full text-sm border rounded-md px-2 py-1.5"
+            style={NEON.field}
           />
           <input
             value={filters.job}
             onChange={(e) => setFilters({ ...filters, job: e.target.value })}
             placeholder="Job title"
-            className="w-full text-sm border border-gray-200 rounded-md px-2 py-1.5"
+            className="w-full text-sm border rounded-md px-2 py-1.5"
+            style={NEON.field}
           />
           <input
             value={filters.company}
             onChange={(e) => setFilters({ ...filters, company: e.target.value })}
             placeholder="Company"
-            className="w-full text-sm border border-gray-200 rounded-md px-2 py-1.5"
+            className="w-full text-sm border rounded-md px-2 py-1.5"
+            style={NEON.field}
           />
-          <button onClick={() => { setFilters({ city: "", job: "", company: "" }); }} className="text-xs text-gray-500">Clear filters</button>
+          <button onClick={() => { setFilters({ city: "", job: "", company: "" }); }} className="text-xs font-semibold" style={{ color: NEON.text }}>Clear filters</button>
         </div>
       )}
     </div>

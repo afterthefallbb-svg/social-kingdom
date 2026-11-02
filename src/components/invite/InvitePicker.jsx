@@ -6,6 +6,7 @@ import { Search, Check, Loader2, Lock, Users, UserPlus } from "lucide-react";
 import { getCategory } from "@/lib/categories";
 import { matchesName } from "@/lib/nameMatch";
 import { searchUsers } from "@/lib/users";
+import { NEON } from "@/lib/neonControls";
 
 const FB = "#1877f2";
 const TABS = [
@@ -162,6 +163,7 @@ export default function InvitePicker({ onChange }) {
           : "Search people by name"
         }
         className="pl-9"
+        style={NEON.field}
       />
     </div>
   );
@@ -187,7 +189,7 @@ export default function InvitePicker({ onChange }) {
               type="button"
               onClick={() => { setTab(t.id); setQuery(""); }}
               className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
-              style={{ background: on ? FB : "#eef2f7", color: on ? "#fff" : "#1f2937" }}
+              style={on ? NEON.on : { ...NEON.chip, border: `1px solid ${NEON.chip.borderColor}` }}
             >
               <span className="mr-1">{t.emoji}</span>{t.label}
             </button>

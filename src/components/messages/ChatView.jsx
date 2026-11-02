@@ -9,6 +9,7 @@ import { canContact } from "@/lib/ageSafety";
 import EmojiPicker from "@/components/messages/EmojiPicker";
 import PresenceBadge from "@/components/presence/PresenceBadge";
 import { toast } from "@/components/ui/use-toast";
+import { NEON } from "@/lib/neonControls";
 
 const FB = "#1877f2";
 
@@ -230,7 +231,8 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
           rows={1}
           placeholder={uploading ? "Uploading…" : "Message…"}
           disabled={uploading}
-          className="flex-1 resize-none rounded-2xl border border-gray-200 px-4 py-2 text-sm outline-none max-h-[120px] leading-5 overflow-y-auto"
+          className="flex-1 resize-none rounded-2xl border px-4 py-2 text-sm outline-none max-h-[120px] leading-5 overflow-y-auto"
+          style={NEON.field}
         />
         <button onClick={send} disabled={sending || uploading || (!text.trim() && !pendingImage)} className="w-10 h-10 rounded-full flex items-center justify-center text-white shrink-0" style={{ background: FB }}>
           <Send size={18} />

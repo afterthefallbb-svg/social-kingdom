@@ -1,6 +1,7 @@
 /* Fixed lightning accents living on the backdrop, tucked behind the outer
    edges of the category panels so they stay put while the content scrolls. */
-.kingdom-backdrop > .kingdom-accents {
+.kingdom-backdrop > .kingdom-accents,
+.sk-backdrop > .kingdom-accents {
   position: absolute;
   inset: 0 auto 0 50%;
   transform: translateX(-50%);

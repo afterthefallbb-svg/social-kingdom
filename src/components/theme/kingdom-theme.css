@@ -1,0 +1,105 @@
+/* Social Kingdom app theme — carries the hub's obsidian / sapphire / gold
+   luxury language across every inner page. Scoped to .sk-theme so the map
+   screen keeps its own light chrome. */
+
+.sk-theme {
+  color: hsl(var(--kingdom-text));
+  background:
+    radial-gradient(ellipse at 50% -10%, hsl(var(--kingdom-blue) / .38), transparent 55%),
+    radial-gradient(ellipse at 0% 105%, hsl(var(--kingdom-blue) / .26), transparent 50%),
+    radial-gradient(ellipse at 100% 100%, hsl(var(--kingdom-violet) / .22), transparent 52%),
+    hsl(var(--kingdom-ink));
+}
+
+.sk-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 42% at 50% 0%, hsl(var(--kingdom-blue) / .3), transparent 70%),
+    radial-gradient(ellipse 60% 34% at 50% 108%, hsl(var(--kingdom-gold) / .16), transparent 72%);
+}
+.sk-backdrop-aura {
+  position: absolute;
+  inset: auto 0 0;
+  height: 34dvh;
+  background:
+    radial-gradient(ellipse 54% 74% at 50% 122%, hsl(var(--kingdom-cyan) / .34), transparent 72%),
+    radial-gradient(ellipse 30% 56% at 12% 124%, hsl(var(--kingdom-gold) / .26), transparent 74%),
+    radial-gradient(ellipse 30% 56% at 88% 124%, hsl(var(--kingdom-magenta) / .22), transparent 74%);
+}
+
+/* ---- surfaces ---- */
+.sk-theme .bg-white {
+  background-color: hsl(var(--kingdom-surface) / .6);
+  backdrop-filter: blur(6px);
+}
+.sk-theme .bg-gray-50,
+.sk-theme .bg-slate-50 {
+  background-color: hsl(var(--kingdom-surface) / .34);
+}
+.sk-theme .bg-gray-100 {
+  background-color: hsl(var(--kingdom-ink) / .35);
+}
+.sk-theme .bg-gray-200 {
+  background-color: hsl(var(--kingdom-surface) / .55);
+}
+.sk-theme .bg-gray-300 {
+  background-color: hsl(var(--kingdom-muted) / .45);
+}
+.sk-theme .bg-gray-900 {
+  background-color: hsl(var(--kingdom-surface) / .9);
+}
+
+/* ---- type ---- */
+.sk-theme .text-gray-900,
+.sk-theme .text-gray-800,
+.sk-theme .text-slate-900 {
+  color: hsl(var(--kingdom-text));
+}
+.sk-theme .text-gray-700,
+.sk-theme .text-gray-600 {
+  color: hsl(var(--kingdom-muted) / .9);
+}
+.sk-theme .text-gray-500,
+.sk-theme .text-gray-400,
+.sk-theme .text-gray-300 {
+  color: hsl(var(--kingdom-muted) / .68);
+}
+
+/* ---- edges ---- */
+.sk-theme .border-gray-200,
+.sk-theme .border-gray-100,
+.sk-theme .border-gray-300 {
+  border-color: hsl(var(--kingdom-cyan) / .3);
+}
+.sk-theme .shadow-sm,
+.sk-theme .shadow,
+.sk-theme .shadow-md {
+  box-shadow: 0 6px 18px hsl(var(--kingdom-ink) / .55), inset 0 1px 0 hsl(var(--kingdom-text) / .07);
+}
+
+/* ---- form fields ---- */
+.sk-theme input,
+.sk-theme textarea,
+.sk-theme select {
+  color: hsl(var(--kingdom-text));
+  caret-color: hsl(var(--kingdom-cyan));
+}
+.sk-theme input::placeholder,
+.sk-theme textarea::placeholder {
+  color: hsl(var(--kingdom-muted) / .5);
+}
+.sk-theme input:focus,
+.sk-theme textarea:focus {
+  outline-color: hsl(var(--kingdom-cyan) / .6);
+}
+
+/* ---- bottom navigation ---- */
+.sk-theme .sk-bottom-nav {
+  background: linear-gradient(transparent, hsl(var(--kingdom-ink) / .94) 46%);
+  border-top-color: hsl(var(--kingdom-cyan) / .3);
+  backdrop-filter: none;
+}

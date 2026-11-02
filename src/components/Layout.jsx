@@ -1,12 +1,19 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
+import KingdomBackdrop from "@/components/theme/KingdomBackdrop";
 
 export default function Layout() {
+  const { pathname } = useLocation();
+  const themed = pathname !== "/";
+
   return (
-    <div className="relative min-h-screen bg-white">
-      <Outlet />
+    <div className={themed ? "sk-theme relative min-h-screen" : "relative min-h-screen bg-white"}>
+      {themed && <KingdomBackdrop />}
+      <div className={themed ? "relative z-10" : undefined}>
+        <Outlet />
+      </div>
       <BottomNav />
       <OnboardingFlow />
     </div>

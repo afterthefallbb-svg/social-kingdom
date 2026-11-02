@@ -12,7 +12,7 @@ export default function BottomNav() {
   if (pathname === "/browse") return <HubBottomNav />;
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-[650] bg-white/95 backdrop-blur border-t border-gray-200 flex justify-around items-center pt-2 pointer-events-none"
+      className="sk-bottom-nav fixed bottom-0 left-0 right-0 z-[650] bg-white/95 backdrop-blur border-t border-gray-200 flex justify-around items-center pt-2 pointer-events-none"
       style={{ paddingBottom: "max(1.5rem, calc(env(safe-area-inset-bottom) + 0.75rem))" }}
     >
       {/* Left — person silhouette in a circular badge */}

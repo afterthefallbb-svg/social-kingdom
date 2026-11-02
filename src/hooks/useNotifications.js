@@ -7,6 +7,7 @@ export function useNotifications() {
   const { toast } = useToast();
   const [me, setMe] = useState(null);
   const [friends, setFriends] = useState([]);
+  const [relationships, setRelationships] = useState([]);
   const [events, setEvents] = useState([]);
   const [cliqs, setCliqs] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -24,6 +25,10 @@ export function useNotifications() {
           { friend_id: u.id, status: "pending" },
           { sort: "-created_date", limit: 100 }
         );
+        const rel = await base44.entities.Relationship.filter(
+          { partner_id: u.id, status: "pending" },
+          { sort: "-created_date", limit: 100 }
+        ).catch(() => ({ items: [] }));
         const ev = await base44.entities.Invite.filter(
           { invitee_id: u.id, target_type: "event", status: "pending" },
           { sort: "-created_date", limit: 100 }
@@ -37,6 +42,7 @@ export function useNotifications() {
           .catch(() => ({ items: [] }));
         if (active) {
           setFriends(fr.items);
+          setRelationships(rel.items || []);
           setEvents(ev.items);
           setCliqs(cq.items);
           setPosts(pn.items.filter((n) => n.type === "event_post" || n.type === "click_post"));
@@ -90,6 +96,30 @@ export function useNotifications() {
       toast({ title: "Request removed" });
     } catch {
       toast({ title: "Could not remove", variant: "destructive" });
+    } finally {
+      setActing(null);
+    }
+  };
+  const acceptRelationship = async (r) => {
+    setActing(r.id);
+    try {
+      await base44.entities.Relationship.update(r.id, { status: "accepted" });
+      setRelationships((x) => x.filter((i) => i.id !== r.id));
+      toast({ title: `You're now ${r.relationship_type.toLowerCase()} with ${r.requester_name || "them"}` });
+    } catch {
+      toast({ title: "Could not accept", variant: "destructive" });
+    } finally {
+      setActing(null);
+    }
+  };
+  const declineRelationship = async (r) => {
+    setActing(r.id);
+    try {
+      await base44.entities.Relationship.update(r.id, { status: "declined" });
+      setRelationships((x) => x.filter((i) => i.id !== r.id));
+      toast({ title: "Request declined" });
+    } catch {
+      toast({ title: "Could not decline", variant: "destructive" });
     } finally {
       setActing(null);
     }
@@ -172,11 +202,14 @@ export function useNotifications() {
     loading,
     acting,
     friends,
+    relationships,
     events,
     cliqs,
     posts,
     acceptFriend,
     denyFriend,
+    acceptRelationship,
+    declineRelationship,
     attendEvent,
     rejectEvent,
     joinCliq,

@@ -76,6 +76,31 @@ export default function NotifList({ category, items, actions, acting, navigate }
     ));
   }
 
+  if (category === "relationship") {
+    return items.map((r) => (
+      <ToggleRow
+        key={r.id}
+        id={r.id}
+        acting={acting}
+        acceptLabel="Accept"
+        denyLabel="Decline"
+        onAccept={() => actions.acceptRelationship(r)}
+        onDeny={() => actions.declineRelationship(r)}
+        left={
+          <button onClick={() => navigate(`/profile/${r.requester_id}`)} className="flex items-center gap-3 min-w-0 text-left">
+            <Avatar src={r.requester_avatar} name={r.requester_name} />
+            <span className="min-w-0">
+              <span className="text-sm font-semibold text-gray-900 truncate block">{r.requester_name || "Someone"}</span>
+              <span className="text-[11px] text-gray-400 truncate block">
+                requested relationship status: <span className="font-semibold text-gray-600">{r.relationship_type}</span>
+              </span>
+            </span>
+          </button>
+        }
+      />
+    ));
+  }
+
   if (category === "events") {
     return items.map((inv) => {
       const cat = getCategory(inv.target_category);

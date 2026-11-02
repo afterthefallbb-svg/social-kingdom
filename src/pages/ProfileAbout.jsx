@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import PreferenceDialog from "@/components/profile/PreferenceDialog";
 import BioPickerDialog from "@/components/profile/BioPickerDialog";
+import RelationshipCard from "@/components/profile/RelationshipCard";
 
 const FB = "#1877f2";
 const TEXT_FIELDS = ["bio", "job", "birthday", "location"];
@@ -26,11 +27,20 @@ export default function ProfileAbout() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [me, setMe] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [editing, setEditing] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(setMe).catch(() => {});
-  }, []);
+    base44.auth.me().then(async (u) => {
+      setMe(u);
+      if (id && id !== u?.id) {
+        const other = await base44.entities.User.get(id).catch(() => null);
+        setProfile(other || u);
+      } else {
+        setProfile(u);
+      }
+    }).catch(() => {});
+  }, [id]);
 
   const isMe = !id || id === me?.id;
   const back = id ? `/profile/${id}` : "/profile";
@@ -48,9 +58,10 @@ export default function ProfileAbout() {
       </div>
 
       <div className="p-3 space-y-2 max-w-2xl mx-auto">
+        <RelationshipCard me={me} profileId={id || me?.id} isMe={isMe} />
         {FIELDS.map((f) => {
           const isText = TEXT_FIELDS.includes(f.field);
-          const raw = me?.[f.field];
+          const raw = profile?.[f.field];
           const has = isText ? !!raw : Array.isArray(raw) && raw.length > 0;
           const preview = isText ? raw || "" : (raw || []).join(", ");
           return (
@@ -80,9 +91,9 @@ export default function ProfileAbout() {
           field={editing.field}
           label={editing.label}
           placeholder={editing.placeholder}
-          me={me}
+          me={profile}
           onClose={() => setEditing(null)}
-          onSaved={setMe}
+          onSaved={setProfile}
         />
       )}
       {editing && !TEXT_FIELDS.includes(editing.field) && (
@@ -90,9 +101,9 @@ export default function ProfileAbout() {
           field={editing.field}
           label={editing.label}
           placeholder={editing.placeholder}
-          me={me}
+          me={profile}
           onClose={() => setEditing(null)}
-          onSaved={setMe}
+          onSaved={setProfile}
         />
       )}
     </div>

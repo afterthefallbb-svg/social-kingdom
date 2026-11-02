@@ -1,5 +1,6 @@
 export const NOTIF_CATS = [
   { id: "friends", label: "Friend Requests", emoji: "👤" },
+  { id: "relationship", label: "Relationship Requests", emoji: "💞" },
   { id: "events", label: "Event Invites", emoji: "📅" },
   { id: "posts", label: "New Posts", emoji: "📝" },
   { id: "cliqs", label: "CliQ Requests", emoji: "👥" },

@@ -14,6 +14,7 @@ export default function NotificationsCategory() {
   const cat = NOTIF_CATS.find((c) => c.id === category) || NOTIF_CATS[0];
   const items =
     cat.id === "friends" ? n.friends
+      : cat.id === "relationship" ? n.relationships
       : cat.id === "events" ? n.events
       : cat.id === "posts" ? n.posts
       : cat.id === "cliqs" ? n.cliqs : [];

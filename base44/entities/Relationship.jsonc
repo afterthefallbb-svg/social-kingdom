@@ -1,0 +1,111 @@
+{
+  "name": "Relationship",
+  "type": "object",
+  "properties": {
+    "requester_id": {
+      "type": "string",
+      "title": "Requester Id"
+    },
+    "requester_name": {
+      "type": "string",
+      "title": "Requester Name"
+    },
+    "requester_avatar": {
+      "type": "string",
+      "title": "Requester Avatar"
+    },
+    "partner_id": {
+      "type": "string",
+      "title": "Partner Id"
+    },
+    "partner_name": {
+      "type": "string",
+      "title": "Partner Name"
+    },
+    "partner_avatar": {
+      "type": "string",
+      "title": "Partner Avatar"
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "In a relationship",
+        "Engaged",
+        "Married",
+        "Partnership",
+        "Spouse",
+        "In an open relationship",
+        "It's complicated",
+        "Separated",
+        "Divorced"
+      ],
+      "default": "In a relationship",
+      "title": "Relationship Type"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "declined"
+      ],
+      "default": "pending",
+      "title": "Status"
+    }
+  },
+  "required": [
+    "requester_id",
+    "partner_id",
+    "relationship_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.requester_id": "{{user.id}}"
+        },
+        {
+          "data.partner_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "data.requester_id": "{{user.id}}"
+    },
+    "update": {
+      "$or": [
+        {
+          "data.requester_id": "{{user.id}}"
+        },
+        {
+          "data.partner_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.requester_id": "{{user.id}}"
+        },
+        {
+          "data.partner_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

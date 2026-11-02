@@ -13,6 +13,7 @@ export default function Notifications() {
   const n = useNotifications();
   const itemsFor = (cat) =>
     cat === "friends" ? n.friends
+      : cat === "relationship" ? n.relationships
       : cat === "events" ? n.events
       : cat === "posts" ? n.posts
       : cat === "cliqs" ? n.cliqs : [];

@@ -11,6 +11,23 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+        map: {
+          midnight: 'var(--map-midnight)',
+          'deep-blue': 'var(--map-deep-blue)',
+          royal: 'var(--map-royal)',
+          electric: 'var(--map-electric)',
+          ice: 'var(--map-ice)',
+          cyan: 'var(--map-cyan)',
+          gold: 'var(--map-gold)',
+          champagne: 'var(--map-champagne)',
+          text: 'var(--map-text)',
+          muted: 'var(--map-muted)',
+          forest: 'var(--map-forest)',
+          park: 'var(--map-park)',
+          building: 'var(--map-building)',
+          urban: 'var(--map-urban)',
+          water: 'var(--map-water)',
+        },
         kingdom: {
           ink: 'hsl(var(--kingdom-ink))',
           surface: 'hsl(var(--kingdom-surface))',

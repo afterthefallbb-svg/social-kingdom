@@ -6,17 +6,7 @@
   background: hsl(var(--kingdom-ink));
   color: hsl(var(--kingdom-text));
 }
-/* Near-black land with bright gold streets, like the reference map. */
-.sk-tile-base {
-  filter: brightness(0.32) contrast(1.1) saturate(0.45);
-}
-.sk-tile-roads {
-  filter: sepia(0.75) saturate(2.6) brightness(1.05) contrast(1.1);
-}
-.sk-tile-labels {
-  filter: sepia(0.5) saturate(1.6) brightness(1.12);
-  opacity: 0.85;
-}
+/* Basemap feature colors are rendered independently by KingdomMapTiles. */
 .sk-map-haze {
   position: absolute;
   inset: 0;

@@ -9,6 +9,7 @@ import EventPanel from "@/components/map/EventPanel";
 import { Image } from "@/components/ui/image";
 import { getUserLocation } from "@/lib/localSeed";
 import "@/components/map/map-kingdom.css";
+import "@/components/map/map-surface.css";
 
 const DEFAULT_CENTER = [46.0646, -118.3425];
 

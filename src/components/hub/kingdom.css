@@ -29,7 +29,8 @@
 .kingdom-camera svg { width: 59%; height: 59%; }
 .kingdom-profile-name { margin-top: .8cqw; max-width: 100%; padding-inline: 1cqw; font-size: clamp(11px, 3cqw, 28px); font-weight: 700; line-height: 1.15; text-shadow: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kingdom-brand { align-self: center; display: block; width: 66cqw; max-width: 100%; min-width: 0; margin: 3cqw 0 0 .4cqw; line-height: 1; }
-.kingdom-brand-artwork { display: block; width: 100%; height: auto; aspect-ratio: 453 / 131; object-fit: contain; }
+.kingdom-brand-crown { display: block; width: 100%; height: auto; aspect-ratio: 453 / 61; object-fit: contain; }
+.kingdom-brand-word { display: block; width: 100%; height: auto; aspect-ratio: 453 / 70; object-fit: contain; margin-top: .55cqw; }
 .kingdom-header-actions { position: absolute; top: 2.2cqw; right: 1.4cqw; display: flex; align-items: center; gap: 1cqw; }
 .kingdom-menu-toggle, .kingdom-create-cliq { display: inline-flex; align-items: center; justify-content: center; gap: .65cqw; min-height: 28px; height: 6.2cqw; border-radius: 999px; padding: .6cqw 1.8cqw; color: hsl(var(--kingdom-text)); border: 1px solid hsl(var(--kingdom-gold)); background: linear-gradient(hsl(var(--kingdom-blue) / .75), hsl(var(--kingdom-ink)) 68%); box-shadow: inset 0 0 5px hsl(var(--kingdom-cyan) / .65), 0 0 8px hsl(var(--kingdom-gold) / .6); font-size: clamp(10px, 2.5cqw, 23px); font-weight: 700; }
 .kingdom-menu-toggle svg { width: 3.8cqw; min-width: 18px; height: 3.8cqw; min-height: 18px; }

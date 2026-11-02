@@ -18,7 +18,7 @@ export default function MapCompass({ locating = false }) {
       <path className="sk-compass-spoke" d="M46.1 28h4.5" />
       <path className="sk-compass-spoke" d="M28 46.1v4.5" />
       <path className="sk-compass-spoke" d="M9.9 28H5.4" />
-      <circle className="sk-compass-dot" cx="28" cy="28" r="2" />
+      <circle className="sk-compass-dot" cx="28" cy="28" r="3.6" />
     </svg>
   );
 }

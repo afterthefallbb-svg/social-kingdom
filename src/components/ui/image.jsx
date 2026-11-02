@@ -61,13 +61,20 @@ const Image = React.forwardRef(
       className: preview && preview.sourceClassName === props.className ? preview.className : props.className,
       onError: handleError,
     }
+    // Plain <img> fallbacks (other hosts, failed transforms, empty state) must
+    // crop/contain exactly like the optimized path, otherwise a photo whose
+    // aspect ratio differs from its frame is squashed to fit it.
+    const plainImageStyle = {
+      objectFit: fittingType === "fit" ? "contain" : "cover",
+      ...props.style,
+    }
 
     if (!src) {
       // Renders as a real <img> (not a <div>) — the visual editor's
       // click-to-edit toolbar keys its "Replace Image" action off the DOM
       // tag being `img`, so a placeholder div would be unrecoverable in the
       // editor. FALLBACK_IMAGE_URL doubles as the "no image chosen" graphic.
-      return <img ref={ref} src={FALLBACK_IMAGE_URL} {...imageProps} data-empty-image />
+      return <img ref={ref} src={FALLBACK_IMAGE_URL} {...imageProps} style={plainImageStyle} data-empty-image />
     }
 
     // A failed transform retries the underlying original as a plain image.
@@ -78,7 +85,7 @@ const Image = React.forwardRef(
       const isErrorMode = mode === IMAGE_LOAD_MODE.FALLBACK
       const imageSrc = isErrorMode ? FALLBACK_IMAGE_URL : getOriginalImageUrl(src, parsedSource)
       return (
-        <img ref={ref} src={imageSrc} {...imageProps} data-error-image={isErrorMode || undefined} />
+        <img ref={ref} src={imageSrc} {...imageProps} style={plainImageStyle} data-error-image={isErrorMode || undefined} />
       )
     }
 

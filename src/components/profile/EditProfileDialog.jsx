@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
+import AvatarCropDialog from "@/components/profile/AvatarCropDialog";
 import { checkProfilePhoto } from "@/lib/faceCheck";
 
 const FB = "#1877f2";
@@ -24,6 +25,8 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
   const [profileType, setProfileType] = useState(me?.profile_type || "none");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(null);
+  const [cropFile, setCropFile] = useState(null);
+  const avatarInputRef = useRef(null);
 
   async function save() {
     setSaving(true);
@@ -88,7 +91,18 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
             <label className="text-sm font-semibold text-gray-700">Avatar Image URL</label>
             <div className="flex gap-2 mt-1.5">
               <Input value={avatar} onChange={(e) => setAvatar(e.target.value)} placeholder="https://..." />
-              <button type="button" onClick={() => setUploading("avatar")} className="shrink-0 inline-flex items-center gap-1 rounded-md px-3 text-xs font-semibold text-white" style={{ background: FB }}>
+              <input
+                ref={avatarInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  e.target.value = "";
+                  if (f) setCropFile(f);
+                }}
+              />
+              <button type="button" onClick={() => avatarInputRef.current?.click()} className="shrink-0 inline-flex items-center gap-1 rounded-md px-3 text-xs font-semibold text-white" style={{ background: FB }}>
                 Upload
               </button>
             </div>
@@ -149,13 +163,23 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
             {saving ? "Saving…" : "Save"}
           </Button>
         </div>
+        {cropFile && (
+          <AvatarCropDialog
+            file={cropFile}
+            onCropped={(url) => {
+              setAvatar(url);
+              setCropFile(null);
+            }}
+            onClose={() => setCropFile(null)}
+          />
+        )}
+
         {uploading && (
           <PhotoEditor
-            label={uploading === "avatar" ? "Profile Photo" : "Cover Photo"}
-            aspect={uploading === "avatar" ? "1 / 1" : "16 / 9"}
+            label="Cover Photo"
+            aspect="16 / 9"
             onUploaded={(url) => {
-              if (uploading === "avatar") setAvatar(url);
-              else setCover(url);
+              setCover(url);
               setUploading(null);
             }}
             onClose={() => setUploading(null)}

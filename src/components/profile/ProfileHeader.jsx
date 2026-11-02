@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Camera, FileText, Pencil, MessageCircle } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
+import AvatarCropDialog from "@/components/profile/AvatarCropDialog";
 import KloutButton from "@/components/klout/KloutButton";
 import FriendMessageActions from "@/components/profile/FriendMessageActions";
 import { presenceBadge } from "@/lib/presence";
@@ -15,16 +16,24 @@ const FB = "#1877f2";
 export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMessages }) {
   const navigate = useNavigate();
   const [uploading, setUploading] = useState(null); // 'avatar' | 'cover' | 'background' | null
+  const [cropFile, setCropFile] = useState(null);
+  const avatarInputRef = useRef(null);
 
   const name = user?.full_name || user?.friend_name || "CliQ Member";
   const initial = (name || "?").charAt(0).toUpperCase();
   const city = user?.location || user?.friend_city || "";
   const aboutPath = isMe ? "/profile/about" : `/profile/${user?.id}/about`;
 
-  async function handleUploaded(url) {
+  function pickAvatarFile(e) {
+    const f = e.target.files?.[0];
+    e.target.value = "";
+    if (f) setCropFile(f);
+  }
+
+  async function handleUploaded(url, source) {
     const fieldMap = { avatar: "avatar_url", cover: "cover_url", background: "background_photo" };
     const labelMap = { avatar: "Profile", cover: "Cover", background: "Background" };
-    const which = uploading;
+    const which = source || uploading;
     setUploading(null);
     if (which === "avatar" && user?.selfie_verified) {
       const check = await checkProfilePhoto(url);
@@ -66,8 +75,15 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
 
       {/* Avatar + bio link */}
       <div className="px-4 -mt-12 flex items-end gap-4">
+        <input
+          ref={avatarInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={pickAvatarFile}
+        />
         <button
-          onClick={() => isMe && setUploading("avatar")}
+          onClick={() => isMe && avatarInputRef.current?.click()}
           className="relative w-24 h-24 rounded-full bg-white p-1 shadow shrink-0"
           aria-label="Upload profile photo"
         >
@@ -177,11 +193,22 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
         </div>
       )}
 
+      {cropFile && (
+        <AvatarCropDialog
+          file={cropFile}
+          onCropped={(url) => {
+            setCropFile(null);
+            handleUploaded(url, "avatar");
+          }}
+          onClose={() => setCropFile(null)}
+        />
+      )}
+
       {uploading && (
         <PhotoEditor
-          label={uploading === "avatar" ? "Profile Photo" : uploading === "cover" ? "Cover Photo" : "Background Photo"}
-          aspect={uploading === "avatar" ? "1 / 1" : "16 / 9"}
-          onUploaded={handleUploaded}
+          label={uploading === "cover" ? "Cover Photo" : "Background Photo"}
+          aspect="16 / 9"
+          onUploaded={(url) => handleUploaded(url)}
           onClose={() => setUploading(null)}
         />
       )}

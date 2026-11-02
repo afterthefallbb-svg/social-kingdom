@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { isOnline, statusEmoji, lastSeenLabel, presenceBadge } from "@/lib/presence";
+import { usersByIds } from "@/lib/users";
 import PresenceBadge from "@/components/presence/PresenceBadge";
 
 const FB = "#1877f2";
@@ -19,11 +20,8 @@ export default function OnlineFriendsRow({ me, onSelectFriend, onLongPress, sele
       ).catch(() => ({ items: [] }));
       const ids = fr.items.map((f) => f.friend_id).filter(Boolean);
       const byId = Object.fromEntries(fr.items.map((f) => [f.friend_id, f]));
-      let users = [];
-      if (ids.length) {
-        const u = await base44.entities.User.filter({ id: { $in: ids } }, { limit: 200 }).catch(() => ({ items: [] }));
-        users = u.items || [];
-      }
+      const found = ids.length ? await usersByIds(ids) : {};
+      const users = Object.values(found);
       // Merge: prefer live user record, fall back to friendship snapshot
       const merged = ids.map((id) => users.find((u) => u.id === id) || { id, full_name: byId[id]?.friend_name, avatar_url: byId[id]?.friend_avatar, location: byId[id]?.friend_city, last_seen: null, show_online: true, status_emoji: "👑" });
       // Sort: online first (most recent last_seen), then offline (most recent first)

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { getAllDrafts, createGroupConversation } from "@/lib/messaging";
+import { usersByIds } from "@/lib/users";
 import { toast } from "@/components/ui/use-toast";
 import ConversationRow from "@/components/messages/ConversationRow";
 import ConversationSelectBar from "@/components/messages/ConversationSelectBar";
@@ -30,11 +31,7 @@ export default function ConversationList({ me, onOpen, refreshKey, scope = "all"
       const ids = new Set();
       mine.forEach((c) => { if (!c.is_group) c.member_ids.forEach((id) => id !== me.id && ids.add(id)); });
 
-      const peerMap = {};
-      if (ids.size) {
-        const u = await base44.entities.User.filter({ id: { $in: [...ids] } }, { limit: 200 }).catch(() => ({ items: [] }));
-        (u.items || []).forEach((x) => { peerMap[x.id] = x; });
-      }
+      const peerMap = ids.size ? await usersByIds([...ids]) : {};
       const fr = await base44.entities.Friendship.filter({ user_id: me.id, status: "accepted" }, { limit: 200 }).catch(() => ({ items: [] }));
       (fr.items || []).forEach((f) => {
         if (!peerMap[f.friend_id]) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { usersByIds } from "@/lib/users";
 
 // Bulk-fetches the host (creator) user for each click. Returns a map: clickId -> host user.
 export function useClickHosts(clicks) {
@@ -15,9 +15,8 @@ export function useClickHosts(clicks) {
         setHosts({});
         return;
       }
-      const res = await base44.entities.User.filter({ id: { $in: uniq } }, { limit: 200 }).catch(() => ({ items: [] }));
+      const byId = await usersByIds(uniq);
       if (!active) return;
-      const byId = Object.fromEntries((res.items || []).map((u) => [u.id, u]));
       const map = {};
       list.forEach((c) => {
         if (c.created_by_id) map[c.id] = byId[c.created_by_id] || null;

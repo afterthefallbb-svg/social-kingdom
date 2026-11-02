@@ -9,6 +9,7 @@ import MessageSettings from "@/components/messages/MessageSettings";
 import ChatView from "@/components/messages/ChatView";
 import { markOnline } from "@/lib/presence";
 import { getOrCreateDirectConversation, createGroupConversation } from "@/lib/messaging";
+import { getUser } from "@/lib/users";
 import { toast } from "@/components/ui/use-toast";
 
 const FB = "#1877f2";
@@ -53,8 +54,7 @@ export default function Messages() {
     if (!chatId) return;
     (async () => {
       try {
-        const u = await base44.entities.User.filter({ id: chatId }, { limit: 1 }).catch(() => ({ items: [] }));
-        const user = (u.items || [])[0] || { id: chatId };
+        const user = (await getUser(chatId)) || { id: chatId };
         const conv = await getOrCreateDirectConversation(me, user);
         setActivePeer(user);
         setActiveConv(conv);

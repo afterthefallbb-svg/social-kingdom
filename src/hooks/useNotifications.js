@@ -56,7 +56,24 @@ export function useNotifications() {
     setActing(r.id);
     try {
       await base44.entities.Friendship.update(r.id, { status: "accepted" });
-      addFriendToMyPersonalEvents(r.friend_id, r.user_id);
+      // The request row belongs to the sender — add the mirror row so the
+      // friendship shows on both profiles.
+      const mine = await base44.entities.Friendship.filter(
+        { user_id: me.id, friend_id: r.user_id },
+        { limit: 5 }
+      ).catch(() => ({ items: [] }));
+      if (!mine.items?.length) {
+        const requester = await base44.entities.User.get(r.user_id).catch(() => null);
+        await base44.entities.Friendship.create({
+          user_id: me.id,
+          friend_id: r.user_id,
+          friend_name: requester?.full_name || r.friend_name || "",
+          friend_avatar: requester?.avatar_url || r.friend_avatar || "",
+          friend_city: requester?.location || "",
+          status: "accepted",
+        }).catch(() => {});
+      }
+      addFriendToMyPersonalEvents(me.id, r.user_id);
       setFriends((x) => x.filter((i) => i.id !== r.id));
       toast({ title: "Friend request accepted" });
     } catch {

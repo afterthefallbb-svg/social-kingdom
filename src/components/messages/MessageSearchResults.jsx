@@ -6,6 +6,7 @@ import { presenceBadge } from "@/lib/presence";
 import PresenceBadge from "@/components/presence/PresenceBadge";
 import ClickPresenceBadge from "@/components/presence/ClickPresenceBadge";
 import { useClickHosts } from "@/hooks/useClickHosts";
+import { usersByIds, searchUsers } from "@/lib/users";
 
 const FB = "#1877f2";
 
@@ -34,11 +35,7 @@ export default function MessageSearchResults({ me, query, scope, filters, onSele
       if (scope === "friends") {
         const fr = await base44.entities.Friendship.filter({ user_id: me.id, status: "accepted", friend_name: rx }, { limit: 100 }).catch(() => ({ items: [] }));
         const ids = fr.items.map((f) => f.friend_id).filter(Boolean);
-        let users = [];
-        if (ids.length) {
-          const u = await base44.entities.User.filter({ id: { $in: ids } }, { limit: 100 }).catch(() => ({ items: [] }));
-          users = u.items || [];
-        }
+        const users = Object.values(await usersByIds(ids));
         const map = Object.fromEntries(users.map((u) => [u.id, u]));
         const merged = ids.map((id) => map[id] || { id, full_name: fr.items.find((f) => f.friend_id === id)?.friend_name, avatar_url: fr.items.find((f) => f.friend_id === id)?.friend_avatar, location: fr.items.find((f) => f.friend_id === id)?.friend_city });
         setPeople(merged.filter((u) => matchesFilters(u, filters)));
@@ -54,8 +51,8 @@ export default function MessageSearchResults({ me, query, scope, filters, onSele
         setCliqs(all);
         setPeople([]);
       } else {
-        const u = await base44.entities.User.filter({ full_name: rx }, { limit: 100 }).catch(() => ({ items: [] }));
-        let list = (u.items || []).filter((x) => x.id !== me.id && matchesFilters(x, filters));
+        const u = await searchUsers(q, { limit: 100, excludeIds: [me.id] });
+        let list = u.filter((x) => matchesFilters(x, filters));
         if (scope === "other") {
           const fr = await base44.entities.Friendship.filter({ user_id: me.id, status: "accepted" }, { limit: 200 }).catch(() => ({ items: [] }));
           const mem = await base44.entities.ClickMembership.filter({ user_id: me.id }, { limit: 200 }).catch(() => ({ items: [] }));

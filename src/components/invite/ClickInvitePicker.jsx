@@ -4,6 +4,7 @@ import { Image } from "@/components/ui/image";
 import { Input } from "@/components/ui/input";
 import { X, Search, Check, Loader2, Lock, Send, Users } from "lucide-react";
 import { matchesName } from "@/lib/nameMatch";
+import { searchUsers } from "@/lib/users";
 
 const FB = "#1877f2";
 const TABS = [
@@ -78,11 +79,9 @@ export default function ClickInvitePicker({ onSend, onClose }) {
     let active = true;
     setSearching(true);
     (async () => {
-      const res = await base44.entities.User
-        .filter({ full_name: { $regex: q, $options: "i" } }, { limit: 30 })
-        .catch(() => ({ items: [] }));
+      const users = await searchUsers(q, { limit: 30, excludeIds: [me?.id] });
       if (active) {
-        setResults(res.items.filter((r) => r.id !== me?.id));
+        setResults(users);
         setSearching(false);
       }
     })();

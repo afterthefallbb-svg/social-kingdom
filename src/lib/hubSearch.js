@@ -1,6 +1,7 @@
 import { base44 } from "@/api/base44Client";
 import moment from "moment";
 import { getCategory } from "@/lib/categories";
+import { searchUsers } from "@/lib/users";
 
 /* Every filter maps to a real, searchable entity in the app. */
 export const SEARCH_FILTERS = [
@@ -50,13 +51,11 @@ async function searchArtists(term, limit) {
   }));
 }
 
-// The User entity rejects regex queries, so people are matched on names here.
+// The User entity only supports list(), so people are matched on names here.
 async function searchPeople(term, limit) {
-  const users = await itemsOf(base44.entities.User.filter({}));
-  const needle = term.toLowerCase();
+  const users = await searchUsers(term, { limit }).catch(() => []);
   return users
-    .filter((u) => u.full_name && u.full_name.toLowerCase().includes(needle))
-    .slice(0, limit)
+    .filter((u) => u.full_name)
     .map((u) => ({
       id: `person-${u.id}`,
       kind: "Person",

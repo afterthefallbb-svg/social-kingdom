@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Search, Plus, X } from "lucide-react";
 import { GROUP_CATEGORIES } from "@/lib/groupCategories";
+import { NEON } from "@/lib/neonControls";
 
 const FB = "#1877f2";
 
@@ -61,13 +62,18 @@ export default function Groups() {
               setOpenCat(c);
               setSubQuery("");
             }}
-            className="flex items-center justify-between rounded-xl border border-gray-200 px-3 py-3.5 text-left hover:bg-gray-50"
+            className="flex items-center justify-between rounded-xl border px-3 py-3.5 text-left shadow-[0_2px_10px_rgba(26,115,255,0.18)]"
+            style={{
+              background: "linear-gradient(155deg, #eaf4ff 0%, #cfe4ff 100%)",
+              borderColor: NEON.chip.borderColor,
+              color: NEON.chip.color,
+            }}
           >
             <span className="flex items-center gap-2 min-w-0">
               <span className="text-xl shrink-0">{c.emoji}</span>
-              <span className="text-sm font-semibold text-gray-800 truncate">{c.label}</span>
+              <span className="text-sm font-semibold truncate">{c.label}</span>
             </span>
-            <ChevronRight size={18} className="text-gray-400 shrink-0" />
+            <ChevronRight size={18} className="shrink-0" style={{ color: NEON.solid }} />
           </button>
         ))}
         {filtered.length === 0 && (
@@ -103,10 +109,10 @@ export default function Groups() {
                 <button
                   key={s}
                   onClick={() => navigate(`/groups/${openCat.id}?sub=${encodeURIComponent(s)}`)}
-                  className="flex items-center justify-between w-full px-3 py-3 rounded-lg hover:bg-gray-50 text-left"
+                  className="flex items-center justify-between w-full px-3 py-3 rounded-lg hover:bg-[#e6f2ff] text-left"
                 >
-                  <span className="text-sm font-medium text-gray-800">{s}</span>
-                  <ChevronRight size={16} className="text-gray-400" />
+                  <span className="text-sm font-medium" style={{ color: NEON.chip.color }}>{s}</span>
+                  <ChevronRight size={16} style={{ color: NEON.solid }} />
                 </button>
               ))}
               {subs.length === 0 && (

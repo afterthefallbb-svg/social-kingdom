@@ -58,7 +58,7 @@ export default function MessageSettings({ me, onClose, onSaved }) {
             <Switch
               checked={showOnline}
               onCheckedChange={setShowOnline}
-              className="data-[state=unchecked]:bg-[#dcebff] data-[state=unchecked]:border-[#7cc4ff]"
+              className="data-[state=unchecked]:bg-[#dcecff] data-[state=unchecked]:border-[#1a73ff] data-[state=checked]:shadow-[0_2px_10px_rgba(26,115,255,0.35)]"
             />
           </div>
 

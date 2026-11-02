@@ -220,7 +220,11 @@ export default function InvitePicker({ onChange }) {
                   type="button"
                   onClick={() => toggleUser(f.friend_id, f.friend_name)}
                   className="w-full flex items-center gap-3 p-2 rounded-lg border text-left"
-                  style={{ borderColor: on ? FB : "#f1f5f9", background: on ? "#eef4ff" : "#fff" }}
+                  style={{
+                    borderColor: on ? NEON.solid : "#9cc7ff",
+                    background: on ? NEON.chip.background : "#f7fbff",
+                    boxShadow: on ? "0 2px 10px rgba(26,115,255,0.25)" : "none",
+                  }}
                 >
                   <span className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-sm font-bold shrink-0">
                     {f.friend_avatar ? <Image src={f.friend_avatar} fittingType="fill" className="w-full h-full" /> : initial(f.friend_name)}
@@ -246,7 +250,11 @@ export default function InvitePicker({ onChange }) {
                   type="button"
                   onClick={() => toggleClick(c.id)}
                   className="w-full flex items-center gap-3 p-2 rounded-lg border text-left"
-                  style={{ borderColor: on ? FB : "#f1f5f9", background: on ? "#eef4ff" : "#fff" }}
+                  style={{
+                    borderColor: on ? NEON.solid : "#9cc7ff",
+                    background: on ? NEON.chip.background : "#f7fbff",
+                    boxShadow: on ? "0 2px 10px rgba(26,115,255,0.25)" : "none",
+                  }}
                 >
                   <span className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-sm font-bold shrink-0">
                     {c.avatar_url ? <Image src={c.avatar_url} fittingType="fill" className="w-full h-full" /> : initial(c.name)}
@@ -278,7 +286,11 @@ export default function InvitePicker({ onChange }) {
                   type="button"
                   onClick={() => toggleEvent(ev.id)}
                   className="w-full flex items-center gap-3 p-2 rounded-lg border text-left"
-                  style={{ borderColor: on ? FB : "#f1f5f9", background: on ? "#eef4ff" : "#fff" }}
+                  style={{
+                    borderColor: on ? NEON.solid : "#9cc7ff",
+                    background: on ? NEON.chip.background : "#f7fbff",
+                    boxShadow: on ? "0 2px 10px rgba(26,115,255,0.25)" : "none",
+                  }}
                 >
                   <span className="w-9 h-9 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center text-lg shrink-0">
                     {ev.image_url ? <Image src={ev.image_url} fittingType="fill" className="w-full h-full" /> : cat.emoji}
@@ -307,7 +319,11 @@ export default function InvitePicker({ onChange }) {
               const allowed = canInvite(u);
               const on = selUsers.has(u.id);
               return (
-                <div key={u.id} className="flex items-center gap-3 p-2 rounded-lg border" style={{ borderColor: on ? FB : "#f1f5f9", background: on ? "#eef4ff" : "#fff" }}>
+                <div key={u.id} className="flex items-center gap-3 p-2 rounded-lg border" style={{
+                    borderColor: on ? NEON.solid : "#9cc7ff",
+                    background: on ? NEON.chip.background : "#f7fbff",
+                    boxShadow: on ? "0 2px 10px rgba(26,115,255,0.25)" : "none",
+                  }}>
                   <span className="w-9 h-9 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center text-sm font-bold shrink-0">
                     {u.avatar_url ? <Image src={u.avatar_url} fittingType="fill" className="w-full h-full" /> : initial(u.full_name)}
                   </span>

@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
+import CityField from "@/components/profile/CityField";
 import AvatarCropDialog from "@/components/profile/AvatarCropDialog";
 import { checkProfilePhoto } from "@/lib/faceCheck";
 
@@ -69,7 +70,7 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
       onClick={onClose}
     >
       <div
-        className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto"
+        className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto pb-24 sm:pb-0"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white" style={{ borderColor: "#e5e7eb" }}>
@@ -85,7 +86,9 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
           </div>
           <div>
             <label className="text-sm font-semibold text-gray-700">Location</label>
-            <Input value={location} onChange={(e) => setLocation(e.target.value)} className="mt-1.5" placeholder="City, State" />
+            <div className="mt-1.5">
+              <CityField value={location} onChange={setLocation} placeholder="City, State" />
+            </div>
           </div>
           <div>
             <label className="text-sm font-semibold text-gray-700">Avatar Image URL</label>

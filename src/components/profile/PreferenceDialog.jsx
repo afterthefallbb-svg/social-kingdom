@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import CityField from "@/components/profile/CityField";
 
 const FB = "#1877f2";
 const TEXT_FIELDS = ["bio", "job", "birthday", "location"];
@@ -12,6 +14,7 @@ const toArray = (s) => s.split(",").map((x) => x.trim()).filter(Boolean);
 
 export default function PreferenceDialog({ field, label, placeholder, me, onClose, onSaved }) {
   const isText = TEXT_FIELDS.includes(field);
+  const isCity = field === "location";
   const [value, setValue] = useState(
     isText ? me?.[field] || "" : (me?.[field] || []).join(", ")
   );
@@ -32,13 +35,14 @@ export default function PreferenceDialog({ field, label, placeholder, me, onClos
     }
   }
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[700] flex items-end sm:items-center justify-center bg-black/40"
+      className="fixed inset-0 flex items-end sm:items-center justify-center bg-black/40"
+      style={{ zIndex: 2147483100, paddingBottom: "env(safe-area-inset-bottom)" }}
       onClick={onClose}
     >
       <div
-        className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl"
+        className="bg-white w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl max-h-[85vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: "#e5e7eb" }}>
@@ -47,30 +51,38 @@ export default function PreferenceDialog({ field, label, placeholder, me, onClos
             <X size={20} className="text-gray-500" />
           </button>
         </div>
-        <div className="p-4">
-          <Textarea
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            rows={3}
-            autoFocus
-            placeholder={placeholder}
-          />
+        <div className="p-4 overflow-y-auto">
+          {isCity ? (
+            <>
+              <CityField value={value} onChange={setValue} placeholder={placeholder} />
+              <p className="text-xs text-gray-400 mt-1.5">Pick your city from the list so it's spelled correctly.</p>
+            </>
+          ) : (
+            <Textarea
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              rows={3}
+              autoFocus
+              placeholder={placeholder}
+            />
+          )}
           {!isText && <p className="text-xs text-gray-400 mt-1.5">Separate each with a comma.</p>}
-          <div className="flex gap-2 mt-3">
-            <Button variant="outline" className="flex-1" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button
-              className="flex-1 text-white"
-              style={{ background: FB }}
-              disabled={saving}
-              onClick={save}
-            >
-              {saving ? "Saving…" : "Save"}
-            </Button>
-          </div>
+        </div>
+        <div className="flex gap-2 p-4 border-t bg-white" style={{ borderColor: "#e5e7eb" }}>
+          <Button variant="outline" className="flex-1" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            className="flex-1 text-white"
+            style={{ background: FB }}
+            disabled={saving}
+            onClick={save}
+          >
+            {saving ? "Saving…" : "Save"}
+          </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

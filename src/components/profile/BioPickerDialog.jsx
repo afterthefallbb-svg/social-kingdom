@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import { X, Search, Check, Plus } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
@@ -41,9 +42,10 @@ export default function BioPickerDialog({ field, label, placeholder, me, onClose
     }
   }
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[700] flex items-end sm:items-center justify-center bg-black/40"
+      className="fixed inset-0 flex items-end sm:items-center justify-center bg-black/40"
+      style={{ zIndex: 2147483100, paddingBottom: "env(safe-area-inset-bottom)" }}
       onClick={onClose}
     >
       <div
@@ -128,6 +130,7 @@ export default function BioPickerDialog({ field, label, placeholder, me, onClose
           </Button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

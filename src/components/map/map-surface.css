@@ -3,17 +3,64 @@
 .sk-map .leaflet-container { background: var(--map-day-ground); }
 .sk-map .sk-street-tiles { filter: none; }
 .sk-map .sk-road-tiles { pointer-events: none; }
+/* Neon glass chips that read over the daylight basemap. */
 .sk-map .sk-cat {
-  background: var(--map-day-surface); border-color: var(--map-day-border); color: var(--map-day-text);
-  box-shadow: 0 2px 6px rgb(5 11 36 / .12);
-  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+  --cat-a: 186 100% 76%;
+  --cat-b: 221 100% 62%;
+  --cat-c: 316 100% 70%;
+  position: relative;
+  isolation: isolate;
+  border-color: transparent;
+  color: rgb(234 243 255);
+  background:
+    radial-gradient(ellipse 92% 76% at 50% -12%, hsl(var(--cat-b) / .58), transparent 72%),
+    radial-gradient(ellipse 84% 62% at 50% 116%, hsl(var(--cat-a) / .3), transparent 74%),
+    linear-gradient(170deg, rgb(13 33 80 / .94), rgb(4 11 34 / .94));
+  box-shadow:
+    inset 0 1px 0 rgb(234 243 255 / .34),
+    inset 0 0 14px hsl(var(--cat-b) / .34),
+    0 0 6px hsl(var(--cat-a) / .5),
+    0 0 14px hsl(var(--cat-b) / .34),
+    0 3px 9px rgb(5 11 36 / .4);
+  transition: color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+.sk-map .sk-cat::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 6% 0%, rgb(255 255 255 / .95), transparent 36%),
+    radial-gradient(circle at 96% 100%, hsl(var(--cat-c) / .95), transparent 38%),
+    radial-gradient(circle at 92% 4%, hsl(var(--cat-a) / .9), transparent 32%),
+    linear-gradient(135deg, hsl(var(--cat-a)), hsl(var(--cat-b)) 38%, hsl(var(--cat-c)) 72%, hsl(var(--cat-a)));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
 }
 .sk-map .sk-cat-icon, .sk-map .sk-cat-on .sk-cat-icon { filter: none; }
 .sk-map .sk-cat-on {
-  background: var(--map-day-active);
-  border-color: var(--map-road-major);
-  box-shadow: 0 2px 6px rgb(5 11 36 / .12);
+  color: rgb(255 255 255);
+  background:
+    radial-gradient(ellipse 96% 80% at 50% -14%, hsl(var(--cat-b) / .88), transparent 70%),
+    radial-gradient(ellipse 86% 66% at 50% 116%, hsl(var(--cat-a) / .5), transparent 72%),
+    linear-gradient(170deg, hsl(var(--cat-b) / .62), rgb(5 17 46 / .94) 66%, rgb(3 9 28 / .94));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .72),
+    inset 0 0 16px hsl(var(--cat-a) / .36),
+    0 0 8px hsl(var(--cat-a) / .85),
+    0 0 20px hsl(var(--cat-b) / .6),
+    0 0 32px hsl(var(--cat-c) / .3);
+  text-shadow: 0 0 10px hsl(var(--cat-b) / .7);
 }
+.sk-map .sk-cat-on::before { padding: 2px; }
+.sk-map .sk-cat[data-tone="ice"] { --cat-a: 210 100% 96%; --cat-b: 190 100% 72%; --cat-c: 221 100% 64%; }
+.sk-map .sk-cat[data-tone="violet"] { --cat-a: 288 100% 86%; --cat-b: 274 100% 62%; --cat-c: 316 100% 72%; }
+.sk-map .sk-cat[data-tone="gold"] { --cat-a: 47 100% 88%; --cat-b: 41 96% 58%; --cat-c: 316 100% 68%; }
+.sk-map .sk-cat[data-tone="rose"] { --cat-a: 316 100% 84%; --cat-b: 330 100% 60%; --cat-c: 262 100% 66%; }
 .sk-map .sk-map-panel-head { align-self: flex-start; padding: 5px 9px; margin-bottom: 5px; border-radius: 8px; background: var(--map-day-surface); box-shadow: 0 2px 6px rgb(5 11 36 / .1); }
 .sk-map .sk-map-panel-head h2 { font-family: var(--font-heading); color: var(--map-day-text); text-shadow: none; }
 .sk-map .sk-map-panel-count { color: var(--map-road-major); }

@@ -17,6 +17,8 @@
   height: auto;
   aspect-ratio: 100 / 220;
   overflow: visible;
+  transform: rotate(var(--bolt-rotate, 0deg));
+  transform-origin: 50% 50%;
   opacity: .62;
   animation: kingdom-bolt-flicker 10s ease-in-out infinite;
 }

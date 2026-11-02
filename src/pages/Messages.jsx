@@ -15,10 +15,10 @@ import GlassToggle from "@/components/theme/GlassToggle";
 
 const FB = "#1877f2";
 const DIRECTIONS = [
-  { key: "incoming", label: "Incoming", tone: "ice" },
-  { key: "sent", label: "Sent", tone: "blue" },
-  { key: "drafts", label: "Drafts", tone: "violet" },
-  { key: "archived", label: "Archived", tone: "gold" },
+  { key: "incoming", label: "Incoming" },
+  { key: "sent", label: "Sent" },
+  { key: "drafts", label: "Drafts" },
+  { key: "archived", label: "Archived" },
 ];
 
 export default function Messages() {
@@ -156,7 +156,6 @@ export default function Messages() {
               {DIRECTIONS.map((d) => (
                 <GlassToggle
                   key={d.key}
-                  tone={d.tone}
                   selected={direction === d.key}
                   onClick={() => setDirection(d.key)}
                   className="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"

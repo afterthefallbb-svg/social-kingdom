@@ -1,12 +1,11 @@
-/* Opted-in controls wear the neon-banner look: deep translucent sapphire glass
-   under a thin, polychromatic electric rim with a bright bloom. The data-tone
-   attribute shifts the rim, so side-by-side sections never share one shade. */
+/* Opted-in controls wear the neon-banner look in a single electric blue: a lit
+   sapphire interior under a thin, brilliant rim with a bright bloom. */
 .sk-theme .sk-glass-control {
-  --glass-a: 186 100% 76%;
-  --glass-b: 221 100% 62%;
-  --glass-c: 316 100% 70%;
-  --glass-deep: 228 100% 9%;
-  --glass-mid: 219 96% 21%;
+  --neon-a: 193 100% 84%;
+  --neon-b: 214 100% 66%;
+  --neon-c: 205 100% 76%;
+  --glass-top: 214 100% 52%;
+  --glass-bottom: 217 100% 33%;
   position: relative;
   isolation: isolate;
   display: inline-flex;
@@ -14,17 +13,17 @@
   justify-content: center;
   flex-shrink: 0;
   border: 1px solid transparent;
-  color: hsl(var(--kingdom-text) / .94);
+  color: hsl(0 0% 100% / .96);
   background:
-    radial-gradient(ellipse 92% 74% at 50% -12%, hsl(var(--glass-b) / .5), transparent 72%),
-    radial-gradient(ellipse 84% 62% at 50% 116%, hsl(var(--glass-a) / .28), transparent 74%),
-    linear-gradient(170deg, hsl(var(--glass-mid) / .74), hsl(var(--glass-deep) / .72));
+    radial-gradient(ellipse 92% 78% at 50% -12%, hsl(var(--neon-b) / .62), transparent 74%),
+    radial-gradient(ellipse 84% 64% at 50% 116%, hsl(var(--neon-a) / .32), transparent 74%),
+    linear-gradient(170deg, hsl(var(--glass-top) / .8), hsl(var(--glass-bottom) / .84));
   box-shadow:
-    inset 0 1px 0 hsl(var(--kingdom-text) / .38),
-    inset 0 0 16px hsl(var(--glass-b) / .3),
-    0 0 6px hsl(var(--glass-a) / .5),
-    0 0 16px hsl(var(--glass-b) / .32),
-    0 4px 10px hsl(var(--kingdom-ink) / .38);
+    inset 0 1px 0 hsl(0 0% 100% / .48),
+    inset 0 0 16px hsl(var(--neon-b) / .44),
+    0 0 7px hsl(var(--neon-a) / .55),
+    0 0 16px hsl(var(--neon-b) / .38),
+    0 4px 10px hsl(var(--kingdom-ink) / .4);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transition: color .18s, box-shadow .18s, background-color .18s;
@@ -37,11 +36,10 @@
   border-radius: inherit;
   pointer-events: none;
   background:
-    radial-gradient(circle at 6% 0%, hsl(0 0% 100% / .95), transparent 36%),
-    radial-gradient(circle at 96% 100%, hsl(var(--glass-c) / .95), transparent 38%),
-    radial-gradient(circle at 92% 4%, hsl(var(--glass-a) / .9), transparent 32%),
-    radial-gradient(circle at 14% 100%, hsl(var(--glass-a) / .6), transparent 30%),
-    linear-gradient(135deg, hsl(var(--glass-a)), hsl(var(--glass-b)) 38%, hsl(var(--glass-c)) 72%, hsl(var(--glass-a)));
+    radial-gradient(circle at 8% 0%, hsl(0 0% 100% / .95), transparent 38%),
+    radial-gradient(circle at 92% 100%, hsl(var(--neon-a) / .92), transparent 36%),
+    radial-gradient(circle at 92% 4%, hsl(var(--neon-c) / .8), transparent 32%),
+    linear-gradient(135deg, hsl(var(--neon-a)), hsl(var(--neon-b)) 50%, hsl(var(--neon-a)));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -54,8 +52,8 @@
   border-radius: inherit;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 42% 16% at 30% 1%, hsl(var(--kingdom-text) / .3), transparent 72%),
-    linear-gradient(180deg, hsl(var(--kingdom-text) / .07), transparent 34%, transparent 78%, hsl(var(--glass-a) / .1));
+    radial-gradient(ellipse 42% 18% at 30% 1%, hsl(0 0% 100% / .3), transparent 72%),
+    linear-gradient(180deg, hsl(0 0% 100% / .08), transparent 34%, transparent 78%, hsl(var(--neon-a) / .12));
 }
 .sk-glass-control-content {
   position: relative;
@@ -69,86 +67,63 @@
 .sk-theme .sk-glass-control[data-selected="true"] {
   color: hsl(0 0% 100%);
   background:
-    radial-gradient(ellipse 96% 80% at 50% -14%, hsl(var(--glass-b) / .82), transparent 70%),
-    radial-gradient(ellipse 86% 66% at 50% 116%, hsl(var(--glass-a) / .48), transparent 72%),
-    linear-gradient(170deg, hsl(var(--glass-b) / .5), hsl(var(--glass-mid) / .78) 62%, hsl(var(--glass-deep) / .8));
+    radial-gradient(ellipse 96% 82% at 50% -14%, hsl(var(--neon-b) / .9), transparent 72%),
+    radial-gradient(ellipse 86% 68% at 50% 116%, hsl(var(--neon-a) / .52), transparent 72%),
+    linear-gradient(170deg, hsl(214 100% 62% / .88), hsl(216 100% 40% / .9));
   box-shadow:
-    inset 0 1px 0 hsl(0 0% 100% / .74),
-    inset 0 0 18px hsl(var(--glass-a) / .34),
-    0 0 8px hsl(var(--glass-a) / .85),
-    0 0 22px hsl(var(--glass-b) / .62),
-    0 0 36px hsl(var(--glass-c) / .3);
-  text-shadow: 0 0 10px hsl(var(--glass-b) / .7);
+    inset 0 1px 0 hsl(0 0% 100% / .8),
+    inset 0 0 20px hsl(var(--neon-a) / .4),
+    0 0 10px hsl(var(--neon-a) / .9),
+    0 0 24px hsl(var(--neon-b) / .65),
+    0 0 38px hsl(var(--neon-b) / .3);
+  text-shadow: 0 0 10px hsl(var(--neon-b) / .7);
 }
 .sk-glass-control[data-selected="true"]::before {
   padding: 2px;
   background:
-    radial-gradient(circle at 4% 0%, hsl(0 0% 100%), transparent 34%),
-    radial-gradient(circle at 98% 100%, hsl(var(--glass-c)), transparent 36%),
-    radial-gradient(circle at 94% 2%, hsl(var(--glass-a)), transparent 30%),
-    linear-gradient(135deg, hsl(var(--glass-a)), hsl(var(--glass-b)) 34%, hsl(var(--glass-c)) 70%, hsl(var(--glass-a)));
+    radial-gradient(circle at 6% 0%, hsl(0 0% 100%), transparent 36%),
+    radial-gradient(circle at 94% 100%, hsl(var(--neon-a)), transparent 38%),
+    linear-gradient(135deg, hsl(190 100% 92%), hsl(var(--neon-b)) 54%, hsl(var(--neon-a)));
 }
 .sk-glass-control[data-selected="true"]::after {
   background:
-    radial-gradient(ellipse 48% 18% at 28% 1%, hsl(0 0% 100% / .46), transparent 72%),
-    linear-gradient(180deg, hsl(0 0% 100% / .1), transparent 36%, transparent 74%, hsl(var(--glass-a) / .16));
-}
-
-/* Tone shifts — icy, royal, violet and champagne rims. */
-.sk-glass-control[data-tone="ice"] {
-  --glass-a: 210 100% 96%;
-  --glass-b: 190 100% 72%;
-  --glass-c: 221 100% 64%;
-}
-.sk-glass-control[data-tone="violet"] {
-  --glass-a: 288 100% 86%;
-  --glass-b: 274 100% 62%;
-  --glass-c: 316 100% 72%;
-}
-.sk-glass-control[data-tone="gold"] {
-  --glass-a: 47 100% 88%;
-  --glass-b: 41 96% 58%;
-  --glass-c: 316 100% 68%;
-}
-.sk-glass-control[data-tone="rose"] {
-  --glass-a: 316 100% 84%;
-  --glass-b: 330 100% 60%;
-  --glass-c: 262 100% 66%;
+    radial-gradient(ellipse 48% 20% at 28% 1%, hsl(0 0% 100% / .48), transparent 72%),
+    linear-gradient(180deg, hsl(0 0% 100% / .12), transparent 36%, transparent 74%, hsl(var(--neon-a) / .18));
 }
 
 .sk-theme .sk-glass-control:focus-visible {
-  outline: 2px solid hsl(var(--glass-a));
+  outline: 2px solid hsl(var(--neon-a));
   outline-offset: 3px;
 }
 @media (hover: hover) {
   .sk-theme .sk-glass-control:hover {
     color: hsl(0 0% 100%);
     box-shadow:
-      inset 0 1px 0 hsl(0 0% 100% / .6),
-      inset 0 0 18px hsl(var(--glass-b) / .42),
-      0 0 8px hsl(var(--glass-a) / .7),
-      0 0 20px hsl(var(--glass-b) / .5);
+      inset 0 1px 0 hsl(0 0% 100% / .62),
+      inset 0 0 18px hsl(var(--neon-b) / .5),
+      0 0 9px hsl(var(--neon-a) / .75),
+      0 0 20px hsl(var(--neon-b) / .55);
   }
 }
 
 /* The settings switch takes the same electric rim. */
 .sk-theme [role="switch"].sk-glass-switch {
-  border: 1px solid hsl(var(--kingdom-cyan) / .5) !important;
+  border: 1px solid hsl(var(--neon-a) / .55) !important;
   background:
-    radial-gradient(ellipse at 50% 0%, hsl(var(--kingdom-blue) / .4), transparent 74%),
-    linear-gradient(180deg, hsl(var(--kingdom-surface) / .5), hsl(var(--kingdom-ink) / .5)) !important;
-  box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .4), 0 0 8px hsl(var(--kingdom-cyan) / .35);
+    radial-gradient(ellipse at 50% 0%, hsl(var(--neon-b) / .55), transparent 74%),
+    linear-gradient(180deg, hsl(214 100% 46% / .8), hsl(217 100% 30% / .85)) !important;
+  box-shadow: inset 0 1px 0 hsl(0 0% 100% / .5), 0 0 9px hsl(var(--neon-b) / .45);
 }
 .sk-theme [role="switch"].sk-glass-switch[data-state="checked"] {
-  border-color: hsl(var(--kingdom-cyan)) !important;
+  border-color: hsl(var(--neon-a)) !important;
   background:
-    radial-gradient(ellipse at 50% 0%, hsl(var(--kingdom-cyan) / .6), transparent 74%),
-    linear-gradient(180deg, hsl(var(--kingdom-blue) / .9), hsl(var(--kingdom-ink) / .9)) !important;
-  box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .7), 0 0 12px hsl(var(--kingdom-cyan) / .7);
+    radial-gradient(ellipse at 50% 0%, hsl(var(--neon-a) / .7), transparent 74%),
+    linear-gradient(180deg, hsl(214 100% 60%), hsl(217 100% 40%)) !important;
+  box-shadow: inset 0 1px 0 hsl(0 0% 100% / .75), 0 0 13px hsl(var(--neon-b) / .75);
 }
 .sk-theme [role="switch"].sk-glass-switch > span {
   background: linear-gradient(160deg, hsl(0 0% 100%), hsl(var(--kingdom-muted))) !important;
-  box-shadow: 0 1px 3px hsl(var(--kingdom-ink) / .55), 0 0 6px hsl(var(--kingdom-cyan) / .55);
+  box-shadow: 0 1px 3px hsl(var(--kingdom-ink) / .55), 0 0 6px hsl(var(--neon-a) / .6);
 }
 @media (prefers-reduced-motion: reduce) {
   .sk-theme .sk-glass-control { transition: none; }

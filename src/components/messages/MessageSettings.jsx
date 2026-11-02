@@ -69,7 +69,6 @@ export default function MessageSettings({ me, onClose, onSaved }) {
               {EMOJIS.map((e) => (
                 <GlassToggle
                   key={e}
-                  tone="gold"
                   selected={emoji === e}
                   onClick={() => setEmoji(e)}
                   className="w-10 h-10 rounded-full text-xl"

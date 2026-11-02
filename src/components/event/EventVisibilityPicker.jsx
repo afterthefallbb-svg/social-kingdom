@@ -7,10 +7,10 @@ export default function EventVisibilityPicker({ visibility, onChange }) {
     <div>
       <label className="text-sm font-semibold text-kingdom-muted">Visibility</label>
       <div className="grid grid-cols-2 gap-2 mt-1.5">
-        <GlassToggle tone="ice" selected={visibility === "public"} onClick={() => onChange("public")} className="gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold">
+        <GlassToggle selected={visibility === "public"} onClick={() => onChange("public")} className="gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold">
           <Globe size={16} /> Public
         </GlassToggle>
-        <GlassToggle tone="violet" selected={visibility === "personal"} onClick={() => onChange("personal")} className="gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold">
+        <GlassToggle selected={visibility === "personal"} onClick={() => onChange("personal")} className="gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold">
           <Lock size={16} /> Personal
         </GlassToggle>
       </div>

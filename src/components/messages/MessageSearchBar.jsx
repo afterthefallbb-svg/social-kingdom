@@ -27,7 +27,6 @@ export default function MessageSearchBar({ query, setQuery, scope, setScope, fil
           />
         </div>
         <GlassToggle
-          tone="ice"
           onClick={() => setOpen((o) => !o)}
           selected={open}
           aria-expanded={open}
@@ -43,7 +42,6 @@ export default function MessageSearchBar({ query, setQuery, scope, setScope, fil
         {SCOPES.map((s) => (
           <GlassToggle
             key={s.id}
-            tone="violet"
             selected={scope === s.id}
             onClick={() => setScope(s.id)}
             className="px-3 py-1 rounded-full text-xs font-semibold"

@@ -155,7 +155,7 @@ export default function Profile() {
           onMessages={() => navigate("/messages")}
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="space-y-3">
           <div className="space-y-3">
             <EventsSection events={upcoming} onSelect={(e) => navigate(`/event/${e.id}`)} />
             <EventsAttendedSection events={past} onSelect={(e) => navigate(`/event/${e.id}`)} />

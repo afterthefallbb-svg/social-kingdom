@@ -1,0 +1,9 @@
+/* The hub's own card track, reused on profile rows so the cards are byte-for-byte
+   the same: container queries size them exactly as on the social hub. */
+.profile-card-track { container-type: inline-size; }
+.profile-card-track .kingdom-track {
+  grid-auto-columns: calc((100% - 3.6cqw) / 3);
+  text-shadow: none;
+  padding-bottom: 2px;
+}
+.profile-card-track .kingdom-card { cursor: pointer; }

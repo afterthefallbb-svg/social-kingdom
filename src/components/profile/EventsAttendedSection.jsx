@@ -1,40 +1,19 @@
-import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
-import ProfileEventCard from "@/components/profile/ProfileEventCard";
-
-const FB = "#1877f2";
+import React from "react";
+import moment from "moment";
+import { getCategory } from "@/lib/categories";
+import ProfileCardRow from "@/components/profile/ProfileCardRow";
 
 export default function EventsAttendedSection({ events, onSelect }) {
-  const [open, setOpen] = useState(true);
+  const items = events.map((e) => ({
+    id: e.id,
+    label: e.title,
+    image: e.image_url,
+    emoji: getCategory(e.category).emoji,
+    meta: e.start_time ? `Went · ${moment(e.start_time).format("MMM D")}` : "Attended",
+    onClick: () => onSelect(e)
+  }));
 
   return (
-    <div className="p-4" style={{ textShadow: "0 1px 4px rgba(255,255,255,0.95)" }}>
-      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center justify-between">
-        <span className="font-bold text-gray-900 flex items-center gap-2">
-          <span
-            className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs"
-            style={{ background: FB }}
-          >
-            ✓
-          </span>
-          Events Attended
-        </span>
-        <ChevronDown size={18} className={`text-gray-400 transition ${open ? "rotate-180" : ""}`} />
-      </button>
-
-      {open && (
-        <div className="mt-3">
-          {events.length === 0 ? (
-            <p className="text-xs text-gray-400">No past events yet.</p>
-          ) : (
-            <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1">
-              {events.map((e) => (
-                <ProfileEventCard key={e.id} event={e} onSelect={onSelect} />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+    <ProfileCardRow title="Events Attended" badge="✓" items={items} emptyText="No past events yet." />
   );
 }

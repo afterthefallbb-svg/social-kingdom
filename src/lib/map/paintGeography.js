@@ -1,5 +1,4 @@
 import { paintRoads } from '@/lib/map/mapRoads';
-import { paintLabels } from '@/lib/map/mapLabels';
 
 function visible(properties, zoom) {
   const level = (n) => n > 24 ? n / 10 : n;
@@ -70,9 +69,8 @@ export function paintGeography(canvas, source, coords, palette, roadsOnly = fals
     paintLand(ctx, features, palette); paintWaterways(ctx, features, palette);
     return;
   }
-  // Transparent roads and labels sit ABOVE hillshade, preserving their exact colors.
+  // Only road accents: the standard street tiles supply all geography and labels.
   for (const layer of ['Road tunnel', 'Road', 'Road bridge']) {
     paintRoads(ctx, features.filter((f) => f.type === 2 && f.layer === layer), coords.z, palette);
   }
-  paintLabels(ctx, features, coords.z, palette, size);
 }

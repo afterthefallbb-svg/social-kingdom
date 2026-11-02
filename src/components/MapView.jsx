@@ -23,7 +23,7 @@ export default function MapView({ events = [], activeId, onSelect, mode = "event
       zoomControl={false}
       attributionControl={false}
       scrollWheelZoom
-      style={{ position: "absolute", inset: 0, background: "var(--map-midnight)", zIndex: 0 }}
+      style={{ position: "absolute", inset: 0, background: "var(--map-day-ground)", zIndex: 0 }}
     >
       {isEvents ? (
         <KingdomMapTiles />

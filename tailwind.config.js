@@ -12,6 +12,14 @@ module.exports = {
   		},
   		colors: {
         map: {
+          'day-ground': 'var(--map-day-ground)',
+          'day-surface': 'var(--map-day-surface)',
+          'day-text': 'var(--map-day-text)',
+          'day-muted': 'var(--map-day-muted)',
+          'day-border': 'var(--map-day-border)',
+          'day-active': 'var(--map-day-active)',
+          'road-major': 'var(--map-road-major)',
+          'road-arterial': 'var(--map-road-arterial)',
           midnight: 'var(--map-midnight)',
           land: 'var(--map-land)',
           'road-highlight': 'var(--map-road-highlight)',

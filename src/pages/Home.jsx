@@ -1,12 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LocateFixed, Search } from "lucide-react";
+import { LocateFixed } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
-import MapHeader from "@/components/map/MapHeader";
-import MapCategoryBar from "@/components/map/MapCategoryBar";
+import MapToolbar from "@/components/map/MapToolbar";
 import EventPanel from "@/components/map/EventPanel";
-import { Image } from "@/components/ui/image";
 import { getUserLocation } from "@/lib/localSeed";
 import "@/components/map/map-kingdom.css";
 import "@/components/map/map-surface.css";
@@ -88,26 +86,12 @@ export default function Home() {
         center={center}
       />
 
-      <div className="sk-map-haze" aria-hidden="true" />
-      <Image
-        src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/180731d3b_kingdom-precise-lightning-original-visible.png"
-        alt=""
-        aria-hidden="true"
-        className="sk-map-lightning"
+      <MapToolbar
+        query={query}
+        onQueryChange={setQuery}
+        activeCategory={activeCat}
+        onCategorySelect={setActiveCat}
       />
-
-      <MapHeader />
-      <MapCategoryBar active={activeCat} onSelect={setActiveCat} />
-
-      <div className="sk-map-search">
-        <Search />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={mode === "events" ? "Search Events..." : "Search places"}
-          aria-label="Search events"
-        />
-      </div>
 
       <button
         onClick={recenterMe}

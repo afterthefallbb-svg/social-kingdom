@@ -6,10 +6,10 @@ const ARCGIS_CLASSES = {
   0: 'motorway', 1: 'trunk', 2: 'trunk', 3: 'primary', 4: 'primary',
   5: 'secondary', 6: 'tertiary', 7: 'street', 8: 'service', 10: 'minor',
 };
+// Accent only through-roads; local streets keep the standard basemap styling.
 const ROAD_GROUPS = {
-  motorway: 'gold', trunk: 'gold', primary: 'gold',
-  secondary: 'blue', tertiary: 'blue',
-  street: 'local', minor: 'local', service: 'local',
+  motorway: 'major', trunk: 'major',
+  primary: 'arterial', secondary: 'arterial',
 };
 export function roadGroup(properties) {
   if (Number(properties.Viz) === 3) return null;
@@ -24,12 +24,9 @@ function interpolate(zoom, stops) {
   }
   return stops[stops.length - 1][1];
 }
-export function luxuryRoadPasses(zoom, palette) {
+export function roadAccentPasses(zoom, palette) {
   return [
-    { group: 'local', color: palette.roadLocal, width: 1.1, opacity: 0.75 },
-    { group: 'blue', color: palette.electric, width: 2.2, opacity: 0.9, blur: 0.5 },
-    { group: 'gold', color: palette.gold, width: interpolate(zoom, [[10, 5], [15, 12], [18, 20]]), opacity: 0.22, blur: 8 },
-    { group: 'gold', color: palette.gold, width: interpolate(zoom, [[10, 1.2], [15, 3], [18, 5]]), opacity: 0.95 },
-    { group: 'gold', color: palette.roadHighlight, width: interpolate(zoom, [[10, 0.4], [15, 1], [18, 1.5]]), opacity: 0.95 },
+    { group: 'arterial', color: palette.roadArterial, width: interpolate(zoom, [[10, 0.7], [15, 1.6], [19, 2.4]]), opacity: 0.5 },
+    { group: 'major', color: palette.roadMajor, width: interpolate(zoom, [[10, 1.2], [15, 2.8], [19, 4]]), opacity: 0.65 },
   ];
 }

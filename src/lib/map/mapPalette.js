@@ -5,6 +5,7 @@ export function readMapPalette(element) {
     midnight: 'midnight', land: 'land', deepBlue: 'deep-blue', royal: 'royal',
     electric: 'electric', ice: 'ice', cyan: 'cyan', gold: 'gold',
     champagne: 'champagne', roadHighlight: 'road-highlight', roadLocal: 'road-local',
+    roadMajor: 'road-major', roadArterial: 'road-arterial',
     darkGold: 'dark-gold', text: 'text',
     muted: 'muted', forest: 'forest', park: 'park',
     building: 'building', urban: 'urban', water: 'water',

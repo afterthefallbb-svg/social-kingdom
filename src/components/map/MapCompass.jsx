@@ -1,24 +1,24 @@
 import React from "react";
 
-/* Familiar map-app compass: a thin ring with four cardinal spokes
-   (north / east / south / west) and a gold north tip. Nothing behind it —
-   the mark floats over the map on its own shadow and glow. */
+/* Familiar map-app compass: a ring with four cardinal ticks radiating
+   outwards (north / east / south / west) — dark enough to sit on a white
+   basemap, with nothing behind it. */
 export default function MapCompass({ locating = false }) {
   return (
     <svg
-      viewBox="0 0 48 48"
+      viewBox="0 0 56 56"
       className={locating ? "sk-compass is-locating" : "sk-compass"}
       aria-hidden="true"
       focusable="false"
     >
-      <circle className="sk-compass-ring" cx="24" cy="24" r="18.5" />
-      <circle className="sk-compass-inner" cx="24" cy="24" r="12.5" />
-      <path className="sk-compass-spoke sk-compass-n" d="M24 7.5v7.5" />
-      <path className="sk-compass-spoke" d="M40.5 24H33" />
-      <path className="sk-compass-spoke" d="M24 40.5V33" />
-      <path className="sk-compass-spoke" d="M7.5 24H15" />
-      <path className="sk-compass-tip" d="M24 2.4l3 4.6h-6z" />
-      <circle className="sk-compass-dot" cx="24" cy="24" r="1.7" />
+      <circle className="sk-compass-ring" cx="28" cy="28" r="17" />
+      <circle className="sk-compass-inner" cx="28" cy="28" r="12.5" />
+      {/* Ticks start on the outside of the ring and point outwards. */}
+      <path className="sk-compass-spoke sk-compass-n" d="M28 9.9V5.4" />
+      <path className="sk-compass-spoke" d="M46.1 28h4.5" />
+      <path className="sk-compass-spoke" d="M28 46.1v4.5" />
+      <path className="sk-compass-spoke" d="M9.9 28H5.4" />
+      <circle className="sk-compass-dot" cx="28" cy="28" r="2" />
     </svg>
   );
 }

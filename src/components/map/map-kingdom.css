@@ -276,23 +276,45 @@
 .sk-map-search input::placeholder { color: hsl(var(--kingdom-muted)); }
 
 /* Recenter */
-/* Compass / locate button — sits clear above the bottom orb navigation. */
+/* Compass / locate — a bare compass mark (ring + four cardinal spokes) that
+   floats over the map on its own shadow. No backdrop, no chrome. */
 .sk-map-locate {
   position: absolute;
-  right: 14px;
-  bottom: calc(env(safe-area-inset-bottom) + 122px);
+  right: 13px;
+  bottom: calc(env(safe-area-inset-bottom) + 108px);
   z-index: 2147483001;
-  width: 46px;
-  height: 46px;
+  width: 50px;
+  height: 50px;
   display: grid;
   place-items: center;
-  border-radius: 999px;
-  border: 1.5px solid hsl(var(--kingdom-gold));
-  background: radial-gradient(circle at 50% 26%, hsl(var(--kingdom-blue) / 0.96), hsl(var(--kingdom-ink)) 80%);
-  color: hsl(var(--kingdom-gold-bright));
-  box-shadow: 0 0 10px hsl(var(--kingdom-gold) / 0.5), 0 5px 14px hsl(var(--kingdom-ink) / 0.5), inset 0 1px 0 hsl(var(--kingdom-text) / 0.35);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.sk-map-locate svg { width: 23px; height: 23px; stroke-width: 2.1; }
+.sk-map-locate .sk-compass {
+  width: 50px;
+  height: 50px;
+  overflow: visible;
+  fill: none;
+  stroke: hsl(var(--kingdom-gold-bright));
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  filter: drop-shadow(0 1px 2px hsl(var(--kingdom-ink) / 0.85)) drop-shadow(0 0 7px hsl(var(--kingdom-gold) / 0.55));
+  transition: filter 160ms ease, transform 160ms ease;
+}
+.sk-map-locate .sk-compass-ring { opacity: 0.95; }
+.sk-map-locate .sk-compass-inner { opacity: 0.26; stroke-width: 1; }
+.sk-map-locate .sk-compass-n { stroke-width: 2.4; }
+.sk-map-locate .sk-compass-tip { fill: hsl(var(--kingdom-gold-bright)); stroke: none; }
+.sk-map-locate .sk-compass-dot { fill: hsl(var(--kingdom-cyan)); stroke: none; }
+.sk-map-locate:active .sk-compass { transform: scale(0.94); }
+.sk-map-locate .sk-compass.is-locating { animation: sk-compass-pulse 900ms ease-in-out infinite; }
+@keyframes sk-compass-pulse {
+  50% { opacity: 0.45; }
+}
 
 /* Map pins */
 .sk-pin-wrap { background: none !important; border: 0 !important; }

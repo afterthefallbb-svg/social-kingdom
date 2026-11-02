@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Compass } from "lucide-react";
+import MapCompass from "@/components/map/MapCompass";
 import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
 import MapToolbar from "@/components/map/MapToolbar";
@@ -105,7 +105,7 @@ export default function Home() {
         aria-label="Center on my location"
         className="sk-map-locate"
       >
-        <Compass className={locating ? "animate-pulse" : undefined} />
+        <MapCompass locating={locating} />
       </button>
 
       <EventPanel

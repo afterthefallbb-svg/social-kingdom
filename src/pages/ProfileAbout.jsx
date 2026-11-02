@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Pencil } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { toast } from "@/components/ui/use-toast";
-import PreferenceDialog from "@/components/profile/PreferenceDialog";
-import BioPickerDialog from "@/components/profile/BioPickerDialog";
 import BioChips from "@/components/profile/BioChips";
 import RelationshipCard from "@/components/profile/RelationshipCard";
-
-const TEXT_FIELDS = ["bio", "job", "birthday", "location"];
+import EditProfileDialog from "@/components/profile/EditProfileDialog";
 
 const FIELDS = [
-  { field: "bio", label: "Bio", emoji: "📝", placeholder: "A short intro about you" },
-  { field: "location", label: "City, State", emoji: "📍", placeholder: "Walla Walla, WA" },
-  { field: "birthday", label: "Birthday", emoji: "🎂", placeholder: "MM/DD/YYYY" },
-  { field: "job", label: "Job", emoji: "💼", placeholder: "Barista at ..." },
-  { field: "professional_interests", label: "Professional Interests", emoji: "📈", placeholder: "Marketing, Startups" },
-  { field: "interests", label: "Interests", emoji: "⭐", placeholder: "Music, Sports, Tech" },
-  { field: "hobbies", label: "Hobbies", emoji: "🎯", placeholder: "Hiking, Gaming, Cooking" },
-  { field: "goals", label: "Goals", emoji: "🏆", placeholder: "Run a 5k, Learn guitar" },
-  { field: "music", label: "Music", emoji: "🎵", placeholder: "Hip-hop, Jazz, Indie" },
-  { field: "family_members", label: "Family Members", emoji: "👪", placeholder: "Sister, Brother, Mom" }
+  { field: "bio", label: "Bio", emoji: "📝" },
+  { field: "location", label: "City, State", emoji: "📍" },
+  { field: "birthday", label: "Birthday", emoji: "🎂" },
+  { field: "job", label: "Job", emoji: "💼" },
+  { field: "professional_interests", label: "Professional Interests", emoji: "📈" },
+  { field: "interests", label: "Interests", emoji: "⭐" },
+  { field: "hobbies", label: "Hobbies", emoji: "🎯" },
+  { field: "goals", label: "Goals", emoji: "🏆" },
+  { field: "music", label: "Music", emoji: "🎵" },
+  { field: "family_members", label: "Family Members", emoji: "👪" }
 ];
 
+// Read-only view. Everything here is edited from Edit Profile, never in place.
 export default function ProfileAbout() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [me, setMe] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [editing, setEditing] = useState(null);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(async (u) => {
@@ -54,73 +51,49 @@ export default function ProfileAbout() {
         <button onClick={() => navigate(back)} aria-label="Back">
           <ArrowLeft size={20} className="text-black" />
         </button>
-        <h1 className="font-bold text-gray-900">About</h1>
+        <h1 className="font-bold text-gray-900 flex-1">About</h1>
+        {isMe && (
+          <button
+            onClick={() => setEditing(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-white"
+            style={{ background: "#1877f2" }}
+          >
+            <Pencil size={13} /> Edit
+          </button>
+        )}
       </div>
 
       <div className="p-3 space-y-2 max-w-2xl mx-auto">
         <RelationshipCard me={me} profileId={id || me?.id} isMe={isMe} />
         {FIELDS.map((f) => {
-          const isText = TEXT_FIELDS.includes(f.field);
           const raw = profile?.[f.field];
-          const has = isText ? !!raw : Array.isArray(raw) && raw.length > 0;
+          const has = Array.isArray(raw) ? raw.length > 0 : !!raw;
           return (
             <div key={f.field} className="bg-white rounded-2xl shadow-sm p-4">
-              {isMe ? (
-                <button onClick={() => setEditing(f)} className="w-full text-left">
-                  <p className="text-sm font-semibold text-gray-800"><span className="mr-1.5">{f.emoji}</span>{f.label}</p>
-                  {has ? (
-                    isText ? (
-                      <p className="text-xs text-gray-500">{raw}</p>
-                    ) : (
-                      <div className="mt-1.5"><BioChips items={raw} /></div>
-                    )
-                  ) : (
-                    <p className="text-xs text-gray-400">{`Add your ${f.label.toLowerCase()}`}</p>
-                  )}
-                </button>
+              <p className="text-sm font-semibold text-gray-800">
+                <span className="mr-1.5">{f.emoji}</span>{f.label}
+              </p>
+              {has ? (
+                Array.isArray(raw) ? (
+                  <div className="mt-1.5"><BioChips items={raw} /></div>
+                ) : (
+                  <p className="text-xs text-gray-500">{raw}</p>
+                )
               ) : (
-                <>
-                  <p className="text-sm font-semibold text-gray-800"><span className="mr-1.5">{f.emoji}</span>{f.label}</p>
-                  {has ? (
-                    isText ? (
-                      <p className="text-xs text-gray-500">{raw}</p>
-                    ) : (
-                      <div className="mt-1.5"><BioChips items={raw} /></div>
-                    )
-                  ) : (
-                    <p className="text-xs text-gray-400">—</p>
-                  )}
-                </>
+                <p className="text-xs text-gray-400">{isMe ? `Add your ${f.label.toLowerCase()} in Edit Profile` : "—"}</p>
               )}
             </div>
           );
         })}
       </div>
 
-      {editing && TEXT_FIELDS.includes(editing.field) && (
-        <PreferenceDialog
-          field={editing.field}
-          label={editing.label}
-          placeholder={editing.placeholder}
+      {editing && (
+        <EditProfileDialog
           me={profile}
-          onClose={() => setEditing(null)}
-          onSaved={setProfile}
-        />
-      )}
-      {editing && !TEXT_FIELDS.includes(editing.field) && (
-        <BioPickerDialog
-          field={editing.field}
-          label={editing.label}
-          value={profile?.[editing.field] || []}
-          onClose={() => setEditing(null)}
-          onSave={async (next) => {
-            try {
-              const updated = await base44.auth.updateMe({ [editing.field]: next });
-              setProfile(updated);
-              toast({ title: `${editing.label} updated` });
-            } catch (e) {
-              toast({ title: "Could not save", description: String(e.message || e) });
-            }
+          onClose={() => setEditing(false)}
+          onSaved={(u) => {
+            setProfile(u);
+            setMe(u);
           }}
         />
       )}

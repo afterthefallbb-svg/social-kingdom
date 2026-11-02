@@ -10,6 +10,7 @@ import CliQsSection from "@/components/profile/CliQsSection";
 import FriendsSection from "@/components/profile/FriendsSection";
 import EditProfileDialog from "@/components/profile/EditProfileDialog";
 import VideoGallery from "@/components/video/VideoGallery";
+import ProfilePhotos from "@/components/profile/ProfilePhotos";
 import KingdomBackdrop from "@/components/theme/KingdomBackdrop";
 import { usersByIds } from "@/lib/users";
 
@@ -167,6 +168,14 @@ export default function Profile() {
 
         {user?.id && (
           <VideoGallery title={isMe ? "My Videos" : "Videos"} scope={{ user_id: user.id }} />
+        )}
+
+        {user?.id && (
+          <ProfilePhotos
+            userId={user.id}
+            title={isMe ? "My Photos" : "Photos"}
+            current={{ avatar: user.avatar_url, cover: user.cover_url }}
+          />
         )}
       </div>
 

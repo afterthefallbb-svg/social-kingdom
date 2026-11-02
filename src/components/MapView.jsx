@@ -22,12 +22,13 @@ export default function MapView({ events = [], activeId, onSelect, mode = "event
       zoomControl={false}
       attributionControl={false}
       scrollWheelZoom
-      style={{ position: "absolute", inset: 0, background: "#aadaff", zIndex: 0 }}
+      style={{ position: "absolute", inset: 0, background: "#050a14", zIndex: 0 }}
     >
       {isEvents ? (
         <TileLayer
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
-          className="meetme-tiles"
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
+          subdomains={["a", "b", "c", "d"]}
+          className="sk-dark-gold-tiles"
           maxZoom={19}
         />
       ) : (

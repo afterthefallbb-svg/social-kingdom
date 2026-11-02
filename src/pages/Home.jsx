@@ -1,13 +1,27 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, LocateFixed } from "lucide-react";
+import { LocateFixed, Search } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
-import CategoryFilter from "@/components/CategoryFilter";
-import EventSideList from "@/components/EventSideList";
+import MapHeader from "@/components/map/MapHeader";
+import MapCategoryBar from "@/components/map/MapCategoryBar";
+import EventPanel from "@/components/map/EventPanel";
+import { Image } from "@/components/ui/image";
 import { getUserLocation } from "@/lib/localSeed";
+import "@/components/map/map-kingdom.css";
 
 const DEFAULT_CENTER = [46.0646, -118.3425];
+
+const kmBetween = (a, b) => {
+  const toRad = (d) => (d * Math.PI) / 180;
+  const R = 6371;
+  const dLat = toRad(b[0] - a[0]);
+  const dLng = toRad(b[1] - a[1]);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(a[0])) * Math.cos(toRad(b[0])) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+};
 
 export default function Home() {
   const navigate = useNavigate();
@@ -17,6 +31,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [center, setCenter] = useState(DEFAULT_CENTER);
   const [seedTick, setSeedTick] = useState(0);
+  const [locating, setLocating] = useState(false);
   const mode = "events";
 
   useEffect(() => {
@@ -47,22 +62,13 @@ export default function Home() {
       const q = query.toLowerCase();
       list = list.filter((e) => e.title.toLowerCase().includes(q));
     }
-    const [clat, clng] = center;
-    const toRad = (d) => (d * Math.PI) / 180;
-    const dist = (e) => {
-      const R = 6371;
-      const dLat = toRad(e.latitude - clat);
-      const dLng = toRad(e.longitude - clng);
-      const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRad(clat)) * Math.cos(toRad(e.latitude)) * Math.sin(dLng / 2) ** 2;
-      return 2 * R * Math.asin(Math.sqrt(a));
-    };
-    return [...list].sort((a, b) => dist(a) - dist(b));
+    return [...list]
+      .map((e) => ({ ...e, distanceMi: kmBetween(center, [e.latitude, e.longitude]) * 0.621371 }))
+      .sort((a, b) => a.distanceMi - b.distanceMi);
   }, [events, activeCat, query, center]);
 
   const goEvent = (ev) => navigate(`/event/${ev.id}`);
-  const [locating, setLocating] = useState(false);
+
   function recenterMe() {
     setLocating(true);
     getUserLocation().then((loc) => {
@@ -72,7 +78,7 @@ export default function Home() {
   }
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-[#aadaff]">
+    <div className="sk-map">
       <MapView
         events={mode === "events" ? filtered : []}
         activeId={null}
@@ -81,51 +87,40 @@ export default function Home() {
         center={center}
       />
 
+      <div className="sk-map-haze" aria-hidden="true" />
+      <Image
+        src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/180731d3b_kingdom-precise-lightning-original-visible.png"
+        alt=""
+        aria-hidden="true"
+        className="sk-map-lightning"
+      />
+
+      <MapHeader />
+      <MapCategoryBar active={activeCat} onSelect={setActiveCat} />
+
+      <div className="sk-map-search">
+        <Search />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={mode === "events" ? "Search Events..." : "Search places"}
+          aria-label="Search events"
+        />
+      </div>
+
       <button
         onClick={recenterMe}
         aria-label="Center on my location"
-        className="absolute right-3 z-[500] w-11 h-11 rounded-full bg-white shadow-lg flex items-center justify-center border border-gray-200"
-        style={{ bottom: "calc(env(safe-area-inset-bottom) + 7.5rem)" }}
+        className="sk-map-locate"
       >
-        <LocateFixed size={22} className={locating ? "text-gray-400 animate-pulse" : "text-blue-600"} />
+        <LocateFixed className={locating ? "animate-pulse" : undefined} />
       </button>
 
-      {/* Top stack: search + count + filters */}
-      <div className="absolute top-0 left-0 right-0 z-[500] px-3 pt-3">
-        <div className="flex items-center bg-white rounded-full px-4 py-2.5 shadow-lg">
-          <Search size={18} className="text-gray-400 shrink-0" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={mode === "events" ? "Search Gatherings" : "Search places"}
-            className="ml-2 bg-transparent outline-none flex-1 text-sm text-gray-800 placeholder:text-gray-400"
-          />
-        </div>
-
-        <div
-          className="px-1 mt-2 text-sm font-medium"
-          style={{ color: "#111", textShadow: "0 1px 4px rgba(255,255,255,0.9)" }}
-        >
-          {mode === "events" ? (
-            <>
-              <span className="font-bold underline decoration-2 underline-offset-2">{count}</span> Gatherings in your area
-            </>
-          ) : (
-            <span className="font-semibold">Businesses nearby</span>
-          )}
-        </div>
-
-        {mode === "events" && (
-          <div className="mt-1" data-tour="categories">
-            <CategoryFilter active={activeCat} onSelect={setActiveCat} />
-          </div>
-        )}
-
-      </div>
-
-      {mode === "events" && (
-        <EventSideList events={filtered} activeId={null} onSelect={goEvent} />
-      )}
+      <EventPanel
+        events={filtered}
+        count={activeCat || query ? filtered.length : count}
+        onSelect={goEvent}
+      />
     </div>
   );
 }

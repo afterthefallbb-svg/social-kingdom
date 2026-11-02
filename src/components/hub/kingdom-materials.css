@@ -1,0 +1,42 @@
+.kingdom-backdrop {
+  background: radial-gradient(ellipse at 50% 14%, hsl(var(--kingdom-blue) / .4), transparent 62%), radial-gradient(ellipse at 6% 80%, hsl(var(--kingdom-blue) / .38), transparent 54%), hsl(var(--kingdom-ink));
+}
+.kingdom-backdrop > .kingdom-backdrop-texture { width: 100%; height: 100%; object-fit: fill; opacity: .65; mix-blend-mode: screen; }
+.kingdom-backdrop::after { background: linear-gradient(180deg, hsl(var(--kingdom-ink) / .15), transparent 30%, hsl(var(--kingdom-ink) / .16)); }
+.kingdom-hub::after { height: 20dvh; background: radial-gradient(ellipse at 0% 100%, hsl(var(--kingdom-blue) / .44), transparent 60%), radial-gradient(ellipse at 100% 100%, hsl(var(--kingdom-blue) / .4), transparent 60%); }
+.kingdom-skyline { display: flex; }
+.kingdom-skyline > .kingdom-skyline-half { flex: 0 0 50%; width: 50%; height: 100%; object-fit: fill; }
+.kingdom-skyline > .kingdom-skyline-half:first-child { transform: scaleX(-1); }
+.kingdom-skyline::before { animation: none; background: radial-gradient(ellipse at 50% 100%, hsl(var(--kingdom-gold) / .2), transparent 58%); }
+.kingdom-skyline::after { background: linear-gradient(180deg, hsl(var(--kingdom-ink) / .18), transparent 70%, hsl(var(--kingdom-ink) / .6)); }
+.kingdom-backdrop > .kingdom-electrics { inset: auto 0 0; height: min(26dvh, 250px); opacity: 1; z-index: 1; }
+.kingdom-lightning-corner { position: absolute; bottom: 0; width: min(46vw, 380px); height: auto; object-fit: fill; mix-blend-mode: screen; opacity: .95; pointer-events: none; -webkit-mask-image: linear-gradient(0deg, black 70%, transparent); mask-image: linear-gradient(0deg, black 70%, transparent); }
+.kingdom-lightning-left { left: 0; aspect-ratio: 144 / 69; }
+.kingdom-lightning-right { right: 0; aspect-ratio: 121 / 69; }
+
+/* The reference's real sapphire material is a decorative layer, never a control. */
+.kingdom-material { position: absolute; inset: 0; z-index: -1; display: block; overflow: hidden; border-radius: inherit; pointer-events: none; opacity: .58; -webkit-mask-image: linear-gradient(180deg, black, transparent 96%); mask-image: linear-gradient(180deg, black, transparent 96%); }
+.kingdom-material > .kingdom-material-image { display: block; width: 100%; height: 100%; object-fit: fill; }
+.kingdom-panel > .kingdom-material { bottom: auto; height: 48%; opacity: .78; }
+.kingdom-app > .kingdom-material { opacity: .28; mix-blend-mode: luminosity; }
+.kingdom-panel, .kingdom-planning-link, .kingdom-app, .kingdom-search, .kingdom-menu-toggle, .kingdom-create-cliq, .kingdom-orb, .kingdom-card { position: relative; isolation: isolate; -webkit-backdrop-filter: blur(5px) saturate(1.45); backdrop-filter: blur(5px) saturate(1.45); }
+
+/* Narrow metal bevels and directional reflections replace the fuzzy solid glow. */
+.kingdom-panel { border-color: hsl(var(--kingdom-cyan) / .85); border-left-color: hsl(var(--kingdom-gold-bright) / .95); background: linear-gradient(165deg, hsl(var(--kingdom-blue) / .16), hsl(var(--kingdom-surface) / .22) 45%, hsl(var(--kingdom-ink) / .42)); box-shadow: inset 0 1px 1px hsl(var(--kingdom-text) / .7), inset 0 -2px 1px hsl(var(--kingdom-ink) / .9), inset 1px 0 2px hsl(var(--kingdom-gold) / .3), inset -1px 0 2px hsl(var(--kingdom-cyan) / .45), 0 0 0 1px hsl(var(--kingdom-ink)), 0 0 0 2px hsl(var(--kingdom-cyan) / .25), -3px 0 7px hsl(var(--kingdom-gold) / .48), 3px 0 8px hsl(var(--kingdom-cyan) / .42), 0 5px 9px hsl(var(--kingdom-ink) / .65); }
+.kingdom-panel::after { background: linear-gradient(165deg, hsl(var(--kingdom-text) / .13), transparent 15%, transparent 68%, hsl(var(--kingdom-cyan) / .06) 91%, hsl(var(--kingdom-text) / .17)); background-size: 100% 100%; animation: none; box-shadow: inset 0 0 0 1px hsl(var(--kingdom-text) / .12); }
+.kingdom-panel::before { background: radial-gradient(ellipse 8% 2% at 12% 0%, hsl(var(--kingdom-gold-bright)), transparent), radial-gradient(ellipse 8% 1.5% at 56% 0%, hsl(var(--kingdom-cyan)), transparent), radial-gradient(ellipse 10% 2% at 87% 100%, hsl(var(--kingdom-gold-bright)), transparent); }
+.kingdom-planning-link, .kingdom-menu-toggle, .kingdom-create-cliq { border-color: hsl(var(--kingdom-gold) / .9); background: linear-gradient(170deg, hsl(var(--kingdom-blue) / .27), hsl(var(--kingdom-surface) / .28) 44%, hsl(var(--kingdom-ink) / .52) 55%, hsl(var(--kingdom-blue) / .22)); box-shadow: inset 0 1px 1px hsl(var(--kingdom-text) / .8), inset 0 -2px 1px hsl(var(--kingdom-ink) / .9), inset 1px 0 2px hsl(var(--kingdom-cyan) / .6), 0 0 0 1px hsl(var(--kingdom-ink) / .8), 0 0 0 2px hsl(var(--kingdom-cyan) / .24), -2px 0 7px hsl(var(--kingdom-gold) / .36), 2px 0 7px hsl(var(--kingdom-cyan) / .25); }
+.kingdom-app { background: radial-gradient(ellipse at 50% 0%, hsl(var(--tile-glow) / .48), transparent 70%), linear-gradient(155deg, hsl(var(--tile-glow) / .3), hsl(var(--kingdom-ink) / .46) 78%); border-color: hsl(var(--tile-glow) / .8); box-shadow: inset 0 1px 1px hsl(var(--kingdom-text) / .75), inset 1px 0 1px hsl(var(--kingdom-cyan) / .65), inset 0 -2px 3px hsl(var(--tile-glow) / .65), 0 0 0 1px hsl(var(--kingdom-ink) / .8), 0 2px 7px hsl(var(--tile-glow) / .5); }
+.kingdom-app-gold { border-color: hsl(var(--kingdom-gold)); }
+.kingdom-app-violet { border-color: hsl(var(--kingdom-violet-light) / .85); }
+.kingdom-app-magenta { border-color: hsl(var(--kingdom-magenta) / .85); }
+.kingdom-app > svg { filter: drop-shadow(0 1px 0 hsl(var(--kingdom-ink))) drop-shadow(0 2px 0 hsl(var(--tile-glow))) drop-shadow(0 0 4px hsl(var(--tile-glow) / .7)); }
+.kingdom-search { background: linear-gradient(175deg, hsl(var(--kingdom-blue) / .2), hsl(var(--kingdom-ink) / .38)); border-color: hsl(var(--kingdom-cyan) / .8); box-shadow: inset 0 1px 1px hsl(var(--kingdom-text) / .6), inset 0 -1px 1px hsl(var(--kingdom-cyan) / .28), 0 0 0 1px hsl(var(--kingdom-ink)), 0 0 6px hsl(var(--kingdom-blue) / .45); }
+.kingdom-planning-link::before, .kingdom-app::before, .kingdom-search::before, .kingdom-menu-toggle::before, .kingdom-create-cliq::before { content: ""; position: absolute; inset: 1px; border-radius: inherit; pointer-events: none; background: linear-gradient(175deg, hsl(var(--kingdom-text) / .2), transparent 25%, transparent 72%, hsl(var(--kingdom-cyan) / .11)); }
+.kingdom-card { background: linear-gradient(175deg, hsl(var(--kingdom-blue) / .12), hsl(var(--kingdom-surface) / .35) 60%, hsl(var(--kingdom-blue) / .28)); border-color: hsl(var(--kingdom-cyan) / .8); box-shadow: inset 0 1px 1px hsl(var(--kingdom-text) / .6), inset 0 -1px 2px hsl(var(--kingdom-cyan) / .4), 0 0 0 1px hsl(var(--kingdom-ink) / .9), 0 2px 4px hsl(var(--kingdom-ink) / .75), 0 0 4px hsl(var(--kingdom-cyan) / .35); }
+.kingdom-card-picture::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .35), inset 0 -1px 3px hsl(var(--kingdom-ink) / .35); }
+.kingdom-card-content { background: linear-gradient(170deg, hsl(var(--kingdom-text) / .05), transparent 45%, hsl(var(--kingdom-cyan) / .07)); }
+.kingdom-bottom-nav { background: linear-gradient(transparent, hsl(var(--kingdom-ink) / .48) 70%); }
+.kingdom-orb { border-color: hsl(var(--kingdom-gold)); background: radial-gradient(circle at 50% 28%, hsl(var(--kingdom-blue) / .6), hsl(var(--kingdom-surface) / .58) 58%, hsl(var(--kingdom-ink) / .8) 80%); box-shadow: inset 0 1px 1px hsl(var(--kingdom-text) / .85), inset 0 -3px 3px hsl(var(--kingdom-ink)), inset 0 0 0 2px hsl(var(--kingdom-amber) / .65), 0 0 0 1px hsl(var(--kingdom-ink)), 0 0 0 2px hsl(var(--kingdom-gold-bright) / .45), 0 0 9px hsl(var(--kingdom-gold) / .55), 0 5px 7px hsl(var(--kingdom-ink) / .8); }
+.kingdom-orb::before { content: ""; position: absolute; inset: 5% 10% 48%; border-radius: 50%; pointer-events: none; background: linear-gradient(180deg, hsl(var(--kingdom-text) / .32), transparent); }
+.kingdom-orb-blue { border-color: hsl(var(--kingdom-cyan)); background: radial-gradient(circle at 46% 28%, hsl(var(--kingdom-cyan) / .75), hsl(var(--kingdom-blue) / .8) 45%, hsl(var(--kingdom-ink) / .82) 88%); box-shadow: inset 0 1px 1px hsl(var(--kingdom-text) / .9), inset 0 -3px 3px hsl(var(--kingdom-ink)), inset 0 0 0 2px hsl(var(--kingdom-blue)), 0 0 0 1px hsl(var(--kingdom-ink)), 0 0 0 2px hsl(var(--kingdom-cyan) / .6), 0 0 12px hsl(var(--kingdom-blue) / .8), 0 5px 7px hsl(var(--kingdom-ink) / .8); }

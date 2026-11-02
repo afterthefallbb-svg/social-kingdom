@@ -8,6 +8,7 @@ import HubCategoryRow from "@/components/hub/HubCategoryRow";
 import useSocialHub from "@/components/hub/useSocialHub";
 import hubItems from "@/components/hub/hubItems";
 import "@/components/hub/kingdom.css";
+import "@/components/hub/kingdom-materials.css";
 
 export default function SocialHub() {
   const navigate = useNavigate();

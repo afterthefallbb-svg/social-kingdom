@@ -8,7 +8,9 @@ import KingdomBrand from "@/components/hub/KingdomBrand";
 export default function HubHeader({ me }) {
   return (
     <header className="kingdom-header">
-      <div className="kingdom-skyline" aria-hidden="true"><Image src="https://media.base44.com/images/public/6ac40db708d83e8619ab9efd/ebc62c3c8_generated_image.png" alt="" className="h-full w-full" /></div>
+      <div className="kingdom-skyline" aria-hidden="true">
+        {["left", "right"].map((side) => <Image key={side} src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/4212b0a5c_kingdom-reference-skyline.png" alt="" className="kingdom-skyline-half" />)}
+      </div>
       <Link to={me ? "/profile" : "/register"} className="kingdom-profile" data-tour="profile-link" aria-label={me ? "My Profile" : "Sign up or log in"}>
         <span className="kingdom-avatar">
           <span className="kingdom-avatar-image">{me?.avatar_url ? <Image src={me.avatar_url} alt="" className="h-full w-full" /> : <UserRound className="kingdom-avatar-placeholder" />}</span>

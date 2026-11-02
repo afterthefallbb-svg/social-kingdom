@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Bell, CalendarDays, ChevronRight, Folder, Gamepad2, Globe, Megaphone, MessageSquare, Music2, Newspaper, Search, ShoppingBag, SlidersHorizontal, UserRound, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
+import KingdomSurface from "@/components/hub/KingdomSurface";
 
 const links = [
   { label: "Feed", to: "/feed", icon: Newspaper, tone: "blue" },
@@ -32,15 +33,15 @@ export default function HubShortcuts({ me }) {
     <div className="kingdom-shortcuts">
       <div className="kingdom-planning">
         {[{ label: "Projects", to: "/projects", icon: Folder }, { label: "Planner", to: "/planner", icon: CalendarDays }].map(({ label, to, icon: Icon }) => (
-          <Link key={to} to={to} className="kingdom-planning-link"><Icon /><span>{label}</span><ChevronRight /></Link>
+          <Link key={to} to={to} className="kingdom-planning-link"><KingdomSurface /><Icon /><span>{label}</span><ChevronRight /></Link>
         ))}
       </div>
       <nav className="kingdom-apps no-scrollbar" aria-label="Social hub shortcuts">
         {links.map(({ label, to, icon: Icon, tone, badge }) => (
-          <Link key={label} to={to} className={`kingdom-app kingdom-app-${tone}`}><Icon /><span>{label}</span>{badges[badge] > 0 && <b className="kingdom-unread">{badges[badge] > 99 ? "99+" : badges[badge]}</b>}</Link>
+          <Link key={label} to={to} className={`kingdom-app kingdom-app-${tone}`}><KingdomSurface /><Icon /><span>{label}</span>{badges[badge] > 0 && <b className="kingdom-unread">{badges[badge] > 99 ? "99+" : badges[badge]}</b>}</Link>
         ))}
       </nav>
-      <Link to="/" className="kingdom-search" aria-label="Search and filter nearby events"><Search /><span>Search...</span><SlidersHorizontal /></Link>
+      <Link to="/" className="kingdom-search" aria-label="Search and filter nearby events"><KingdomSurface /><Search /><span>Search...</span><SlidersHorizontal /></Link>
     </div>
   );
 }

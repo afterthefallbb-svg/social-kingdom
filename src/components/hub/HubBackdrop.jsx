@@ -5,7 +5,7 @@ import KingdomLightning from "@/components/hub/KingdomLightning";
 export default function HubBackdrop() {
   return (
     <div className="kingdom-backdrop" aria-hidden="true">
-      <Image src="https://media.base44.com/images/public/6ac40db708d83e8619ab9efd/7461f73b5_generated_image.png" alt="" className="h-full w-full" />
+      <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/79ec2cb06_kingdom-reference-backdrop.png" alt="" className="kingdom-backdrop-texture" />
       <KingdomLightning />
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { ChevronLeft, ChevronRight, CirclePlay, MapPin, Palette, Users } from "lucide-react";
 import HubCard from "@/components/hub/HubCard";
+import KingdomSurface from "@/components/hub/KingdomSurface";
 
 const icons = { stream: CirclePlay, events: MapPin, artists: Palette, cliqs: Users };
 
@@ -17,6 +18,7 @@ export default function HubCategoryRow({ title, kind, onTitle, items = [], empty
   }
   return (
     <section className={`kingdom-panel kingdom-panel-${kind}`} aria-label={title}>
+      <KingdomSurface />
       <div className="kingdom-panel-heading">
         <button type="button" onClick={onTitle} className="kingdom-panel-title"><Icon /><span>{title}</span></button>
         <button type="button" onClick={onTitle} className="kingdom-see-all" aria-label={`See all ${title}`}><span>See All</span><ChevronRight /></button>

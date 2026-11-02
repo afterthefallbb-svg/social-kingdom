@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { Switch } from "@/components/ui/switch";
-import { NEON } from "@/lib/neonControls";
+import GlassToggle from "@/components/theme/GlassToggle";
 import { toast } from "@/components/ui/use-toast";
 
 const FB = "#1877f2";
@@ -58,7 +58,7 @@ export default function MessageSettings({ me, onClose, onSaved }) {
             <Switch
               checked={showOnline}
               onCheckedChange={setShowOnline}
-              className="data-[state=unchecked]:bg-[#2f8bff] data-[state=unchecked]:border-[#8fe9ff] data-[state=checked]:bg-[#0a2f8f] data-[state=checked]:border-[#5fe9ff] data-[state=checked]:shadow-[0_0_10px_rgba(0,214,255,0.6)]"
+              className="sk-glass-switch"
             />
           </div>
 
@@ -67,17 +67,14 @@ export default function MessageSettings({ me, onClose, onSaved }) {
             <p className="font-semibold text-gray-900 text-sm mb-2">Online status emoji</p>
             <div className="grid grid-cols-6 gap-2">
               {EMOJIS.map((e) => (
-                <button
+                <GlassToggle
                   key={e}
+                  selected={emoji === e}
                   onClick={() => setEmoji(e)}
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
-                  style={{
-                    ...(emoji === e ? NEON.on : NEON.chip),
-                    border: `2px solid ${emoji === e ? NEON.on.borderColor : NEON.chip.borderColor}`,
-                  }}
+                  className="w-10 h-10 rounded-full text-xl"
                 >
                   {e}
-                </button>
+                </GlassToggle>
               ))}
             </div>
           </div>

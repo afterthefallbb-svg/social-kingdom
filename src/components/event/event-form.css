@@ -1,0 +1,21 @@
+/* Smoked blue-grey fields, scoped to creating a gathering. */
+.sk-theme .sk-event-form :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea) {
+  @apply bg-kingdom-field text-kingdom-field-foreground;
+  background-image: linear-gradient(160deg, hsl(var(--kingdom-text) / .12), hsl(var(--kingdom-blue) / .06));
+  border-color: hsl(var(--kingdom-muted) / .45) !important;
+  box-shadow: inset 0 1px 2px hsl(var(--kingdom-ink) / .1), 0 1px 0 hsl(var(--kingdom-text) / .08);
+  caret-color: hsl(var(--kingdom-field-foreground));
+}
+.sk-theme .sk-event-form :is(input, textarea)::placeholder {
+  @apply text-kingdom-field-muted;
+  opacity: 1;
+}
+.sk-theme .sk-event-form :is(input, textarea):focus {
+  border-color: hsl(var(--kingdom-cyan) / .9) !important;
+  box-shadow: 0 0 0 2px hsl(var(--kingdom-cyan) / .14), 0 0 12px hsl(var(--kingdom-blue) / .18);
+  outline: none;
+}
+.sk-theme .sk-event-form .relative > svg.text-gray-400 {
+  @apply text-kingdom-field-muted;
+  filter: none;
+}

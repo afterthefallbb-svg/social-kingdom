@@ -45,6 +45,11 @@ module.exports = {
           blue: 'hsl(var(--kingdom-blue))',
           cyan: 'hsl(var(--kingdom-cyan))',
           gold: 'hsl(var(--kingdom-gold))',
+          field: {
+            DEFAULT: 'hsl(var(--kingdom-field))',
+            foreground: 'hsl(var(--kingdom-field-foreground))',
+            muted: 'hsl(var(--kingdom-field-muted))',
+          },
           text: 'hsl(var(--kingdom-text))',
           muted: 'hsl(var(--kingdom-muted))'
         },

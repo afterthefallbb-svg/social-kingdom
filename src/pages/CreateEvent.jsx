@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Plus, X, Globe, Lock } from "lucide-react";
+import { ArrowLeft, Plus, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { CATEGORIES } from "@/lib/categories";
+import EventCategoryPicker from "@/components/event/EventCategoryPicker";
+import EventVisibilityPicker from "@/components/event/EventVisibilityPicker";
 import { makeEventIcon } from "@/lib/mapMarker";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,7 +13,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import InvitePicker from "@/components/invite/InvitePicker";
 import { getFriendIdsBothDirections } from "@/lib/eventVisibility";
-import { NEON } from "@/lib/neonControls";
+import GlassToggle from "@/components/theme/GlassToggle";
+import "@/components/event/event-form.css";
 
 const WALLA_WALLA = [46.0646, -118.3425];
 const FB = "#1877f2";
@@ -139,7 +141,7 @@ export default function CreateEvent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-28">
+    <div className="sk-event-form min-h-screen bg-gray-50 pb-28">
       <div className="text-white px-4 py-4 flex items-center gap-3 shadow" style={{ background: FB }}>
         <button onClick={() => navigate(clickId ? `/clicks/${clickId}` : "/")} aria-label="Back">
           <ArrowLeft size={22} color="#000000" />
@@ -155,7 +157,6 @@ export default function CreateEvent() {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Walla Walla Hoops"
             className="mt-1.5"
-            style={NEON.field}
           />
         </div>
 
@@ -166,69 +167,13 @@ export default function CreateEvent() {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="What is this gathering about?"
             className="mt-1.5"
-            style={NEON.field}
             rows={3}
           />
         </div>
 
-        <div>
-          <label className="text-sm font-semibold text-gray-700">Category</label>
-          <div className="flex flex-wrap gap-2 mt-1.5">
-            {CATEGORIES.map((c) => {
-              const on = category === c.id;
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => setCategory(c.id)}
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border transition"
-                  style={{
-                    background: on ? c.color : NEON.chip.background,
-                    color: on ? "#ffffff" : NEON.chip.color,
-                    borderColor: on ? c.color : NEON.chip.borderColor
-                  }}
-                >
-                  <span>{c.emoji}</span> {c.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <EventCategoryPicker category={category} onChange={setCategory} />
 
-        <div>
-          <label className="text-sm font-semibold text-gray-700">Visibility</label>
-          <div className="grid grid-cols-2 gap-2 mt-1.5">
-            <button
-              type="button"
-              onClick={() => setVisibility("public")}
-              className="inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold border transition"
-              style={{
-                background: visibility === "public" ? NEON.on.background : NEON.chip.background,
-                color: visibility === "public" ? "#ffffff" : NEON.chip.color,
-                borderColor: visibility === "public" ? NEON.on.borderColor : NEON.chip.borderColor
-              }}
-            >
-              <Globe size={16} /> Public
-            </button>
-            <button
-              type="button"
-              onClick={() => setVisibility("personal")}
-              className="inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-semibold border transition"
-              style={{
-                background: visibility === "personal" ? NEON.on.background : NEON.chip.background,
-                color: visibility === "personal" ? "#ffffff" : NEON.chip.color,
-                borderColor: visibility === "personal" ? NEON.on.borderColor : NEON.chip.borderColor
-              }}
-            >
-              <Lock size={16} /> Personal
-            </button>
-          </div>
-          <p className="text-xs text-gray-500 mt-1.5">
-            {visibility === "public"
-              ? "Anyone on the map can discover this gathering."
-              : "Only shared with your CliQ — not shown on the public map."}
-          </p>
-        </div>
+        <EventVisibilityPicker visibility={visibility} onChange={setVisibility} />
 
         <div className="grid grid-cols-2 gap-3">
           <div>
@@ -238,8 +183,7 @@ export default function CreateEvent() {
               onChange={(e) => setAgeBracket(e.target.value)}
               placeholder="e.g. 18+"
               className="mt-1.5"
-              style={NEON.field}
-            />
+              />
           </div>
           <div>
             <label className="text-sm font-semibold text-gray-700">Dress Code</label>
@@ -248,8 +192,7 @@ export default function CreateEvent() {
               onChange={(e) => setDressCode(e.target.value)}
               placeholder="e.g. Casual"
               className="mt-1.5"
-              style={NEON.field}
-            />
+              />
           </div>
         </div>
 
@@ -266,17 +209,14 @@ export default function CreateEvent() {
                 }
               }}
               placeholder="Type a tag and press Enter"
-              style={NEON.field}
-            />
-            <Button
-              type="button"
+              />
+            <GlassToggle
               onClick={addTag}
-              variant="outline"
-              className="shrink-0"
-              style={{ background: NEON.chip.background, borderColor: NEON.chip.borderColor, color: NEON.chip.color }}
+              aria-label="Add tag"
+              className="h-9 w-9 rounded-md"
             >
               <Plus size={16} />
-            </Button>
+            </GlassToggle>
           </div>
           {tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">

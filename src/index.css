@@ -18,6 +18,9 @@
     --kingdom-indigo: 248 100% 50%;
     --kingdom-text: 210 100% 98%;
     --kingdom-muted: 211 80% 87%;
+    --kingdom-field: 213 16% 74%;
+    --kingdom-field-foreground: 218 32% 18%;
+    --kingdom-field-muted: 216 18% 35%;
     --kingdom-wordmark-font: Georgia, "Times New Roman", serif;
     --map-day-ground: #f3f1ec;
     --map-day-surface: #ffffff;
@@ -103,6 +106,9 @@
     --kingdom-indigo: 248 100% 50%;
     --kingdom-text: 210 100% 98%;
     --kingdom-muted: 211 80% 87%;
+    --kingdom-field: 213 16% 74%;
+    --kingdom-field-foreground: 218 32% 18%;
+    --kingdom-field-muted: 216 18% 35%;
     --kingdom-wordmark-font: Georgia, "Times New Roman", serif;
     --map-day-ground: #f3f1ec;
     --map-day-surface: #ffffff;

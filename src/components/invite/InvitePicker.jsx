@@ -7,6 +7,7 @@ import { getCategory } from "@/lib/categories";
 import { matchesName } from "@/lib/nameMatch";
 import { searchUsers } from "@/lib/users";
 import { NEON } from "@/lib/neonControls";
+import GlassToggle from "@/components/theme/GlassToggle";
 
 const FB = "#1877f2";
 const TABS = [
@@ -163,7 +164,6 @@ export default function InvitePicker({ onChange }) {
           : "Search people by name"
         }
         className="pl-9"
-        style={NEON.field}
       />
     </div>
   );
@@ -184,15 +184,14 @@ export default function InvitePicker({ onChange }) {
         {TABS.map((t) => {
           const on = t.id === tab;
           return (
-            <button
+            <GlassToggle
               key={t.id}
-              type="button"
+              selected={on}
               onClick={() => { setTab(t.id); setQuery(""); }}
-              className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
-              style={on ? NEON.on : { ...NEON.chip, border: `1px solid ${NEON.chip.borderColor}` }}
+              className="whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
             >
               <span className="mr-1">{t.emoji}</span>{t.label}
-            </button>
+            </GlassToggle>
           );
         })}
       </div>

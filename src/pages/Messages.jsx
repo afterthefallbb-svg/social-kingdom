@@ -11,7 +11,7 @@ import { markOnline } from "@/lib/presence";
 import { getOrCreateDirectConversation, createGroupConversation } from "@/lib/messaging";
 import { getUser } from "@/lib/users";
 import { toast } from "@/components/ui/use-toast";
-import { NEON } from "@/lib/neonControls";
+import GlassToggle from "@/components/theme/GlassToggle";
 
 const FB = "#1877f2";
 const DIRECTIONS = [
@@ -154,14 +154,14 @@ export default function Messages() {
           <>
             <div className="flex gap-1 px-2 pt-3 pb-1 overflow-x-auto no-scrollbar">
               {DIRECTIONS.map((d) => (
-                <button
+                <GlassToggle
                   key={d.key}
+                  selected={direction === d.key}
                   onClick={() => setDirection(d.key)}
                   className="px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap"
-                  style={direction === d.key ? NEON.on : { ...NEON.chip, border: `1px solid ${NEON.chip.borderColor}` }}
                 >
                   {d.label}
-                </button>
+                </GlassToggle>
               ))}
             </div>
             <ConversationList

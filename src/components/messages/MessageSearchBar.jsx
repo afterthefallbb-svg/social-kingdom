@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { NEON } from "@/lib/neonControls";
+import GlassToggle from "@/components/theme/GlassToggle";
 
 const FB = "#1877f2";
 
@@ -25,27 +26,28 @@ export default function MessageSearchBar({ query, setQuery, scope, setScope, fil
             className="flex-1 outline-none text-sm bg-transparent"
           />
         </div>
-        <button
+        <GlassToggle
           onClick={() => setOpen((o) => !o)}
-          className="w-10 h-10 rounded-lg flex items-center justify-center border"
-          style={{ ...NEON.chip, borderColor: NEON.chip.borderColor }}
+          selected={open}
+          aria-expanded={open}
+          className="w-10 h-10 rounded-lg"
           aria-label="Filters"
         >
           <SlidersHorizontal size={18} />
-        </button>
+        </GlassToggle>
       </div>
 
       {/* Scope chips */}
       <div className="flex gap-1.5 mt-2">
         {SCOPES.map((s) => (
-          <button
+          <GlassToggle
             key={s.id}
+            selected={scope === s.id}
             onClick={() => setScope(s.id)}
             className="px-3 py-1 rounded-full text-xs font-semibold"
-            style={scope === s.id ? NEON.on : { ...NEON.chip, border: `1px solid ${NEON.chip.borderColor}` }}
           >
             {s.label}
-          </button>
+          </GlassToggle>
         ))}
       </div>
 

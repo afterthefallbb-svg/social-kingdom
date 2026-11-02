@@ -1,0 +1,90 @@
+/* The Hub's sapphire glass, top bevel and illuminated lower rail, without
+   opaque fills or the broad legacy card overrides. Only opted-in controls. */
+.sk-theme .sk-glass-control {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  color: hsl(var(--kingdom-muted));
+  background:
+    radial-gradient(ellipse at 30% 0%, hsl(var(--kingdom-blue) / .26), transparent 72%),
+    linear-gradient(180deg, hsl(var(--kingdom-surface) / .38), hsl(var(--kingdom-ink) / .28));
+  box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .26), inset 0 -1px 1px hsl(var(--kingdom-cyan) / .24), 0 3px 7px hsl(var(--kingdom-ink) / .3);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: border-color .18s, box-shadow .18s, color .18s;
+}
+.sk-glass-control::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg, hsl(var(--kingdom-cyan) / .85), hsl(var(--kingdom-blue) / .3) 28%, hsl(var(--kingdom-cyan) / .18) 55%, hsl(var(--kingdom-cyan) / .66));
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: exclude;
+}
+.sk-glass-control::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 28% 8% at 24% 0%, hsl(var(--kingdom-text) / .75), transparent),
+    linear-gradient(180deg, hsl(var(--kingdom-text) / .09), transparent 28%, transparent 80%, hsl(var(--kingdom-cyan) / .07));
+}
+.sk-glass-control-content {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: inherit;
+  justify-content: inherit;
+  gap: inherit;
+  min-width: 0;
+}
+.sk-theme .sk-glass-control[data-selected="true"] {
+  color: hsl(var(--kingdom-text));
+  background:
+    radial-gradient(ellipse at 50% 0%, hsl(var(--kingdom-cyan) / .22), transparent 72%),
+    linear-gradient(180deg, hsl(var(--kingdom-blue) / .4), hsl(var(--kingdom-surface) / .55) 65%, hsl(var(--kingdom-blue) / .24));
+  box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .65), inset 0 -1px 2px hsl(var(--kingdom-cyan) / .8), 0 0 0 1px hsl(var(--kingdom-cyan) / .45), 0 0 12px hsl(var(--kingdom-blue) / .4);
+  text-shadow: 0 0 8px hsl(var(--kingdom-blue) / .55);
+}
+.sk-glass-control[data-selected="true"]::before {
+  background: linear-gradient(135deg, hsl(var(--kingdom-gold-bright) / .9), hsl(var(--kingdom-cyan) / .85) 22%, hsl(var(--kingdom-blue) / .5) 60%, hsl(var(--kingdom-cyan)));
+}
+.sk-theme .sk-glass-control:focus-visible {
+  outline: 2px solid hsl(var(--kingdom-cyan));
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  .sk-theme .sk-glass-control:hover {
+    color: hsl(var(--kingdom-text));
+    border-color: hsl(var(--kingdom-cyan) / .5);
+    box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .5), inset 0 -1px 2px hsl(var(--kingdom-cyan) / .6), 0 0 10px hsl(var(--kingdom-blue) / .32);
+  }
+}
+.sk-theme [role="switch"].sk-glass-switch {
+  border: 1px solid hsl(var(--kingdom-cyan) / .4) !important;
+  background: linear-gradient(180deg, hsl(var(--kingdom-blue) / .2), hsl(var(--kingdom-ink) / .4)) !important;
+  box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .35), inset 0 -1px 1px hsl(var(--kingdom-cyan) / .3);
+}
+.sk-theme [role="switch"].sk-glass-switch[data-state="checked"] {
+  border-color: hsl(var(--kingdom-cyan) / .9) !important;
+  background: linear-gradient(180deg, hsl(var(--kingdom-cyan) / .3), hsl(var(--kingdom-blue) / .5)) !important;
+  box-shadow: inset 0 1px 0 hsl(var(--kingdom-text) / .65), 0 0 9px hsl(var(--kingdom-cyan) / .35);
+}
+.sk-theme [role="switch"].sk-glass-switch > span {
+  background: linear-gradient(160deg, hsl(var(--kingdom-text)), hsl(var(--kingdom-muted))) !important;
+  box-shadow: 0 1px 3px hsl(var(--kingdom-ink) / .55), 0 0 5px hsl(var(--kingdom-cyan) / .45);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sk-theme .sk-glass-control { transition: none; }
+}

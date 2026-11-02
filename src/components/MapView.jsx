@@ -28,13 +28,19 @@ export default function MapView({ events = [], activeId, onSelect, mode = "event
         <>
           <TileLayer
             url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-            className="sk-dark-gold-tiles"
+            className="sk-tile-base"
             maxNativeZoom={16}
             maxZoom={19}
           />
           <TileLayer
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}"
+            className="sk-tile-roads"
+            maxNativeZoom={19}
+            maxZoom={19}
+          />
+          <TileLayer
             url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
-            className="sk-dark-gold-tiles"
+            className="sk-tile-labels"
             maxNativeZoom={16}
             maxZoom={19}
           />

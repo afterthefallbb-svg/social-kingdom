@@ -6,8 +6,16 @@
   background: hsl(var(--kingdom-ink));
   color: hsl(var(--kingdom-text));
 }
-.sk-dark-gold-tiles {
-  filter: brightness(1.22) contrast(1.6) saturate(0.8) sepia(0.2);
+/* Near-black land with bright gold streets, like the reference map. */
+.sk-tile-base {
+  filter: brightness(0.32) contrast(1.1) saturate(0.45);
+}
+.sk-tile-roads {
+  filter: sepia(0.75) saturate(2.6) brightness(1.05) contrast(1.1);
+}
+.sk-tile-labels {
+  filter: sepia(0.5) saturate(1.6) brightness(1.12);
+  opacity: 0.85;
 }
 .sk-map-haze {
   position: absolute;
@@ -40,7 +48,16 @@
   align-items: center;
   gap: 8px;
   padding: max(8px, env(safe-area-inset-top)) 12px 10px;
-  background: linear-gradient(180deg, hsl(var(--kingdom-ink)), hsl(var(--kingdom-ink) / 0.72) 68%, transparent);
+  background: linear-gradient(180deg, hsl(var(--kingdom-surface) / 0.98), hsl(var(--kingdom-ink) / 0.86) 72%, hsl(var(--kingdom-ink) / 0.5));
+}
+.sk-map-head::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, hsl(var(--kingdom-gold) / 0.45) 14%, hsl(var(--kingdom-gold-bright)) 48%, hsl(var(--kingdom-gold) / 0.55) 74%, transparent);
+  box-shadow: 0 0 10px hsl(var(--kingdom-gold) / 0.75), 0 0 3px hsl(var(--kingdom-gold-bright));
 }
 .sk-map-back {
   display: inline-flex;

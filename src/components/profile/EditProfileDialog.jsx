@@ -8,20 +8,31 @@ import { toast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
 import CityField from "@/components/profile/CityField";
 import AvatarCropDialog from "@/components/profile/AvatarCropDialog";
+import BioChips from "@/components/profile/BioChips";
+import BioPickerDialog from "@/components/profile/BioPickerDialog";
 import { checkProfilePhoto } from "@/lib/faceCheck";
 
 const FB = "#1877f2";
 
-const toArray = (s) => s.split(",").map((x) => x.trim()).filter(Boolean);
+// Every self-describing section picks from the searchable database.
+const BIO_FIELDS = [
+  { field: "professional_interests", label: "Professional Interests", emoji: "📈" },
+  { field: "interests", label: "Interests", emoji: "⭐" },
+  { field: "hobbies", label: "Hobbies", emoji: "🎯" },
+  { field: "goals", label: "Goals", emoji: "🏆" },
+  { field: "music", label: "Music", emoji: "🎵" },
+  { field: "family_members", label: "Family Members", emoji: "👪" }
+];
 
 export default function EditProfileDialog({ me, onClose, onSaved }) {
   const [bio, setBio] = useState(me?.bio || "");
   const [location, setLocation] = useState(me?.location || "");
   const [avatar, setAvatar] = useState(me?.avatar_url || "");
   const [cover, setCover] = useState(me?.cover_url || "");
-  const [traits, setTraits] = useState((me?.traits || []).join(", "));
-  const [hobbies, setHobbies] = useState((me?.hobbies || []).join(", "));
-  const [music, setMusic] = useState((me?.music || []).join(", "));
+  const [lists, setLists] = useState(() =>
+    Object.fromEntries(BIO_FIELDS.map((f) => [f.field, me?.[f.field] || []]))
+  );
+  const [browsing, setBrowsing] = useState(null);
   const [publicProfile, setPublicProfile] = useState(me?.public_profile !== false);
   const [profileType, setProfileType] = useState(me?.profile_type || "none");
   const [saving, setSaving] = useState(false);
@@ -48,9 +59,7 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
         location: location.trim(),
         avatar_url: avatar.trim(),
         cover_url: cover.trim(),
-        traits: toArray(traits),
-        hobbies: toArray(hobbies),
-        music: toArray(music),
+        ...lists,
         public_profile: publicProfile,
         profile_type: profileType
       });
@@ -119,14 +128,37 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
               </button>
             </div>
           </div>
-          <div>
-            <label className="text-sm font-semibold text-gray-700">Personal Traits (comma separated)</label>
-            <Input value={traits} onChange={(e) => setTraits(e.target.value)} className="mt-1.5" placeholder="Outgoing, Loyal, Funny" />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-gray-700">Hobbies (comma separated)</label>
-            <Input value={hobbies} onChange={(e) => setHobbies(e.target.value)} className="mt-1.5" placeholder="Hiking, Gaming, Cooking" />
-          </div>
+          {BIO_FIELDS.map((f) => (
+            <div key={f.field}>
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-semibold text-gray-700">
+                  <span className="mr-1.5">{f.emoji}</span>{f.label}
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setBrowsing(f)}
+                  className="text-xs font-semibold"
+                  style={{ color: FB }}
+                >
+                  {lists[f.field].length ? "Change" : "Browse list"}
+                </button>
+              </div>
+              <div className="mt-1.5">
+                {lists[f.field].length ? (
+                  <BioChips
+                    items={lists[f.field]}
+                    onRemove={(item) =>
+                      setLists((l) => ({ ...l, [f.field]: l[f.field].filter((v) => v !== item) }))
+                    }
+                  />
+                ) : (
+                  <p className="text-[11px] text-gray-400">
+                    Pick from the {f.label.toLowerCase()} list instead of typing.
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
           <div>
             <label className="text-sm font-semibold text-gray-700">Profile type</label>
             <p className="text-[11px] text-gray-400 mb-1.5">Show a badge on your profile and let people find you by type.</p>
@@ -166,6 +198,15 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
             {saving ? "Saving…" : "Save"}
           </Button>
         </div>
+        {browsing && (
+          <BioPickerDialog
+            field={browsing.field}
+            label={browsing.label}
+            value={lists[browsing.field]}
+            onSave={(next) => setLists((l) => ({ ...l, [browsing.field]: next }))}
+            onClose={() => setBrowsing(null)}
+          />
+        )}
         {cropFile && (
           <AvatarCropDialog
             file={cropFile}

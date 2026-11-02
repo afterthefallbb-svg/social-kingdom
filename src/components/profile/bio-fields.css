@@ -1,0 +1,55 @@
+/* Bio selections wear the same neon language as the event and message toggles:
+   rectangular chips with a lit sapphire interior and a thin brilliant rim. */
+.bio-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.bio-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px 5px 10px;
+  border-radius: 7px;
+  border: 1px solid #5fe9ff;
+  background: linear-gradient(160deg, #0a2f8f, #05153f);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 650;
+  line-height: 1.15;
+  box-shadow: 0 0 8px rgba(0, 214, 255, 0.32), inset 0 0 6px rgba(95, 233, 255, 0.22);
+}
+.bio-chip-x {
+  display: inline-flex;
+  align-items: center;
+  color: #9fe9ff;
+}
+.bio-opt-list {
+  max-height: min(46vh, 380px);
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 6px;
+  padding: 2px;
+}
+.bio-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: 1px solid #9ec8ff;
+  background: #fff;
+  color: #12325e;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.15;
+  box-shadow: 0 1px 2px rgba(15, 42, 90, 0.08);
+}
+.bio-opt[data-on="true"] {
+  border-color: #5fe9ff;
+  background: linear-gradient(160deg, #0a2f8f, #05153f);
+  color: #fff;
+  box-shadow: 0 0 8px rgba(0, 214, 255, 0.4), inset 0 0 6px rgba(95, 233, 255, 0.25);
+}

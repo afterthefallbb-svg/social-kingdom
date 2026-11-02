@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import moment from "moment";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
-import { Image } from "@/components/ui/image";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import VideoComposer from "@/components/video/VideoComposer";
 import VideoCreateButton from "@/components/video/VideoCreateButton";
+import HubCard from "@/components/hub/HubCard";
 
 const FB = "#1877f2";
 
@@ -47,6 +48,7 @@ export default function CategoryBrowse() {
             label: e.title,
             image: e.image_url,
             emoji: getCategory(e.category).emoji,
+            meta: e.start_time ? moment(e.start_time).format("MMM D · h:mm A") : e.address || "View event",
             onClick: () => navigate(`/event/${e.id}`),
           }));
         } else if (category === "videos") {
@@ -60,6 +62,10 @@ export default function CategoryBrowse() {
             label: v.caption || v.user_name || "Video",
             image: v.thumbnail,
             emoji: "🎬",
+            isVideo: true,
+            author: v.user_name,
+            avatar: v.user_avatar,
+            time: v.created_date ? moment(v.created_date).fromNow() : "",
             onClick: () => setPlayerState({ videos: vids, index: i }),
           }));
         } else if (category === "cliqs") {
@@ -69,6 +75,7 @@ export default function CategoryBrowse() {
             label: c.name,
             image: c.avatar_url,
             emoji: "👥",
+            meta: `${(c.member_count || 0).toLocaleString()} members`,
             onClick: () => navigate(`/clicks/${c.id}`),
           }));
         }
@@ -89,7 +96,7 @@ export default function CategoryBrowse() {
   const hasData = SUPPORTED.includes(category);
 
   return (
-    <div className="min-h-screen bg-white pb-28">
+    <div className="min-h-screen bg-white pb-32">
       <div className="flex items-center gap-2 px-4 pt-6">
         <button onClick={() => navigate("/browse")} className="p-1">
           <ChevronLeft size={24} style={{ color: FB }} />
@@ -111,24 +118,9 @@ export default function CategoryBrowse() {
         ) : items.length === 0 ? (
           <p className="text-sm text-gray-400">Nothing here yet.</p>
         ) : (
-          <div className="grid grid-cols-4 gap-4">
+          <div className="kingdom-grid">
             {items.map((it) => (
-              <button
-                key={it.id}
-                onClick={it.onClick}
-                className="flex flex-col items-center gap-1"
-              >
-                <span className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center text-2xl bg-gray-100">
-                  {it.image ? (
-                    <Image src={it.image} fittingType="fill" className="w-full h-full" />
-                  ) : (
-                    it.emoji
-                  )}
-                </span>
-                <span className="text-[10px] text-gray-600 text-center leading-tight truncate w-full">
-                  {it.label}
-                </span>
-              </button>
+              <HubCard key={it.id} item={it} stream={category === "videos"} onClick={it.onClick} />
             ))}
           </div>
         )}

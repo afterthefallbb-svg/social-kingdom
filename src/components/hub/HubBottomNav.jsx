@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Navigation, Plus, UserRound } from "lucide-react";
+import "@/components/hub/kingdom.css";
+import "@/components/hub/kingdom-materials.css";
 
 export default function HubBottomNav() {
   return (

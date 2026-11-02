@@ -68,7 +68,7 @@ export default function Stream() {
         </button>
       </div>
 
-      <div className="mt-4 space-y-4">
+      <div className="mt-4 space-y-4 px-3">
         {STREAM_CATEGORIES.map((c) => {
           const catVideos = videosByCat[c.name] || [];
           const items = [
@@ -78,6 +78,8 @@ export default function Stream() {
               image: v.thumbnail,
               emoji: "🎬",
               isVideo: true,
+              author: v.user_name,
+              avatar: v.user_avatar,
             })),
             ...c.items.slice(0, Math.max(0, 10 - catVideos.length)).map((s, i) => ({
               ...s,

@@ -13,7 +13,7 @@
 .kingdom-backdrop::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, hsl(var(--kingdom-ink) / .3), hsl(var(--kingdom-ink) / .08) 44%, hsl(var(--kingdom-ink) / .5)); }
 .kingdom-backdrop > .kingdom-electrics { inset: auto 0 0; height: 44%; opacity: 1; }
 @keyframes kingdom-gloss { 0%, 100% { background-position: 168% 0; } 50% { background-position: -68% 0; } }
-.kingdom-shell { width: min(100%, 960px); margin-inline: auto; container-type: inline-size; padding-bottom: max(110px, calc(env(safe-area-inset-bottom) + 14cqw)); }
+.kingdom-shell { width: min(100%, 960px); margin-inline: auto; container-type: inline-size; padding-bottom: max(136px, calc(env(safe-area-inset-bottom) + 18cqw)); }
 .kingdom-header { height: auto; aspect-ratio: 696 / 194; max-height: 250px; min-height: 124px; position: relative; display: grid; grid-template-columns: 30% 70%; align-items: center; }
 .kingdom-skyline { position: absolute; inset: 0 -1px auto -1px; height: calc(100% + 16cqw); z-index: -1; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, #000 0 64%, rgba(0,0,0,.75) 82%, transparent 100%); mask-image: linear-gradient(180deg, #000 0 64%, rgba(0,0,0,.75) 82%, transparent 100%); }
 .kingdom-skyline::before { content: ""; position: absolute; inset: 0; z-index: 2; background: linear-gradient(100deg, transparent 40%, hsl(var(--kingdom-cyan) / .18) 49%, hsl(var(--kingdom-text) / .12) 53%, transparent 62%); background-size: 240% 100%; animation: kingdom-gloss 17s linear infinite; mix-blend-mode: screen; pointer-events: none; }
@@ -93,10 +93,14 @@
 .kingdom-scroll-prev { left: -.6cqw; }
 .kingdom-scroll-next { right: -.6cqw; }
 .kingdom-empty { padding: 2cqw; color: hsl(var(--kingdom-muted)); font-size: 14px; }
-.kingdom-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: min(100%, 960px); z-index: 650; display: flex; align-items: center; justify-content: space-evenly; padding: 8px 0 max(10px, env(safe-area-inset-bottom)); pointer-events: none; background: linear-gradient(transparent, hsl(var(--kingdom-ink) / .88) 48%); }
-.kingdom-orb { pointer-events: auto; display: grid; place-items: center; width: clamp(50px, 9.6vw, 86px); height: clamp(50px, 9.6vw, 86px); border-radius: 50%; border: 2px solid hsl(var(--kingdom-gold)); background: radial-gradient(circle at 48% 27%, hsl(var(--kingdom-blue)), hsl(var(--kingdom-surface)) 64%, hsl(var(--kingdom-ink))); box-shadow: 0 0 3px 1px hsl(var(--kingdom-text)), 0 0 12px hsl(var(--kingdom-gold) / .7), inset 0 0 8px hsl(var(--kingdom-gold) / .5); color: hsl(var(--kingdom-text)); }
+.kingdom-bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: min(100%, 960px); z-index: 900; display: flex; align-items: center; justify-content: space-evenly; padding: 8px 0 max(10px, env(safe-area-inset-bottom)); pointer-events: none; background: linear-gradient(transparent, hsl(var(--kingdom-ink) / .88) 48%); }
+.kingdom-orb { position: relative; z-index: 1; pointer-events: auto; display: grid; place-items: center; width: clamp(50px, 9.6vw, 86px); height: clamp(50px, 9.6vw, 86px); border-radius: 50%; border: 2px solid hsl(var(--kingdom-gold)); background: radial-gradient(circle at 48% 27%, hsl(var(--kingdom-blue)), hsl(var(--kingdom-surface)) 64%, hsl(var(--kingdom-ink))); box-shadow: 0 0 3px 1px hsl(var(--kingdom-text)), 0 0 12px hsl(var(--kingdom-gold) / .7), inset 0 0 8px hsl(var(--kingdom-gold) / .5); color: hsl(var(--kingdom-text)); }
 .kingdom-orb-blue { border-color: hsl(var(--kingdom-cyan)); background: radial-gradient(circle at 40% 20%, hsl(var(--kingdom-cyan) / .9), hsl(var(--kingdom-blue)) 42%, hsl(var(--kingdom-ink)) 90%); box-shadow: 0 0 3px 1px hsl(var(--kingdom-text)), 0 0 15px hsl(var(--kingdom-cyan) / .8), inset 0 0 9px hsl(var(--kingdom-cyan)); }
 .kingdom-orb svg { width: 56%; height: 56%; stroke-width: 2.3; filter: drop-shadow(0 0 4px hsl(var(--kingdom-blue))); }
+/* Full-page category grids reuse the hub card instead of round avatars. */
+.kingdom-grid { container-type: inline-size; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(8px, 2.4cqw, 14px); }
+.kingdom-grid > .kingdom-card { width: 100%; }
+.kingdom-grid .kingdom-card-picture { height: clamp(62px, 12cqw, 104px); }
 @media (max-width: 420px) {
   .kingdom-header-actions { top: 1.8cqw; }
   .kingdom-planning { margin-bottom: 1.6cqw; }

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LocateFixed } from "lucide-react";
+import { Compass } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
 import MapToolbar from "@/components/map/MapToolbar";
@@ -29,6 +29,7 @@ export default function Home() {
   const [activeCat, setActiveCat] = useState(null);
   const [query, setQuery] = useState("");
   const [center, setCenter] = useState(DEFAULT_CENTER);
+  const [zoom, setZoom] = useState(13);
   const [seedTick, setSeedTick] = useState(0);
   const [locating, setLocating] = useState(false);
   const mode = "events";
@@ -68,11 +69,16 @@ export default function Home() {
 
   const goEvent = (ev) => navigate(`/event/${ev.id}`);
 
+  /* Compass: jump to the user's own spot, zoomed in close enough to see
+     themselves in the city and the events around them. */
   function recenterMe() {
     setLocating(true);
     getUserLocation().then((loc) => {
       setLocating(false);
-      if (loc) setCenter([loc.latitude, loc.longitude]);
+      if (loc) {
+        setCenter([loc.latitude, loc.longitude]);
+        setZoom(14);
+      }
     });
   }
 
@@ -84,6 +90,7 @@ export default function Home() {
         onSelect={goEvent}
         mode={mode}
         center={center}
+        zoom={zoom}
       />
 
       <MapToolbar
@@ -98,7 +105,7 @@ export default function Home() {
         aria-label="Center on my location"
         className="sk-map-locate"
       >
-        <LocateFixed className={locating ? "animate-pulse" : undefined} />
+        <Compass className={locating ? "animate-pulse" : undefined} />
       </button>
 
       <EventPanel

@@ -276,22 +276,23 @@
 .sk-map-search input::placeholder { color: hsl(var(--kingdom-muted)); }
 
 /* Recenter */
+/* Compass / locate button — sits clear above the bottom orb navigation. */
 .sk-map-locate {
   position: absolute;
-  right: 12px;
-  bottom: calc(env(safe-area-inset-bottom) + 96px);
-  z-index: 620;
-  width: 40px;
-  height: 40px;
+  right: 14px;
+  bottom: calc(env(safe-area-inset-bottom) + 122px);
+  z-index: 2147483001;
+  width: 46px;
+  height: 46px;
   display: grid;
   place-items: center;
   border-radius: 999px;
   border: 1.5px solid hsl(var(--kingdom-gold));
-  background: radial-gradient(circle at 50% 30%, hsl(var(--kingdom-blue) / 0.9), hsl(var(--kingdom-ink)) 78%);
+  background: radial-gradient(circle at 50% 26%, hsl(var(--kingdom-blue) / 0.96), hsl(var(--kingdom-ink)) 80%);
   color: hsl(var(--kingdom-gold-bright));
-  box-shadow: 0 0 10px hsl(var(--kingdom-gold) / 0.55), inset 0 0 8px hsl(var(--kingdom-cyan) / 0.35);
+  box-shadow: 0 0 10px hsl(var(--kingdom-gold) / 0.5), 0 5px 14px hsl(var(--kingdom-ink) / 0.5), inset 0 1px 0 hsl(var(--kingdom-text) / 0.35);
 }
-.sk-map-locate svg { width: 19px; height: 19px; }
+.sk-map-locate svg { width: 23px; height: 23px; stroke-width: 2.1; }
 
 /* Map pins */
 .sk-pin-wrap { background: none !important; border: 0 !important; }

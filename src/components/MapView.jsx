@@ -25,12 +25,20 @@ export default function MapView({ events = [], activeId, onSelect, mode = "event
       style={{ position: "absolute", inset: 0, background: "#050a14", zIndex: 0 }}
     >
       {isEvents ? (
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
-          subdomains={["a", "b", "c", "d"]}
-          className="sk-dark-gold-tiles"
-          maxZoom={19}
-        />
+        <>
+          <TileLayer
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+            className="sk-dark-gold-tiles"
+            maxNativeZoom={16}
+            maxZoom={19}
+          />
+          <TileLayer
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+            className="sk-dark-gold-tiles"
+            maxNativeZoom={16}
+            maxZoom={19}
+          />
+        </>
       ) : (
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

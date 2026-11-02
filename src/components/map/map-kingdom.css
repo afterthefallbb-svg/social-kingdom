@@ -7,7 +7,7 @@
   color: hsl(var(--kingdom-text));
 }
 .sk-dark-gold-tiles {
-  filter: sepia(1) saturate(2.8) hue-rotate(-10deg) brightness(1.32) contrast(1.12);
+  filter: sepia(1) saturate(2.6) hue-rotate(-12deg) brightness(1.75) contrast(1.05);
 }
 .sk-map-haze {
   position: absolute;

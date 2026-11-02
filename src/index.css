@@ -20,6 +20,9 @@
     --kingdom-muted: 211 80% 87%;
     --kingdom-wordmark-font: Georgia, "Times New Roman", serif;
     --map-midnight: #050B24;
+    --map-land: #07132D;
+    --map-road-highlight: #FFE5A3;
+    --map-road-local: #30496F;
     --map-deep-blue: #0A1745;
     --map-royal: #1458D4;
     --map-electric: #168BFF;
@@ -32,10 +35,10 @@
     --map-text: #EAF3FF;
     --map-muted: #A7BAD6;
     --map-forest: #0C332F;
-    --map-park: #104B3B;
-    --map-building: #142849;
+    --map-park: #102C32;
+    --map-building: #142746;
     --map-urban: #0B1933;
-    --map-water: #0B2860;
+    --map-water: #03091D;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -94,6 +97,9 @@
     --kingdom-muted: 211 80% 87%;
     --kingdom-wordmark-font: Georgia, "Times New Roman", serif;
     --map-midnight: #050B24;
+    --map-land: #07132D;
+    --map-road-highlight: #FFE5A3;
+    --map-road-local: #30496F;
     --map-deep-blue: #0A1745;
     --map-royal: #1458D4;
     --map-electric: #168BFF;
@@ -106,10 +112,10 @@
     --map-text: #EAF3FF;
     --map-muted: #A7BAD6;
     --map-forest: #0C332F;
-    --map-park: #104B3B;
-    --map-building: #142849;
+    --map-park: #102C32;
+    --map-building: #142746;
     --map-urban: #0B1933;
-    --map-water: #0B2860;
+    --map-water: #03091D;
     --brand: 214.68 89.34% 52.16%;
     --brand-foreground: 0 0% 100%;
     --background: 0 0% 3.9%;

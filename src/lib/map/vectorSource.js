@@ -17,7 +17,10 @@ function load(z, x, y) {
   return promise;
 }
 export async function loadGeographicTile(coords) {
-  let { z, x, y } = coords;
+  // Keep the existing source detail limit while painting styles at the real map zoom.
+  let z = Math.min(coords.z, 16);
+  const overzoom = 2 ** (coords.z - z);
+  let x = Math.floor(coords.x / overzoom), y = Math.floor(coords.y / overzoom);
   while (z >= 0) {
     const layers = await load(z, x, y);
     if (layers) return { layers, z, x, y };

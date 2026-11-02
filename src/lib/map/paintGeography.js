@@ -24,7 +24,7 @@ function project(source, coords, size) {
   });
 }
 function surface(name, palette) {
-  if (name === 'Land') return palette.midnight;
+  if (name === 'Land') return palette.land;
   if (/Marine area|Bathymetry|^Water area/.test(name)) return palette.water;
   if (/Vegetation|forest|Indigenous/.test(name)) return palette.forest;
   if (/Park or farming|Golf course|Zoo|Cemetery/.test(name)) return palette.park;
@@ -58,14 +58,19 @@ function paintWaterways(ctx, features, palette) {
   for (const f of features.filter((f) => f.type === 2 && /Railroad|Boundary/.test(f.layer))) ctx.stroke(f.path);
   ctx.setLineDash([]); ctx.globalAlpha = 1;
 }
-export function paintGeography(canvas, source, coords, palette) {
+export function paintGeography(canvas, source, coords, palette, roadsOnly = false) {
   const size = 256, ratio = Math.min(window.devicePixelRatio || 1, 2);
   canvas.width = size * ratio; canvas.height = size * ratio;
   canvas.style.width = `${size}px`; canvas.style.height = `${size}px`;
   const ctx = canvas.getContext('2d');
-  ctx.scale(ratio, ratio); ctx.fillStyle = palette.deepBlue; ctx.fillRect(0, 0, size, size);
+  ctx.scale(ratio, ratio);
   const features = project(source, coords, size);
-  paintLand(ctx, features, palette); paintWaterways(ctx, features, palette);
+  if (!roadsOnly) {
+    ctx.fillStyle = palette.land; ctx.fillRect(0, 0, size, size);
+    paintLand(ctx, features, palette); paintWaterways(ctx, features, palette);
+    return;
+  }
+  // Transparent roads and labels sit ABOVE hillshade, preserving their exact colors.
   for (const layer of ['Road tunnel', 'Road', 'Road bridge']) {
     paintRoads(ctx, features.filter((f) => f.type === 2 && f.layer === layer), coords.z, palette);
   }

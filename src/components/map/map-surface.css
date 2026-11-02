@@ -2,7 +2,7 @@
 .sk-map { background: var(--map-midnight); color: var(--map-text); font-family: var(--font-body); }
 .sk-map .leaflet-container { background: var(--map-midnight); }
 .sk-map .sk-terrain-tiles { mix-blend-mode: soft-light; opacity: .36; pointer-events: none; }
-.sk-map .sk-vector-tiles { pointer-events: none; }
+.sk-map .sk-vector-tiles, .sk-map .sk-road-tiles { pointer-events: none; }
 .sk-map .sk-map-lightning { display: none; }
 .sk-map .sk-map-haze { opacity: .16; background: radial-gradient(ellipse at 90% 0%, var(--map-royal), transparent 65%); }
 .sk-map .sk-map-head {

@@ -13,6 +13,9 @@ module.exports = {
   		colors: {
         map: {
           midnight: 'var(--map-midnight)',
+          land: 'var(--map-land)',
+          'road-highlight': 'var(--map-road-highlight)',
+          'road-local': 'var(--map-road-local)',
           'deep-blue': 'var(--map-deep-blue)',
           royal: 'var(--map-royal)',
           electric: 'var(--map-electric)',

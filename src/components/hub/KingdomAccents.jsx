@@ -2,20 +2,12 @@ import React from "react";
 import "@/components/hub/kingdom-accents.css";
 
 const bolts = [
-  { left: "1%", top: "30%", width: "13%", tone: "cyan", delay: "0s" },
-  { left: "86%", top: "42%", width: "11%", tone: "gold", delay: "2.6s" },
-  { left: "58%", top: "56%", width: "12%", tone: "cyan", delay: "5.1s" },
-  { left: "6%", top: "70%", width: "14%", tone: "gold", delay: "7.4s" },
-  { left: "78%", top: "84%", width: "10%", tone: "cyan", delay: "3.8s" },
+  { left: "-4%", top: "30%", width: "19%", tone: "cyan", delay: "0s", path: "M58 2 L34 82 L62 98 L26 218" },
+  { left: "88%", top: "41%", width: "16%", tone: "gold", delay: "2.4s", path: "M62 4 L40 86 L66 100 L34 214" },
+  { left: "0%", top: "55%", width: "20%", tone: "gold", delay: "5.2s", path: "M54 2 L28 78 L56 92 L20 216" },
+  { left: "90%", top: "68%", width: "15%", tone: "cyan", delay: "7.6s", path: "M60 4 L38 84 L64 98 L30 212" },
+  { left: "2%", top: "82%", width: "18%", tone: "cyan", delay: "3.6s", path: "M56 2 L30 80 L58 94 L24 214" },
 ];
-
-const pathFor = (i) => [
-  "M56 2 L34 82 L60 96 L26 216",
-  "M70 4 L52 88 L74 104 L46 210",
-  "M48 6 L26 78 L54 92 L20 208",
-  "M64 2 L40 90 L66 102 L34 214",
-  "M50 4 L30 86 L56 98 L24 212",
-][i % 5];
 
 export default function KingdomAccents() {
   return (
@@ -29,8 +21,8 @@ export default function KingdomAccents() {
           preserveAspectRatio="xMidYMin meet"
           focusable="false"
         >
-          <path className="kingdom-bolt-halo" d={pathFor(i)} />
-          <path className="kingdom-bolt-core" d={pathFor(i)} />
+          <path className="kingdom-bolt-halo" d={b.path} />
+          <path className="kingdom-bolt-core" d={b.path} />
         </svg>
       ))}
     </div>

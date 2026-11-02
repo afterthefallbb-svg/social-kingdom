@@ -146,8 +146,8 @@
   position: absolute;
   left: 10px;
   top: calc(max(12px, env(safe-area-inset-top)) + 112px);
-  /* Four full cards, then the list scrolls so the map stays in view */
-  max-height: 346px;
+  /* Five full cards, then the list scrolls so the map stays in view */
+  max-height: 420px;
   z-index: 620;
   width: clamp(140px, 27vw, 224px);
   display: flex;
@@ -317,5 +317,5 @@
 @media (max-width: 420px) {
   .sk-ev-thumb { width: 34px; height: 34px; }
   .sk-ev-card { padding: 5px; gap: 6px; }
-  .sk-map-panel { max-height: 332px; }
+  .sk-map-panel { max-height: 404px; }
 }

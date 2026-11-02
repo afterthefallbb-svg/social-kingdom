@@ -14,7 +14,7 @@
 .kingdom-backdrop > .kingdom-electrics { inset: auto 0 0; height: 44%; opacity: 1; }
 @keyframes kingdom-gloss { 0%, 100% { background-position: 168% 0; } 50% { background-position: -68% 0; } }
 .kingdom-shell { width: min(100%, 960px); margin-inline: auto; container-type: inline-size; padding-bottom: max(110px, calc(env(safe-area-inset-bottom) + 14cqw)); }
-.kingdom-header { height: clamp(128px, 15.8dvh, 250px); position: relative; display: grid; grid-template-columns: 30% 70%; align-items: center; }
+.kingdom-header { height: auto; aspect-ratio: 696 / 194; max-height: 250px; min-height: 124px; position: relative; display: grid; grid-template-columns: 30% 70%; align-items: center; }
 .kingdom-skyline { position: absolute; inset: 0 -1px; z-index: -1; overflow: hidden; }
 .kingdom-skyline::before { content: ""; position: absolute; inset: 0; z-index: 2; background: linear-gradient(100deg, transparent 40%, hsl(var(--kingdom-cyan) / .18) 49%, hsl(var(--kingdom-text) / .12) 53%, transparent 62%); background-size: 240% 100%; animation: kingdom-gloss 17s linear infinite; mix-blend-mode: screen; pointer-events: none; }
 .kingdom-skyline::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, hsl(var(--kingdom-ink) / .95), transparent 24%, hsl(var(--kingdom-ink) / .1)), radial-gradient(ellipse 72% 42% at 50% 106%, hsl(var(--kingdom-cyan) / .3), transparent 70%); }
@@ -100,7 +100,6 @@
 .kingdom-orb-blue { border-color: hsl(var(--kingdom-cyan)); background: radial-gradient(circle at 40% 20%, hsl(var(--kingdom-cyan) / .9), hsl(var(--kingdom-blue)) 42%, hsl(var(--kingdom-ink)) 90%); box-shadow: 0 0 3px 1px hsl(var(--kingdom-text)), 0 0 15px hsl(var(--kingdom-cyan) / .8), inset 0 0 9px hsl(var(--kingdom-cyan)); }
 .kingdom-orb svg { width: 56%; height: 56%; stroke-width: 2.3; filter: drop-shadow(0 0 4px hsl(var(--kingdom-blue))); }
 @media (max-width: 420px) {
-  .kingdom-header { height: clamp(120px, 15.4dvh, 176px); }
   .kingdom-brand { padding-top: 4cqw; }
   .kingdom-header-actions { top: 1.8cqw; }
   .kingdom-planning { margin-bottom: 1.6cqw; }

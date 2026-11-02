@@ -3,8 +3,8 @@
 .kingdom-backdrop { background: radial-gradient(ellipse at 50% 25%, hsl(var(--kingdom-blue) / .36), transparent 74%), radial-gradient(ellipse at 0% 75%, hsl(var(--kingdom-blue) / .5), transparent 45%), radial-gradient(ellipse at 100% 92%, hsl(var(--kingdom-blue) / .4), transparent 48%), hsl(var(--kingdom-ink)); }
 .kingdom-backdrop::after { background: none; }
 .kingdom-hub::after { height: 20dvh; background: radial-gradient(ellipse at 0% 100%, hsl(var(--kingdom-blue) / .42), transparent 60%), radial-gradient(ellipse at 100% 100%, hsl(var(--kingdom-blue) / .35), transparent 60%); }
-.kingdom-skyline { display: block; background: radial-gradient(ellipse at 42% 70%, hsl(var(--kingdom-gold) / .3), transparent 42%), radial-gradient(ellipse at 70% 55%, hsl(var(--kingdom-magenta) / .38), transparent 65%), linear-gradient(180deg, hsl(var(--kingdom-ink)), hsl(var(--kingdom-blue) / .55) 48%, hsl(var(--kingdom-surface))); }
-.kingdom-skyline > .kingdom-skyline-image { display: block; width: 100%; height: 100%; object-fit: fill; }
+.kingdom-skyline { display: block; background: hsl(var(--kingdom-ink)); }
+.kingdom-skyline > .kingdom-skyline-image { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 .kingdom-skyline::before, .kingdom-skyline::after { display: none; }
 .kingdom-header::after { height: 1px; box-shadow: 0 0 5px hsl(var(--kingdom-cyan) / .5); }
 .kingdom-backdrop > .kingdom-electrics { inset: auto auto 0 50%; transform: translateX(-50%); width: min(100%, 696px); height: auto; opacity: 1; z-index: 1; }

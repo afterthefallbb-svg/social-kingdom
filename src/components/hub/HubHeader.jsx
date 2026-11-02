@@ -9,7 +9,7 @@ export default function HubHeader({ me }) {
   return (
     <header className="kingdom-header">
       <div className="kingdom-skyline" aria-hidden="true">
-        <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/eb0cdc14f_kingdom-precise-city-original-visible.png" alt="" className="kingdom-skyline-image" quality={100} loading="eager" />
+        <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/fcd7493e9_kingdom-city-header-full.png" alt="" className="kingdom-skyline-image" quality={100} loading="eager" />
       </div>
       <Link to={me ? "/profile" : "/register"} className="kingdom-profile" data-tour="profile-link" aria-label={me ? "My Profile" : "Sign up or log in"}>
         <span className="kingdom-avatar">

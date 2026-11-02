@@ -14,7 +14,7 @@ const TABS = [
   { id: "friends", label: "Friends", emoji: "👤" },
   { id: "cliqs", label: "CliQs", emoji: "👥" },
   { id: "afterparty", label: "After-party", emoji: "🎉" },
-  { id: "search", label: "Search", emoji: "🔍" }
+  { id: "search", label: "People", emoji: "🧑" }
 ];
 
 // Multi-select invite picker used inside Create Event. Same tabs/features as

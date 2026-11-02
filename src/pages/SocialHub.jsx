@@ -9,6 +9,7 @@ import useSocialHub from "@/components/hub/useSocialHub";
 import hubItems from "@/components/hub/hubItems";
 import "@/components/hub/kingdom.css";
 import "@/components/hub/kingdom-materials.css";
+import "@/components/hub/hub-layout.css";
 
 export default function SocialHub() {
   const navigate = useNavigate();
@@ -21,13 +22,17 @@ export default function SocialHub() {
     <div className="kingdom-hub">
       <HubBackdrop />
       <div className="kingdom-shell">
-        <HubHeader me={me} />
-        <HubShortcuts me={me} />
-        <div className="kingdom-sections">
-          <HubCategoryRow title="Stream" kind="stream" onTitle={() => navigate("/stream")} items={rows.stream} emptyText="No videos yet." onVideoClick={(index) => setPlayerState({ videos, index })} />
-          <HubCategoryRow title="Events" kind="events" onTitle={() => navigate("/browse/events")} items={rows.events} emptyText="No events in your area yet." />
-          <HubCategoryRow title="Artists" kind="artists" onTitle={() => navigate("/browse/artists")} items={rows.artists} emptyText="No local artists yet." />
-          <HubCategoryRow title="CliQs" kind="cliqs" onTitle={() => navigate("/browse/cliqs")} items={rows.cliqs} emptyText="No CliQs yet." />
+        <div className="kingdom-pinned">
+          <HubHeader me={me} />
+          <HubShortcuts me={me} />
+        </div>
+        <div className="kingdom-feed">
+          <div className="kingdom-sections">
+            <HubCategoryRow title="Stream" kind="stream" onTitle={() => navigate("/stream")} items={rows.stream} emptyText="No videos yet." onVideoClick={(index) => setPlayerState({ videos, index })} />
+            <HubCategoryRow title="Events" kind="events" onTitle={() => navigate("/browse/events")} items={rows.events} emptyText="No events in your area yet." />
+            <HubCategoryRow title="Artists" kind="artists" onTitle={() => navigate("/browse/artists")} items={rows.artists} emptyText="No local artists yet." />
+            <HubCategoryRow title="CliQs" kind="cliqs" onTitle={() => navigate("/browse/cliqs")} items={rows.cliqs} emptyText="No CliQs yet." />
+          </div>
         </div>
       </div>
 

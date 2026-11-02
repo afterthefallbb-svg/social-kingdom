@@ -5,22 +5,18 @@
 .sk-map .sk-road-tiles { pointer-events: none; }
 /* Electric-blue glass chips that read over the daylight basemap. */
 .sk-map .sk-cat {
-  --cat-a: 193 100% 84%;
-  --cat-b: 214 100% 66%;
+  --cat-a: 202 88% 66%;
+  --cat-b: 217 92% 48%;
   position: relative;
   isolation: isolate;
   border-color: transparent;
-  color: rgb(255 255 255 / .96);
+  color: rgb(234 243 255 / .92);
   background:
-    radial-gradient(ellipse 92% 78% at 50% -12%, hsl(var(--cat-b) / .7), transparent 74%),
-    radial-gradient(ellipse 84% 64% at 50% 116%, hsl(var(--cat-a) / .34), transparent 74%),
-    linear-gradient(170deg, hsl(214 100% 48% / .92), hsl(217 100% 30% / .94));
+    radial-gradient(ellipse 92% 78% at 50% -12%, hsl(var(--cat-b) / .34), transparent 74%),
+    linear-gradient(170deg, hsl(219 92% 24% / .94), hsl(224 90% 13% / .95));
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / .46),
-    inset 0 0 15px hsl(var(--cat-b) / .46),
-    0 0 7px hsl(var(--cat-a) / .55),
-    0 0 15px hsl(var(--cat-b) / .4),
-    0 3px 9px rgb(5 11 36 / .42);
+    inset 0 1px 0 rgb(255 255 255 / .2),
+    inset 0 0 10px hsl(var(--cat-b) / .22);
   transition: color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
 .sk-map .sk-cat::before {
@@ -31,9 +27,9 @@
   border-radius: inherit;
   pointer-events: none;
   background:
-    radial-gradient(circle at 8% 0%, rgb(255 255 255 / .95), transparent 38%),
-    radial-gradient(circle at 92% 100%, hsl(var(--cat-a) / .92), transparent 36%),
-    linear-gradient(135deg, hsl(var(--cat-a)), hsl(var(--cat-b)) 50%, hsl(var(--cat-a)));
+    radial-gradient(circle at 8% 0%, rgb(255 255 255 / .7), transparent 38%),
+    radial-gradient(circle at 92% 100%, hsl(var(--cat-a) / .62), transparent 36%),
+    linear-gradient(135deg, hsl(var(--cat-a) / .8), hsl(var(--cat-b)) 50%, hsl(var(--cat-a) / .8));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -41,18 +37,14 @@
 }
 .sk-map .sk-cat-icon, .sk-map .sk-cat-on .sk-cat-icon { filter: none; }
 .sk-map .sk-cat-on {
-  color: rgb(255 255 255);
+  color: rgb(244 249 255);
   background:
-    radial-gradient(ellipse 96% 82% at 50% -14%, hsl(var(--cat-b) / .95), transparent 72%),
-    radial-gradient(ellipse 86% 68% at 50% 116%, hsl(var(--cat-a) / .55), transparent 72%),
-    linear-gradient(170deg, hsl(214 100% 62% / .94), hsl(217 100% 36% / .96));
+    radial-gradient(ellipse 96% 82% at 50% -14%, hsl(var(--cat-b) / .62), transparent 72%),
+    linear-gradient(170deg, hsl(217 92% 38% / .95), hsl(222 90% 20% / .96));
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / .8),
-    inset 0 0 18px hsl(var(--cat-a) / .42),
-    0 0 10px hsl(var(--cat-a) / .9),
-    0 0 22px hsl(var(--cat-b) / .68),
-    0 0 34px hsl(var(--cat-b) / .32);
-  text-shadow: 0 0 10px hsl(var(--cat-b) / .7);
+    inset 0 1px 0 rgb(255 255 255 / .4),
+    inset 0 0 12px hsl(var(--cat-a) / .22),
+    0 0 4px hsl(var(--cat-b) / .45);
 }
 .sk-map .sk-cat-on::before { padding: 2px; }
 .sk-map .sk-map-panel-head { align-self: flex-start; padding: 5px 9px; margin-bottom: 5px; border-radius: 8px; background: var(--map-day-surface); box-shadow: 0 2px 6px rgb(5 11 36 / .1); }

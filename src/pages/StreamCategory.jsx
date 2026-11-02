@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { Play } from "lucide-react";
+import CategoryPageHeader from "@/components/category/CategoryPageHeader";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import VideoComposer from "@/components/video/VideoComposer";
 import VideoCreateButton from "@/components/video/VideoCreateButton";
-
-const FB = "#1877f2";
 
 // Browse all videos within one streaming category. A search box at the top
 // filters videos by caption / creator name within the category.
 export default function StreamCategory() {
   const params = new URLSearchParams(window.location.search);
   const categoryName = params.get("name") || "all other";
-  const navigate = useNavigate();
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -55,14 +52,9 @@ export default function StreamCategory() {
 
   return (
     <div className="min-h-screen bg-white pb-28">
-      <div className="flex items-center gap-2 px-4 pt-6">
-        <button onClick={() => navigate("/stream")} className="p-1">
-          <ChevronLeft size={24} style={{ color: "#000" }} />
-        </button>
-        <span className="font-bold text-gray-900 text-lg truncate flex-1">{categoryName}</span>
+      <CategoryPageHeader title={categoryName} backTo="/stream">
         <VideoCreateButton onClick={() => setComposing(true)} />
-      </div>
-      <div className="h-[3px] w-12 bg-gray-900 ml-4 mt-2 rounded-full" />
+      </CategoryPageHeader>
 
       {/* Search box */}
       <div className="px-4 mt-4">

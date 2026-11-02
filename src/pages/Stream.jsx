@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Bookmark } from "lucide-react";
+import { Bookmark } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import CategoryPageHeader from "@/components/category/CategoryPageHeader";
 import CategoryRow from "@/components/hub/CategoryRow";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import VideoComposer from "@/components/video/VideoComposer";
@@ -47,16 +48,9 @@ export default function Stream() {
 
   return (
     <div className="min-h-screen bg-white pb-28">
-      <div className="flex items-center gap-2 px-4 pt-6">
-        <button onClick={() => navigate("/browse")} className="p-1">
-          <ChevronLeft size={24} style={{ color: FB }} />
-        </button>
-        <span className="font-bold text-gray-900 text-lg">Stream</span>
-        <div className="ml-auto">
-          <VideoCreateButton onClick={() => setComposing(true)} />
-        </div>
-      </div>
-      <div className="h-[3px] w-12 bg-gray-900 ml-4 mt-2 rounded-full" />
+      <CategoryPageHeader title="Stream" backTo="/browse">
+        <VideoCreateButton onClick={() => setComposing(true)} />
+      </CategoryPageHeader>
 
       <div className="px-4 mt-3">
         <button

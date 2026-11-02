@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
 import moment from "moment";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
+import CategoryPageHeader from "@/components/category/CategoryPageHeader";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import VideoComposer from "@/components/video/VideoComposer";
 import VideoCreateButton from "@/components/video/VideoCreateButton";
 import HubCard from "@/components/hub/HubCard";
-
-const FB = "#1877f2";
 
 const TITLES = {
   events: "Events",
@@ -97,18 +95,9 @@ export default function CategoryBrowse() {
 
   return (
     <div className="min-h-screen bg-white pb-32">
-      <div className="flex items-center gap-2 px-4 pt-6">
-        <button onClick={() => navigate("/browse")} className="p-1">
-          <ChevronLeft size={24} style={{ color: FB }} />
-        </button>
-        <span className="font-bold text-gray-900 text-lg">{title}</span>
-        {category === "videos" && (
-          <div className="ml-auto">
-            <VideoCreateButton onClick={() => setComposing(true)} />
-          </div>
-        )}
-      </div>
-      <div className="h-[3px] w-12 bg-gray-900 ml-4 mt-2 rounded-full" />
+      <CategoryPageHeader title={title} backTo="/browse">
+        {category === "videos" && <VideoCreateButton onClick={() => setComposing(true)} />}
+      </CategoryPageHeader>
 
       <div className="px-4 mt-4">
         {loading ? (

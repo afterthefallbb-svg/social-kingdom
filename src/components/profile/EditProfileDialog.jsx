@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
+import { checkProfilePhoto } from "@/lib/faceCheck";
 
 const FB = "#1877f2";
 
@@ -27,6 +28,17 @@ export default function EditProfileDialog({ me, onClose, onSaved }) {
   async function save() {
     setSaving(true);
     try {
+      const newAvatar = avatar.trim();
+      if (newAvatar && newAvatar !== (me?.avatar_url || "") && me?.selfie_verified) {
+        const check = await checkProfilePhoto(newAvatar);
+        if (!check.ok) {
+          toast({
+            title: "That photo isn't you",
+            description: "Your profile photo has to show your face and match your verified selfie.",
+          });
+          return;
+        }
+      }
       const updated = await base44.auth.updateMe({
         bio: bio.trim(),
         location: location.trim(),

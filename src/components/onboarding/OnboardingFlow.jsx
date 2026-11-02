@@ -6,6 +6,8 @@ import AnnouncementModal from "./AnnouncementModal";
 import TourOverlay from "./TourOverlay";
 import SelfieCapture from "@/components/auth/SelfieCapture";
 import PhotoEditor from "@/components/compose/PhotoEditor";
+import { toast } from "@/components/ui/use-toast";
+import { checkProfilePhoto } from "@/lib/faceCheck";
 
 const FB = "#1877f2";
 
@@ -118,6 +120,17 @@ export default function OnboardingFlow() {
   }
 
   async function onPhoto(url) {
+    if (url && me?.selfie_verified) {
+      const check = await checkProfilePhoto(url);
+      if (!check.ok) {
+        toast({
+          title: "That photo isn't you",
+          description: "Your profile photo has to show your face and match your verified selfie.",
+        });
+        setPhase("bio");
+        return;
+      }
+    }
     try {
       const updated = await base44.auth.updateMe({ avatar_url: url });
       setMe(updated);

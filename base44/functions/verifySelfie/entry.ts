@@ -34,6 +34,7 @@ export default async function (req) {
     if (!signedUrl || !/^https:\/\//i.test(signedUrl)) {
       return Response.json({ error: 'signed_url is required' }, { status: 400 });
     }
+    const fileUri = typeof body.file_uri === 'string' ? body.file_uri : '';
 
     const result = await base44.asServiceRole.integrations.Core.InvokeLLM({
       prompt: PROMPT,
@@ -51,7 +52,11 @@ export default async function (req) {
     const verified = result?.verified === true;
 
     if (verified) {
-      await base44.asServiceRole.entities.User.update(user.id, { selfie_verified: true }).catch(() => {});
+      // The stored selfie is the reference for duplicate-account and profile-photo checks.
+      await base44.asServiceRole.entities.User.update(user.id, {
+        selfie_verified: true,
+        ...(fileUri ? { selfie_uri: fileUri } : {}),
+      }).catch(() => {});
     }
 
     return Response.json({ verified, reason: result?.reason || '' });

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Camera, RefreshCw, Check, Loader2, UserCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { checkDuplicateFace } from "@/lib/faceCheck";
 
 const FB = "#1877f2";
 
@@ -16,6 +17,7 @@ export default function SelfieCapture({ onCaptured, title = "Verify with a selfi
   const [cameraReady, setCameraReady] = useState(false);
   const [starting, setStarting] = useState(false);
   const [checking, setChecking] = useState(false);
+  const [blocked, setBlocked] = useState(false);
 
   function stopCamera() {
     if (streamRef.current) {
@@ -95,7 +97,7 @@ export default function SelfieCapture({ onCaptured, title = "Verify with a selfi
       const file = new File([shot.blob], "selfie.jpg", { type: shot.blob.type || "image/jpeg" });
       const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
       const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri });
-      const res = await base44.functions.invoke("verifySelfie", { signed_url });
+      const res = await base44.functions.invoke("verifySelfie", { signed_url, file_uri });
       const data = res?.data || {};
       if (!data.verified) {
         setShot(null);
@@ -103,6 +105,13 @@ export default function SelfieCapture({ onCaptured, title = "Verify with a selfi
           `We couldn't confirm a real face${data.reason ? ` (${data.reason})` : ""}. Face the camera in good light and take a new selfie.`
         );
         startCamera();
+        return;
+      }
+      const dup = await checkDuplicateFace();
+      if (dup.duplicate) {
+        setShot(null);
+        stopCamera();
+        setBlocked(true);
         return;
       }
       onCaptured?.(file_uri);
@@ -118,6 +127,28 @@ export default function SelfieCapture({ onCaptured, title = "Verify with a selfi
   function retake() {
     setShot(null);
     startCamera();
+  }
+
+  if (blocked) {
+    return (
+      <div className="text-center max-w-sm mx-auto">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4" style={{ background: "#dc2626" }}>
+          <UserCircle className="w-8 h-8 text-white" />
+        </div>
+        <h2 className="text-xl font-bold text-foreground">This face already has an account</h2>
+        <p className="text-muted-foreground mt-2 text-sm">
+          This selfie matches an existing Social Kingdom account. Each person can only verify one account, so a second
+          one can't be created with the same face.
+        </p>
+        <a
+          href="/login"
+          className="mt-5 inline-flex items-center justify-center w-52 h-12 rounded-full text-white font-semibold"
+          style={{ background: FB }}
+        >
+          Sign in instead
+        </a>
+      </div>
+    );
   }
 
   return (

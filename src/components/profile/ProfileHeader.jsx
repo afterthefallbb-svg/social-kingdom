@@ -8,6 +8,7 @@ import PhotoEditor from "@/components/compose/PhotoEditor";
 import KloutButton from "@/components/klout/KloutButton";
 import FriendMessageActions from "@/components/profile/FriendMessageActions";
 import { presenceBadge } from "@/lib/presence";
+import { checkProfilePhoto } from "@/lib/faceCheck";
 
 const FB = "#1877f2";
 
@@ -25,6 +26,16 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
     const labelMap = { avatar: "Profile", cover: "Cover", background: "Background" };
     const which = uploading;
     setUploading(null);
+    if (which === "avatar" && user?.selfie_verified) {
+      const check = await checkProfilePhoto(url);
+      if (!check.ok) {
+        toast({
+          title: "That photo isn't you",
+          description: "Your profile photo has to show your face and match your verified selfie.",
+        });
+        return;
+      }
+    }
     try {
       const updated = await base44.auth.updateMe({ [fieldMap[which]]: url });
       onUserUpdated?.(updated);

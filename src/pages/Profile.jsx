@@ -10,6 +10,8 @@ import CliQsSection from "@/components/profile/CliQsSection";
 import FriendsSection from "@/components/profile/FriendsSection";
 import EditProfileDialog from "@/components/profile/EditProfileDialog";
 import VideoGallery from "@/components/video/VideoGallery";
+import KingdomBackdrop from "@/components/theme/KingdomBackdrop";
+import { usersByIds } from "@/lib/users";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -25,6 +27,7 @@ export default function Profile() {
   const [clicks, setClicks] = useState([]);
   const [friends, setFriends] = useState([]);
   const [editing, setEditing] = useState(false);
+  const [bgFailed, setBgFailed] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -92,7 +95,21 @@ export default function Profile() {
         { user_id: targetId, status: "accepted" },
         { limit: 50 }
       );
-      if (active) setFriends(frres.items);
+      // Friend rows store a snapshot of the name/photo at request time — show
+      // the live profile instead so a changed photo is never blank or stale.
+      const live = await usersByIds(frres.items.map((f) => f.friend_id));
+      const withLive = frres.items.map((f) => {
+        const u = live[f.friend_id];
+        return u
+          ? {
+              ...f,
+              friend_name: u.full_name || f.friend_name,
+              friend_avatar: u.avatar_url || f.friend_avatar,
+              friend_city: u.location || f.friend_city,
+            }
+          : f;
+      });
+      if (active) setFriends(withLive);
     })();
     return () => {
       active = false;
@@ -113,10 +130,10 @@ export default function Profile() {
     <div className="min-h-screen relative pb-28">
       {/* Fixed full-screen background photo — stays in place while content scrolls */}
       <div className="fixed inset-0 z-0">
-        {bg ? (
-          <Image src={bg} fittingType="fill" className="w-full h-full" />
+        {bg && !bgFailed ? (
+          <Image src={bg} fittingType="fill" className="w-full h-full" onError={() => setBgFailed(true)} />
         ) : (
-          <div className="w-full h-full bg-white" />
+          <KingdomBackdrop />
         )}
       </div>
 

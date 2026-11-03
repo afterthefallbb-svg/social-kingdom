@@ -1,0 +1,10 @@
+/* Unread conversations stay in the list but read as new: a tinted row with an
+   accent bar, the way inboxes flag messages you haven't opened yet. */
+.sk-unread-row {
+  background: #e8f2ff;
+  box-shadow: inset 3px 0 0 0 #1877f2;
+}
+
+.sk-unread-row:active {
+  background: #dbeaff;
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Send, Ban, MoreVertical, Plus, Smile, Image as ImageIcon, User } from "lucide-react";
+import { ArrowLeft, Send, Ban, MoreVertical, Plus, Smile, Image as ImageIcon, User, Flag, Minimize2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { isOnline, statusEmoji, presenceBadge } from "@/lib/presence";
@@ -9,11 +9,13 @@ import { canContact } from "@/lib/ageSafety";
 import EmojiPicker from "@/components/messages/EmojiPicker";
 import PresenceBadge from "@/components/presence/PresenceBadge";
 import { toast } from "@/components/ui/use-toast";
+import ReportDialog from "@/components/messages/ReportDialog";
 import "@/components/messages/chat-composer.css";
 
 const FB = "#1877f2";
 
-export default function ChatView({ me, conversation, peer, onBack, onBlocked }) {
+export default function ChatView({ me, conversation, peer, onBack, onBlocked, bubblesEnabled = false, onMinimize }) {
+  const [reportOpen, setReportOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -166,10 +168,26 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
         <div className="relative" ref={menuRef}>
           <button onClick={() => setMenuOpen((o) => !o)} aria-label="More"><MoreVertical size={20} /></button>
           {menuOpen && (
-            <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1 w-40 z-50">
+            <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1 w-48 z-50">
               {!conversation?.is_group && (
                 <button onClick={block} className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 hover:bg-gray-50">
                   <Ban size={15} /> Block user
+                </button>
+              )}
+              {!conversation?.is_group && (
+                <button
+                  onClick={() => { setMenuOpen(false); setReportOpen(true); }}
+                  className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 text-left"
+                >
+                  <Flag size={15} /> Report spam or abuse
+                </button>
+              )}
+              {bubblesEnabled && (
+                <button
+                  onClick={() => { setMenuOpen(false); onMinimize?.(); }}
+                  className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 text-left"
+                >
+                  <Minimize2 size={15} /> Keep as bubble
                 </button>
               )}
               <button onClick={() => { setMenuOpen(false); onBack(); }} className="w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 text-left">Close chat</button>
@@ -237,6 +255,15 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked }) 
           <Send size={18} />
         </button>
       </div>
+
+      {reportOpen && (
+        <ReportDialog
+          me={me}
+          peer={peer}
+          conversation={conversation}
+          onClose={() => setReportOpen(false)}
+        />
+      )}
     </div>
   );
 }

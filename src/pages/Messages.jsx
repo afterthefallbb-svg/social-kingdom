@@ -7,6 +7,7 @@ import MessageSearchResults from "@/components/messages/MessageSearchResults";
 import ConversationList from "@/components/messages/ConversationList";
 import MessageSettings from "@/components/messages/MessageSettings";
 import ChatView from "@/components/messages/ChatView";
+import ChatBubble from "@/components/messages/ChatBubble";
 import { markOnline } from "@/lib/presence";
 import { getOrCreateDirectConversation, createGroupConversation } from "@/lib/messaging";
 import { getUser } from "@/lib/users";
@@ -33,6 +34,7 @@ export default function Messages() {
   const [selecting, setSelecting] = useState(false);
   const [selected, setSelected] = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [bubble, setBubble] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -103,12 +105,31 @@ export default function Messages() {
     }
   }
 
+  // Closing a chat with bubbles on collapses it into a floating bubble instead
+  // of dropping it, so picking the conversation back up is one tap.
+  function minimizeChat() {
+    if (!activeConv) return;
+    setBubble({ conversation: activeConv, peer: activePeer });
+    setActiveConv(null);
+    setActivePeer(null);
+    setRefreshKey((k) => k + 1);
+  }
+
+  function reopenBubble() {
+    if (!bubble) return;
+    setActiveConv(bubble.conversation);
+    setActivePeer(bubble.peer);
+    setBubble(null);
+  }
+
   if (activeConv) {
     return (
       <ChatView
         me={me}
         conversation={activeConv}
         peer={activePeer}
+        bubblesEnabled={me?.bubbles_enabled !== false}
+        onMinimize={minimizeChat}
         onBack={() => { setActiveConv(null); setActivePeer(null); setRefreshKey((k) => k + 1); }}
         onBlocked={() => setRefreshKey((k) => k + 1)}
       />
@@ -178,6 +199,15 @@ export default function Messages() {
 
       {settingsOpen && (
         <MessageSettings me={me} onClose={() => setSettingsOpen(false)} onSaved={(u) => setMe(u)} />
+      )}
+
+      {bubble && (
+        <ChatBubble
+          conversation={bubble.conversation}
+          peer={bubble.peer}
+          onOpen={reopenBubble}
+          onDismiss={() => setBubble(null)}
+        />
       )}
     </div>
   );

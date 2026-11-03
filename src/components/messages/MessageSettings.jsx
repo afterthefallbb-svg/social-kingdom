@@ -3,6 +3,8 @@ import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/image";
 import { Switch } from "@/components/ui/switch";
 import GlassToggle from "@/components/theme/GlassToggle";
+import ReportDialog from "@/components/messages/ReportDialog";
+import { Flag } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
 const FB = "#1877f2";
@@ -11,8 +13,10 @@ const EMOJIS = ["👑", "🟢", "🟡", "🔴", "😎", "🏆", "⭐", "💬", "
 export default function MessageSettings({ me, onClose, onSaved }) {
   const [showOnline, setShowOnline] = useState(me?.show_online !== false);
   const [emoji, setEmoji] = useState(me?.status_emoji || "👑");
+  const [bubbles, setBubbles] = useState(me?.bubbles_enabled !== false);
   const [blocks, setBlocks] = useState([]);
   const [saving, setSaving] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
 
   useEffect(() => {
     if (!me?.id) return;
@@ -24,7 +28,11 @@ export default function MessageSettings({ me, onClose, onSaved }) {
   async function save() {
     setSaving(true);
     try {
-      const updated = await base44.auth.updateMe({ show_online: showOnline, status_emoji: emoji });
+      const updated = await base44.auth.updateMe({
+        show_online: showOnline,
+        status_emoji: emoji,
+        bubbles_enabled: bubbles,
+      });
       onSaved?.(updated);
       toast({ title: "Settings saved" });
       onClose();
@@ -58,6 +66,21 @@ export default function MessageSettings({ me, onClose, onSaved }) {
             <Switch
               checked={showOnline}
               onCheckedChange={setShowOnline}
+              className="sk-glass-switch"
+            />
+          </div>
+
+          {/* Chat bubbles */}
+          <div className="flex items-center justify-between">
+            <div className="pr-3">
+              <p className="font-semibold text-gray-900 text-sm">Chat bubbles</p>
+              <p className="text-xs text-gray-500">
+                Keep a chat as a floating bubble with their photo when you close the window. Tap it to reopen.
+              </p>
+            </div>
+            <Switch
+              checked={bubbles}
+              onCheckedChange={setBubbles}
               className="sk-glass-switch"
             />
           </div>
@@ -99,6 +122,19 @@ export default function MessageSettings({ me, onClose, onSaved }) {
             )}
           </div>
 
+          {/* Report spam or abuse */}
+          <div>
+            <p className="font-semibold text-gray-900 text-sm mb-2">Report spam or abuse</p>
+            <p className="text-xs text-gray-500 mb-2">Send a private report straight to the Social Kingdom team.</p>
+            <button
+              onClick={() => setReportOpen(true)}
+              className="w-full flex items-center justify-center gap-2 rounded-lg border py-2.5 text-sm font-semibold"
+              style={{ borderColor: "#d1d5db", color: "#b91c1c" }}
+            >
+              <Flag size={15} /> Report a user
+            </button>
+          </div>
+
           <button
             onClick={save}
             disabled={saving}
@@ -109,6 +145,8 @@ export default function MessageSettings({ me, onClose, onSaved }) {
           </button>
         </div>
       </div>
+
+      {reportOpen && <ReportDialog me={me} onClose={() => setReportOpen(false)} />}
     </div>
   );
 }

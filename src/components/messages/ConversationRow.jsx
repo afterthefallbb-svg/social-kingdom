@@ -3,6 +3,7 @@ import { Image } from "@/components/ui/image";
 import { presenceBadge } from "@/lib/presence";
 import PresenceBadge from "@/components/presence/PresenceBadge";
 import { Check, Archive } from "lucide-react";
+import "@/components/messages/conversation-row.css";
 
 const FB = "#1877f2";
 
@@ -88,7 +89,7 @@ export default function ConversationRow({
         </span>
       </div>
       <div
-        className="w-full flex items-center gap-3 px-3 py-3 bg-white text-left"
+        className={`w-full flex items-center gap-3 px-3 py-3 text-left ${showUnread ? "sk-unread-row" : "bg-white"}`}
         style={{
           transform: `translateX(${dx}px)`,
           transition: start.current ? "none" : "transform 0.18s ease",
@@ -116,15 +117,23 @@ export default function ConversationRow({
         </span>
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-center">
-            <p className="font-semibold text-gray-900 truncate">{title}</p>
-            <span className="text-[10px] text-gray-400 shrink-0">{timeAgo(conv.last_message_at)}</span>
+            <p className={`truncate ${showUnread ? "font-bold text-gray-900" : "font-semibold text-gray-900"}`}>{title}</p>
+            <span
+              className={`text-[10px] shrink-0 ${showUnread ? "font-bold" : "text-gray-400"}`}
+              style={showUnread ? { color: FB } : undefined}
+            >
+              {timeAgo(conv.last_message_at)}
+            </span>
           </div>
-          <p className="text-xs text-gray-500 truncate">
+          <p className={`truncate ${showUnread ? "text-xs font-semibold text-gray-800" : "text-xs text-gray-500"}`}>
             {draftText ? <span className="text-amber-600">Draft: {draftText}</span> : (conv.last_message || "Say hello 👋")}
           </p>
         </div>
         {showUnread && (
-          <span className="text-[10px] font-bold text-white rounded-full px-2 py-0.5" style={{ background: FB }}>
+          <span
+            className="min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[10px] font-bold text-white rounded-full ring-2 ring-white"
+            style={{ background: FB }}
+          >
             {conv.unread}
           </span>
         )}

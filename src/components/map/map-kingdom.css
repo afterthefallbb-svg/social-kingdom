@@ -146,8 +146,8 @@
   position: absolute;
   left: 10px;
   top: calc(max(12px, env(safe-area-inset-top)) + 112px);
-  /* Five full cards, then the list scrolls so the map stays in view */
-  max-height: 420px;
+  /* Exactly four full cards show, then the list scrolls so the map stays in view */
+  --sk-card-row: 80px;
   z-index: 620;
   width: clamp(140px, 27vw, 224px);
   display: flex;
@@ -180,12 +180,17 @@
   overflow-y: auto;
   min-height: 0;
   padding: 2px 4px 8px 2px;
+  /* Room for four rows plus their gaps and top padding — and not one pixel
+     of a fifth card, which is what used to peek out below the fourth. */
+  max-height: calc(4 * var(--sk-card-row) + 3 * 7px + 8px);
 }
 .sk-ev-card {
   display: flex;
   align-items: center;
   gap: 7px;
   width: 100%;
+  /* Fixed row height keeps the four-card window exact at every width. */
+  height: var(--sk-card-row);
   padding: 6px;
   text-align: left;
   border-radius: 11px;
@@ -346,5 +351,4 @@
 @media (max-width: 420px) {
   .sk-ev-thumb { width: 34px; height: 34px; }
   .sk-ev-card { padding: 5px; gap: 6px; }
-  .sk-map-panel { max-height: 404px; }
 }

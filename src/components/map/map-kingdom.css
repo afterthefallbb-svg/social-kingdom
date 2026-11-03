@@ -189,8 +189,11 @@
   align-items: center;
   gap: 7px;
   width: 100%;
-  /* Fixed row height keeps the four-card window exact at every width. */
+  /* A fixed row that never shrinks — otherwise the list squeezes every card
+     to fit the window and the next card's top edge creeps into view. */
+  flex: 0 0 var(--sk-card-row);
   height: var(--sk-card-row);
+  min-height: var(--sk-card-row);
   padding: 6px;
   text-align: left;
   border-radius: 11px;

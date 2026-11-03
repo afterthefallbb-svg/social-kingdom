@@ -21,6 +21,10 @@
     "user_city": {
       "type": "string",
       "title": "User City"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
     }
   },
   "required": [

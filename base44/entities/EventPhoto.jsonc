@@ -26,6 +26,10 @@
     "user_name": {
       "type": "string",
       "title": "User Name"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
     }
   },
   "required": [

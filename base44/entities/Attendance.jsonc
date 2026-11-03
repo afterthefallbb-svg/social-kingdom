@@ -30,6 +30,10 @@
       ],
       "default": "confirmed",
       "title": "Status"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
     }
   },
   "required": [

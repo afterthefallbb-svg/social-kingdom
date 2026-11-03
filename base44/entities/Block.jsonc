@@ -13,6 +13,10 @@
     "blocked_name": {
       "type": "string",
       "title": "Blocked Name"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
     }
   },
   "required": [

@@ -45,6 +45,10 @@
     "music_artwork": {
       "type": "string",
       "title": "Music Artwork"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
     }
   },
   "required": [

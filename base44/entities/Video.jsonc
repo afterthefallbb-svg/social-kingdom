@@ -78,6 +78,10 @@
     "filter": {
       "type": "string",
       "title": "Filter"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
     }
   },
   "required": [

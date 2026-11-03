@@ -51,6 +51,10 @@
       },
       "default": [],
       "title": "Archived By Ids"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
     }
   },
   "required": [

@@ -13,6 +13,10 @@
     "data": {
       "type": "object",
       "title": "Data"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
     }
   },
   "required": [

@@ -51,6 +51,10 @@
       ],
       "default": "pending",
       "title": "Status"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
     }
   },
   "required": [

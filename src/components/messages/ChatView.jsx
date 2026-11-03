@@ -10,6 +10,8 @@ import EmojiPicker from "@/components/messages/EmojiPicker";
 import PresenceBadge from "@/components/presence/PresenceBadge";
 import { toast } from "@/components/ui/use-toast";
 import ReportDialog from "@/components/messages/ReportDialog";
+import MessageActions from "@/components/messages/MessageActions";
+import { visibleMessages, deleteMessageForMe, unsendMessage } from "@/lib/messageActions";
 import "@/components/messages/chat-composer.css";
 
 const FB = "#1877f2";
@@ -24,6 +26,8 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
   const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [pendingImage, setPendingImage] = useState(null);
+  const [actionMsg, setActionMsg] = useState(null);
+  const pressTimer = useRef(null);
   const scrollRef = useRef(null);
   const fileRef = useRef(null);
   const inputRef = useRef(null);
@@ -40,7 +44,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
       { conversation_id: conversation.id },
       { limit: 200, sort: "created_date" }
     ).catch(() => ({ items: [] }));
-    setMessages(res.items || []);
+    setMessages(visibleMessages(res.items, me.id));
     markConversationRead(conversation.id, me.id);
   }
 
@@ -131,6 +135,39 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
     }
   }
 
+  // Long-press (tap and hold) or right-click a bubble to open its actions
+  function pressStart(m) {
+    clearTimeout(pressTimer.current);
+    pressTimer.current = setTimeout(() => setActionMsg(m), 450);
+  }
+
+  function pressEnd() {
+    clearTimeout(pressTimer.current);
+  }
+
+  useEffect(() => () => clearTimeout(pressTimer.current), []);
+
+  function dropMessage(id) {
+    setMessages((list) => list.filter((x) => x.id !== id));
+  }
+
+  async function deleteForMe() {
+    const m = actionMsg;
+    setActionMsg(null);
+    if (!m) return;
+    dropMessage(m.id);
+    await deleteMessageForMe(m, me.id);
+  }
+
+  async function unsend() {
+    const m = actionMsg;
+    setActionMsg(null);
+    if (!m) return;
+    dropMessage(m.id);
+    await unsendMessage(m);
+    toast({ title: "Message unsent" });
+  }
+
   async function block() {
     if (!peer?.id) return;
     setMenuOpen(false);
@@ -203,7 +240,15 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
           const mine = m.sender_id === me.id;
           return (
             <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm ${mine ? "text-white" : "bg-white border border-gray-200 text-gray-900"}`} style={mine ? { background: FB } : {}}>
+              <div
+                className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm select-none ${mine ? "text-white" : "bg-white border border-gray-200 text-gray-900"}`}
+                style={mine ? { background: FB, WebkitTouchCallout: "none" } : { WebkitTouchCallout: "none" }}
+                onPointerDown={() => pressStart(m)}
+                onPointerUp={pressEnd}
+                onPointerLeave={pressEnd}
+                onPointerCancel={pressEnd}
+                onContextMenu={(e) => { e.preventDefault(); pressEnd(); setActionMsg(m); }}
+              >
                 {!mine && conversation?.is_group && <p className="text-[10px] font-semibold mb-0.5" style={{ color: FB }}>{m.sender_name?.split(" ")[0]}</p>}
                 {m.image_url && <Image src={m.image_url} fittingType="fit" className="rounded-xl mb-1 max-h-60 w-full" />}
                 {m.content && <p className="break-words">{m.content}</p>}
@@ -255,6 +300,16 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
           <Send size={18} />
         </button>
       </div>
+
+      {actionMsg && (
+        <MessageActions
+          message={actionMsg}
+          mine={actionMsg.sender_id === me.id}
+          onDeleteForMe={deleteForMe}
+          onUnsend={unsend}
+          onClose={() => setActionMsg(null)}
+        />
+      )}
 
       {reportOpen && (
         <ReportDialog

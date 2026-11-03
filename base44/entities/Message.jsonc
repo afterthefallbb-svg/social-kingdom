@@ -37,6 +37,14 @@
       "type": "boolean",
       "default": false,
       "title": "Read"
+    },
+    "deleted_for_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "title": "Deleted For Ids"
     }
   },
   "required": [

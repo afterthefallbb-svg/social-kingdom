@@ -23,16 +23,27 @@ export default function EmbedFrame({ provider, videoId, active, title }) {
     );
   }
 
+  // YouTube rejects a player whose embedding page sends no referrer or an
+  // undeclared origin ("player configuration error"). Declaring the origin and
+  // letting the browser send it keeps the player valid inside our window.
+  const origin =
+    typeof window !== "undefined" ? encodeURIComponent(window.location.origin) : "";
+  const src =
+    `https://www.youtube.com/embed/${videoId}` +
+    `?playsinline=1&rel=0&autoplay=${active ? 1 : 0}` +
+    (origin ? `&origin=${origin}` : "");
+
   return (
     <div className="h-full w-full flex items-center justify-center bg-black">
       <div className="w-full aspect-video">
         <iframe
           key={active ? "active" : "idle"}
-          src={`https://www.youtube.com/embed/${videoId}?playsinline=1&rel=0&modestbranding=1&autoplay=${active ? 1 : 0}`}
+          src={src}
           title={title || "YouTube video"}
           className="w-full h-full border-0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
           allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
           loading={active ? "eager" : "lazy"}
         />
       </div>

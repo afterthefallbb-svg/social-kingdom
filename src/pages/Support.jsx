@@ -83,6 +83,13 @@ export default function Support() {
             </button>{" "}
             page.
           </p>
+          <p className="text-sm text-gray-600 mt-3">
+            Read our{" "}
+            <button onClick={() => navigate("/privacy")} className="font-semibold underline" style={{ color: FB }}>
+              Privacy Policy
+            </button>
+            .
+          </p>
         </div>
       </div>
     </div>

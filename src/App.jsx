@@ -20,6 +20,7 @@ import Messages from '@/pages/Messages';
 import SocialHub from '@/pages/SocialHub';
 import CategoryBrowse from '@/pages/CategoryBrowse';
 import Support from '@/pages/Support';
+import Privacy from '@/pages/Privacy';
 import ContactUs from '@/pages/ContactUs';
 import Notifications from '@/pages/Notifications';
 import NotificationsCategory from '@/pages/NotificationsCategory';
@@ -87,6 +88,7 @@ const AuthenticatedApp = () => {
         <Route path="/browse" element={<SocialHub />} />
         <Route path="/browse/:category" element={<CategoryBrowse />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/notifications/:category" element={<NotificationsCategory />} />

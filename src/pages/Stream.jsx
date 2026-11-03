@@ -28,7 +28,7 @@ export default function Stream() {
     setLoading(true);
     (async () => {
       try {
-        const res = await base44.entities.Video.filter({}, { sort: "-created_date", limit: 100 });
+        const res = await base44.entities.Video.filter({}, { sort: "-created_date", limit: 500 });
         if (!active) return;
         const grouped = {};
         (res.items || []).forEach((v) => {

@@ -6,6 +6,20 @@
       "type": "string",
       "title": "Url"
     },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "mp4",
+        "youtube",
+        "tiktok"
+      ],
+      "default": "mp4",
+      "title": "Provider"
+    },
+    "video_id": {
+      "type": "string",
+      "title": "Video Id"
+    },
     "thumbnail": {
       "type": "string",
       "title": "Thumbnail"

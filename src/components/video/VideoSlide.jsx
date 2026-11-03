@@ -4,6 +4,7 @@ import { Image } from "@/components/ui/image";
 import { SIZES } from "@/lib/photoEdit";
 import KloutButton from "@/components/klout/KloutButton";
 import CommentSection from "@/components/comments/CommentSection";
+import EmbedFrame from "./EmbedFrame";
 
 function fmt(s) {
   if (!s || isNaN(s)) return "0:00";
@@ -24,6 +25,7 @@ export default function VideoSlide({ video, active }) {
   const [showControls, setShowControls] = useState(true);
   const [showComments, setShowComments] = useState(false);
 
+  const isEmbed = video.provider === "youtube" || video.provider === "tiktok";
   const hasMusic = !!video.music_url;
   const filterCss = video.filter && video.filter !== "none" ? video.filter : undefined;
   const overlays = Array.isArray(video.text_overlays) ? video.text_overlays : [];
@@ -88,19 +90,30 @@ export default function VideoSlide({ video, active }) {
       style={{ containerType: "inline-size" }}
       onClick={() => setShowControls((s) => !s)}
     >
-      <video
-        ref={videoRef}
-        src={video.url}
-        className="h-full w-full object-cover"
-        style={{ filter: filterCss }}
-        loop={!hasMusic}
-        playsInline
-        muted={hasMusic}
-        onTimeUpdate={onTimeUpdate}
-        onLoadedMetadata={() => setDuration(videoRef.current?.duration || 0)}
-        onClick={(e) => { e.stopPropagation(); togglePlay(); }}
-      />
-      {hasMusic && <audio ref={audioRef} src={video.music_url} loop />}
+      {isEmbed ? (
+        <EmbedFrame
+          provider={video.provider}
+          videoId={video.video_id}
+          active={active}
+          title={video.caption}
+        />
+      ) : (
+        <>
+          <video
+            ref={videoRef}
+            src={video.url}
+            className="h-full w-full object-cover"
+            style={{ filter: filterCss }}
+            loop={!hasMusic}
+            playsInline
+            muted={hasMusic}
+            onTimeUpdate={onTimeUpdate}
+            onLoadedMetadata={() => setDuration(videoRef.current?.duration || 0)}
+            onClick={(e) => { e.stopPropagation(); togglePlay(); }}
+          />
+          {hasMusic && <audio ref={audioRef} src={video.music_url} loop />}
+        </>
+      )}
 
       {/* Text overlays */}
       {overlays.map((t, i) => {
@@ -181,8 +194,8 @@ export default function VideoSlide({ video, active }) {
         </div>
       )}
 
-      {/* Playback controls — bottom */}
-      {showControls && (
+      {/* Playback controls — bottom. Native embeds carry their own. */}
+      {showControls && !isEmbed && (
         <div
           className="absolute bottom-4 left-4 right-4 z-10"
           onClick={(e) => e.stopPropagation()}

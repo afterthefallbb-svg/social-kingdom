@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { X, Plus, BookmarkCheck } from "lucide-react";
+import { X, Plus, BookmarkCheck, ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import VideoSlide from "./VideoSlide";
 
@@ -109,9 +109,20 @@ export default function VideoPlayer({ videos, startIndex = 0, onClose }) {
 
   return (
     <div className="fixed inset-0 z-[900] bg-black">
+      {/* Back returns to the category or page the video was opened from,
+          with its scroll position untouched. */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 left-4 z-50 flex items-center gap-1 h-10 pl-1.5 pr-3 rounded-full bg-black/40 text-white text-sm font-semibold"
+        aria-label="Back"
+      >
+        <ChevronLeft size={22} />
+        <span>Back</span>
+      </button>
       <button
         onClick={onClose}
         className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/40 flex items-center justify-center text-white"
+        aria-label="Close"
       >
         <X size={22} />
       </button>

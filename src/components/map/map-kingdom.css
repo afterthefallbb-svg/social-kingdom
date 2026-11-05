@@ -337,26 +337,18 @@
   width: 100%;
   height: 100%;
   display: grid;
-  place-items: end center;
+  place-items: center;
   border: 0;
   background: none;
   line-height: 1;
-  transform-origin: 50% 92%;
-  transition: transform 160ms ease;
+  /* The graphic itself floats above the map on its own shadow */
+  filter: drop-shadow(0 2px 2px hsl(var(--kingdom-ink) / 0.5)) drop-shadow(0 4px 6px hsl(var(--kingdom-ink) / 0.25));
 }
-/* Each marker is its own little object, so the only thing CSS adds is the drop
-   shadow that lifts it off the map and the gold lift when it is selected. */
-.sk-pin-glyph {
-  display: block;
-  line-height: 0;
-  filter: drop-shadow(0 2px 2px rgba(5, 11, 36, 0.42));
-}
-.sk-pin-glyph svg { display: block; overflow: visible; }
 .sk-pin-active {
-  transform: translateY(-2px) scale(1.04);
+  filter: drop-shadow(0 2px 2px hsl(var(--kingdom-ink) / 0.55)) drop-shadow(0 0 6px hsl(var(--kingdom-gold) / 0.6));
 }
-.sk-pin-active .sk-pin-glyph {
-  filter: drop-shadow(0 3px 3px rgba(5, 11, 36, 0.45)) drop-shadow(0 0 6px hsl(var(--kingdom-gold) / 0.6));
+.sk-pin-emoji {
+  filter: grayscale(1) sepia(1) saturate(6) hue-rotate(-8deg) brightness(1.3);
 }
 
 @media (max-width: 420px) {

@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -10,41 +11,45 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 // Add page imports here
 import Layout from '@/components/Layout';
-import Home from '@/pages/Home';
-import CreateEvent from '@/pages/CreateEvent';
-import Profile from '@/pages/Profile';
-import ProfileAbout from '@/pages/ProfileAbout';
-import EventDetail from '@/pages/EventDetail';
-import Clicks from '@/pages/Clicks';
-import ClickDetail from '@/pages/ClickDetail';
-import CreateClick from '@/pages/CreateClick';
-import Messages from '@/pages/Messages';
-import SocialHub from '@/pages/SocialHub';
-import CategoryBrowse from '@/pages/CategoryBrowse';
-import Support from '@/pages/Support';
-import Privacy from '@/pages/Privacy';
-import ContactUs from '@/pages/ContactUs';
-import Notifications from '@/pages/Notifications';
-import NotificationsCategory from '@/pages/NotificationsCategory';
-import Groups from '@/pages/Groups';
-import Music from '@/pages/Music';
-import BuySell from '@/pages/BuySell';
-import CreateListing from '@/pages/CreateListing';
-import ListingDetail from '@/pages/ListingDetail';
-import GroupList from '@/pages/GroupList';
-import CreateGroup from '@/pages/CreateGroup';
-import Projects from '@/pages/Projects';
-import Planner from '@/pages/Planner';
-import Stream from '@/pages/Stream';
-import StreamCategory from '@/pages/StreamCategory';
-import Feed from '@/pages/Feed';
-import Announcements from '@/pages/Announcements';
-import Games from '@/pages/Games';
-import Viewers from '@/pages/Viewers';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import ForgotPassword from '@/pages/ForgotPassword';
-import ResetPassword from '@/pages/ResetPassword';
+import PageLoader from '@/components/PageLoader';
+
+// Pages are code-split so the WebView paints its shell before any screen's
+// JS is downloaded; Suspense below shows the spinner while a chunk loads.
+const Home = lazy(() => import('@/pages/Home'));
+const CreateEvent = lazy(() => import('@/pages/CreateEvent'));
+const Profile = lazy(() => import('@/pages/Profile'));
+const ProfileAbout = lazy(() => import('@/pages/ProfileAbout'));
+const EventDetail = lazy(() => import('@/pages/EventDetail'));
+const Clicks = lazy(() => import('@/pages/Clicks'));
+const ClickDetail = lazy(() => import('@/pages/ClickDetail'));
+const CreateClick = lazy(() => import('@/pages/CreateClick'));
+const Messages = lazy(() => import('@/pages/Messages'));
+const SocialHub = lazy(() => import('@/pages/SocialHub'));
+const CategoryBrowse = lazy(() => import('@/pages/CategoryBrowse'));
+const Support = lazy(() => import('@/pages/Support'));
+const Privacy = lazy(() => import('@/pages/Privacy'));
+const ContactUs = lazy(() => import('@/pages/ContactUs'));
+const Notifications = lazy(() => import('@/pages/Notifications'));
+const NotificationsCategory = lazy(() => import('@/pages/NotificationsCategory'));
+const Groups = lazy(() => import('@/pages/Groups'));
+const Music = lazy(() => import('@/pages/Music'));
+const BuySell = lazy(() => import('@/pages/BuySell'));
+const CreateListing = lazy(() => import('@/pages/CreateListing'));
+const ListingDetail = lazy(() => import('@/pages/ListingDetail'));
+const GroupList = lazy(() => import('@/pages/GroupList'));
+const CreateGroup = lazy(() => import('@/pages/CreateGroup'));
+const Projects = lazy(() => import('@/pages/Projects'));
+const Planner = lazy(() => import('@/pages/Planner'));
+const Stream = lazy(() => import('@/pages/Stream'));
+const StreamCategory = lazy(() => import('@/pages/StreamCategory'));
+const Feed = lazy(() => import('@/pages/Feed'));
+const Announcements = lazy(() => import('@/pages/Announcements'));
+const Games = lazy(() => import('@/pages/Games'));
+const Viewers = lazy(() => import('@/pages/Viewers'));
+const Login = lazy(() => import('@/pages/Login'));
+const Register = lazy(() => import('@/pages/Register'));
+const ForgotPassword = lazy(() => import('@/pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('@/pages/ResetPassword'));
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -71,6 +76,7 @@ const AuthenticatedApp = () => {
 
   // Render the main app
   return (
+    <Suspense fallback={<PageLoader />}>
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -113,6 +119,7 @@ const AuthenticatedApp = () => {
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
+    </Suspense>
   );
 };
 

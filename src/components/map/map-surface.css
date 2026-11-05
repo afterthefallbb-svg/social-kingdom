@@ -1,6 +1,10 @@
 /* Unfiltered daylight street map with restrained blue/cyan road accents. */
 .sk-map { background: var(--map-day-ground); color: var(--map-text); font-family: var(--font-body); }
 .sk-map .leaflet-container { background: var(--map-day-ground); }
+/* Dark mode: dark-neutral canvas behind the tiles so pans/zooms and the first
+   paint never flash a light rectangle. */
+.dark .sk-map,
+.dark .sk-map .leaflet-container { background: hsl(var(--kingdom-ink)); }
 .sk-map .sk-street-tiles { filter: none; }
 .sk-map .sk-road-tiles { pointer-events: none; }
 /* Electric-blue glass chips that read over the daylight basemap. */

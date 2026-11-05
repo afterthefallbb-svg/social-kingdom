@@ -286,11 +286,17 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
       {/* Composer */}
       <div className="shrink-0 border-t bg-white p-2 pb-[max(7.375rem,calc(env(safe-area-inset-bottom)_+_70px))] flex items-end gap-1.5">
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPickPhoto} />
-        <button onClick={() => { setAttachOpen((o) => !o); setEmojiOpen(false); }} className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: FB + "22", color: FB }} aria-label="Attach">
-          <Plus size={20} />
+        {/* 44px tap areas (4px transparent margin each side) around the 36px
+            visual buttons, so the composer keeps its exact previous spacing. */}
+        <button onClick={() => { setAttachOpen((o) => !o); setEmojiOpen(false); }} className="w-11 h-11 -m-1 flex items-center justify-center shrink-0" aria-label="Attach">
+          <span className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: FB + "22", color: FB }}>
+            <Plus size={20} />
+          </span>
         </button>
-        <button onClick={() => { setEmojiOpen((o) => !o); setAttachOpen(false); }} className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: FB + "22", color: FB }} aria-label="Emoji">
-          <Smile size={20} />
+        <button onClick={() => { setEmojiOpen((o) => !o); setAttachOpen(false); }} className="w-11 h-11 -m-1 flex items-center justify-center shrink-0" aria-label="Emoji">
+          <span className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: FB + "22", color: FB }}>
+            <Smile size={20} />
+          </span>
         </button>
         <textarea
           ref={inputRef}

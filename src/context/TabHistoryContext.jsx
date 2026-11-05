@@ -2,8 +2,9 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import { useLocation, useNavigate } from "react-router-dom";
 
 /* Each bottom-tab (Browse, Map, Create) keeps its own little navigation stack,
-   so leaving a tab for another and coming back lands where you left off, and
-   tapping the tab you are already on steps back through that tab's history. */
+   so leaving a tab for another and coming back lands where you left off.
+   Tapping the tab you are already on resets that tab to its root instead of
+   stepping back through history (unpredictable inside an iOS WebView). */
 const TABS = { browse: "/browse", map: "/", create: "/create" };
 
 const EMPTY = { browse: [], map: [], create: [] };
@@ -40,13 +41,14 @@ export function TabHistoryProvider({ children }) {
 
   const historyFor = useCallback((tab) => [...(stacks.current[tab] || [])], []);
 
-  /* Tapping the tab you are already viewing pops back to the page you were on
-     in that tab before this one. */
+  /* Tapping the tab you are already viewing returns straight to that tab's
+     root page and drops the stack it had built up. */
   const restoreTab = useCallback(
     (tab) => {
-      const stack = stacks.current[tab] || [];
-      const previous = [...stack].reverse().find((p) => p !== pathname && p !== TABS[tab]);
-      if (previous) navigate(previous);
+      const root = TABS[tab];
+      if (!root) return;
+      stacks.current[tab] = [];
+      if (pathname !== root) navigate(root);
     },
     [navigate, pathname]
   );

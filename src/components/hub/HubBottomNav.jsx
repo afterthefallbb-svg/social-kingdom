@@ -16,7 +16,7 @@ export default function HubBottomNav() {
   if (typeof document === "undefined") return null;
 
   const tabbed = (tab, isActive) => (e) => {
-    // Re-tapping the tab you are on steps back through that tab's own history.
+    // Re-tapping the tab you are on resets it to its root page.
     if (isActive) {
       e.preventDefault();
       restoreTab(tab);

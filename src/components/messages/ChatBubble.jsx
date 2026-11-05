@@ -41,12 +41,16 @@ export default function ChatBubble({ conversation, peer, unread = 0, onOpen, onD
           </span>
         )}
       </button>
+      {/* 44px tap area (10px transparent padding each side) around the 24px
+          visual button, so the row looks exactly as it did before. */}
       <button
         onClick={onDismiss}
         aria-label="Hide chat bubble"
-        className="w-6 h-6 rounded-full bg-white shadow border border-gray-200 flex items-center justify-center text-gray-500"
+        className="relative -m-2.5 p-2.5 rounded-full flex items-center justify-center"
       >
-        <X size={13} />
+        <span className="w-6 h-6 rounded-full bg-white shadow border border-gray-200 flex items-center justify-center text-gray-500">
+          <X size={13} />
+        </span>
       </button>
     </div>
   );

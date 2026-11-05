@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ChevronLeft, Bookmark, Play, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/sk-image";
+import { coverPhoto } from "@/lib/coverPhotos";
 import VideoPlayer from "./VideoPlayer";
 
 // Full-screen view of videos the current user has saved while watching.
@@ -95,7 +96,7 @@ export default function MyVideosView({ onClose }) {
                   aria-label="Play saved video"
                 >
                   {v.thumbnail ? (
-                    <Image src={v.thumbnail} fittingType="fill" className="w-full h-full" />
+                    <Image src={v.thumbnail} fallback={coverPhoto(v.id, v.category, "stream")} fittingType="fill" className="w-full h-full" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-3xl">🎬</div>
                   )}

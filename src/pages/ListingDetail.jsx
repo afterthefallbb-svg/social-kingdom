@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/sk-image";
+import { coverPhoto } from "@/lib/coverPhotos";
 import { getMarketplaceCategory } from "@/lib/marketplaceCategories";
 
 const FB = "#1877f2";
@@ -68,7 +69,7 @@ export default function ListingDetail() {
           <div className="flex gap-2 overflow-x-auto no-scrollbar rounded-xl">
             {photos.map((u, i) => (
               <span key={i} className="w-64 aspect-square shrink-0 overflow-hidden rounded-xl bg-gray-100">
-                <Image src={u} fittingType="fill" className="w-full h-full" />
+                <Image src={u} fallback={coverPhoto(listing?.id, listing?.category)} fittingType="fill" className="w-full h-full" />
               </span>
             ))}
           </div>

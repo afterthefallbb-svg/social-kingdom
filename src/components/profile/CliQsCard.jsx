@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Users, ChevronRight } from "lucide-react";
 import { Image } from "@/components/ui/sk-image";
+import { coverPhoto } from "@/lib/coverPhotos";
 import ClickPresenceBadge from "@/components/presence/ClickPresenceBadge";
 import { useClickHosts } from "@/hooks/useClickHosts";
 
@@ -26,7 +27,7 @@ export default function CliQsCard({ clicks = [] }) {
             <div className="relative w-16 h-16 mx-auto shrink-0">
               <div className="w-full h-full rounded-full overflow-hidden border-2" style={{ borderColor: FB }}>
                 {c.avatar_url ? (
-                  <Image src={c.avatar_url} fittingType="fill" className="w-full h-full" />
+                  <Image src={c.avatar_url} fallback={coverPhoto(c.id, "", "cliqs")} fittingType="fill" className="w-full h-full" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center font-bold" style={{ color: FB }}>
                     {(c.name || "?").charAt(0)}

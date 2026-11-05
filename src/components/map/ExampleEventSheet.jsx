@@ -2,6 +2,7 @@ import React from "react";
 import { format, isValid } from "date-fns";
 import { CalendarDays, MapPin, X } from "lucide-react";
 import { Image } from "@/components/ui/sk-image";
+import { eventCover } from "@/lib/coverPhotos";
 
 const FB = "#1877f2";
 
@@ -19,7 +20,7 @@ export default function ExampleEventSheet({ event, onClose, onSignUp }) {
       <button className="absolute inset-0 bg-black/50" aria-label="Close" onClick={onClose} />
       <div className="relative w-full max-h-[86dvh] overflow-y-auto rounded-t-2xl bg-white pb-[max(1rem,env(safe-area-inset-bottom))]">
         <div className="relative">
-          <Image src={event.image_url} fittingType="fill" className="w-full h-44" />
+          <Image src={event.image_url} fallback={eventCover(event)} fittingType="fill" className="w-full h-44" />
           <button
             onClick={onClose}
             aria-label="Close"

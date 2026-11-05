@@ -40,6 +40,7 @@ export default function Clicks() {
                   item={{
                     label: c.name,
                     image: c.avatar_url,
+                    kind: "cliqs",
                     emoji: "👥",
                     meta: `${(c.member_count || 0).toLocaleString()} members`,
                   }}

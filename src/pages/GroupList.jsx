@@ -4,6 +4,7 @@ import { ChevronLeft, Search, Plus, SlidersHorizontal, Users, MapPin } from "luc
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/groupCategories";
 import { Image } from "@/components/ui/sk-image";
+import { coverPhoto } from "@/lib/coverPhotos";
 
 const FB = "#1877f2";
 
@@ -129,7 +130,7 @@ export default function GroupList() {
           <div key={g.id} className="rounded-xl border border-gray-200 overflow-hidden">
             <div className="h-28 w-full relative" style={{ background: `linear-gradient(135deg, ${cat.color}, #1f2937)` }}>
               {g.header_image && (
-                <Image src={g.header_image} fittingType="fill" className="w-full h-full" />
+                <Image src={g.header_image} fallback={coverPhoto(g.id, g.category)} fittingType="fill" className="w-full h-full" />
               )}
             </div>
             <div className="p-3 flex items-start gap-2">

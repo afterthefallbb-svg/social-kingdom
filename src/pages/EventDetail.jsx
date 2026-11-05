@@ -6,6 +6,7 @@ import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import EventDirectionsLink from "@/components/event/EventDirectionsLink";
 import { Image } from "@/components/ui/sk-image";
+import { eventCover } from "@/lib/coverPhotos";
 import { useToast } from "@/components/ui/use-toast";
 import EventAttending from "@/components/event/EventAttending";
 import EventPhotos from "@/components/event/EventPhotos";
@@ -151,7 +152,7 @@ export default function EventDetail() {
           style={{ background: `linear-gradient(135deg, ${cat.color}, ${cat.color}cc)` }}
         >
           {event.image_url ? (
-            <Image src={event.image_url} fittingType="fill" className="absolute inset-0 w-full h-full" />
+            <Image src={event.image_url} fallback={eventCover(event)} fittingType="fill" className="absolute inset-0 w-full h-full" />
           ) : (
             cat.emoji
           )}

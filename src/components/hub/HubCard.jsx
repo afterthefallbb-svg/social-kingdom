@@ -1,12 +1,14 @@
 import React from "react";
 import { MessageCircle, Play, UserRound, Users } from "lucide-react";
 import { Image } from "@/components/ui/sk-image";
+import { coverPhoto } from "@/lib/coverPhotos";
 
 export default function HubCard({ item, stream, onClick }) {
+  const fallback = coverPhoto(item.id || item.label, item.category, item.kind || (stream ? "stream" : ""));
   return (
     <button type="button" onClick={onClick} className={`kingdom-card ${stream ? "kingdom-card-stream" : ""}`}>
       <span className="kingdom-card-picture">
-        {item.image ? <Image src={item.image} alt="" className="h-full w-full" /> : <span className="kingdom-card-placeholder">{item.emoji || "✦"}</span>}
+        <Image src={item.image} fallback={fallback} alt="" className="h-full w-full" />
         {item.isVideo && <Play className="kingdom-card-play" fill="currentColor" />}
       </span>
       <span className="kingdom-card-content">

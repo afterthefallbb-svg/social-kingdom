@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Search, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/sk-image";
+import { coverPhoto } from "@/lib/coverPhotos";
 import { Play } from "lucide-react";
 import CategoryPageHeader from "@/components/category/CategoryPageHeader";
 import VideoPlayer from "@/components/video/VideoPlayer";
@@ -92,7 +93,7 @@ export default function StreamCategory() {
                 className="relative aspect-[9/16] rounded-lg overflow-hidden bg-gray-100 group"
               >
                 {v.thumbnail ? (
-                  <Image src={v.thumbnail} fittingType="fill" className="w-full h-full" />
+                  <Image src={v.thumbnail} fallback={coverPhoto(v.id, v.category, "stream")} fittingType="fill" className="w-full h-full" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-2xl">🎬</div>
                 )}

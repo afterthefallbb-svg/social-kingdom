@@ -19,7 +19,7 @@ const TITLES = {
   "local-sale": "Local Sale",
 };
 
-const SUPPORTED = ["events", "videos", "cliqs"];
+const SUPPORTED = ["events", "videos", "cliqs", "artists"];
 
 export default function CategoryBrowse() {
   const { category } = useParams();
@@ -45,8 +45,25 @@ export default function CategoryBrowse() {
             id: e.id,
             label: e.title,
             image: e.image_url,
+            category: e.category,
+            kind: "events",
             emoji: getCategory(e.category).emoji,
             meta: e.start_time ? moment(e.start_time).format("MMM D · h:mm A") : e.address || "View event",
+            onClick: () => navigate(`/event/${e.id}`),
+          }));
+        } else if (category === "artists") {
+          const res = await base44.entities.Event.filter(
+            { category: "artists", visibility: { $ne: "personal" } },
+            { sort: "-created_date", limit: 100 }
+          );
+          its = res.items.map((e) => ({
+            id: e.id,
+            label: e.title,
+            image: e.image_url,
+            category: e.category,
+            kind: "artists",
+            emoji: "🎨",
+            meta: e.address || "Local artist",
             onClick: () => navigate(`/event/${e.id}`),
           }));
         } else if (category === "videos") {
@@ -59,6 +76,7 @@ export default function CategoryBrowse() {
             id: v.id,
             label: v.caption || v.user_name || "Video",
             image: v.thumbnail,
+            kind: "stream",
             emoji: "🎬",
             isVideo: true,
             author: v.user_name,
@@ -72,6 +90,7 @@ export default function CategoryBrowse() {
             id: c.id,
             label: c.name,
             image: c.avatar_url,
+            kind: "cliqs",
             emoji: "👥",
             meta: `${(c.member_count || 0).toLocaleString()} members`,
             onClick: () => navigate(`/clicks/${c.id}`),

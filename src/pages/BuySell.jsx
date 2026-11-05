@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Search, SlidersHorizontal } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/sk-image";
+import { coverPhoto } from "@/lib/coverPhotos";
 import { MARKETPLACE_CATEGORIES, getMarketplaceCategory } from "@/lib/marketplaceCategories";
 
 const FB = "#1877f2";
@@ -155,7 +156,7 @@ export default function BuySell() {
                 >
                   <span className="block w-full aspect-square overflow-hidden bg-gray-100 flex items-center justify-center text-3xl">
                     {l.image_url ? (
-                      <Image src={l.image_url} fittingType="fill" className="w-full h-full" />
+                      <Image src={l.image_url} fallback={coverPhoto(l.id, l.category)} fittingType="fill" className="w-full h-full" />
                     ) : (
                       cat.emoji
                     )}

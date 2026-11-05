@@ -4,6 +4,7 @@ import { ArrowLeft, Users, Calendar, MapPin, UserPlus, Flag, Camera, Crown, Tras
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import { Image } from "@/components/ui/sk-image";
+import { coverPhoto } from "@/lib/coverPhotos";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -131,7 +132,7 @@ export default function ClickDetail() {
           <div className="relative w-20 h-20 mx-auto shrink-0">
             <div className="w-full h-full rounded-full overflow-hidden border-4" style={{ borderColor: FB }}>
               {click.avatar_url ? (
-                <Image src={click.avatar_url} fittingType="fill" className="w-full h-full" />
+                <Image src={click.avatar_url} fallback={coverPhoto(click.id, "", "cliqs")} fittingType="fill" className="w-full h-full" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-2xl font-bold" style={{ color: FB }}>
                   {(click.name || "?").charAt(0)}

@@ -20,7 +20,7 @@ export default function MapAutoResize() {
     const observer = new ResizeObserver(remeasure);
     observer.observe(container);
     window.addEventListener("orientationchange", remeasure);
-    const timers = [0, 150, 500].map((delay) => setTimeout(remeasure, delay));
+    const timers = [0, 150, 500, 1000].map((delay) => setTimeout(remeasure, delay));
 
     return () => {
       cancelAnimationFrame(frame);

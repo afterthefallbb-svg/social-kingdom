@@ -14,6 +14,11 @@ export default function ScreenTransition({ routeKey, children }) {
   return (
     <motion.div
       key={routeKey}
+      /* While the slide runs, this wrapper becomes the containing block for
+         full-screen fixed children (the map). Without a height of its own a
+         fixed child computes to zero height, so the map measured itself at
+         0px and only ever painted a small patch of tiles afterwards. */
+      className="min-h-screen"
       initial={{ opacity: 0, x: 22 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.26, ease: [0.22, 0.61, 0.36, 1] }}

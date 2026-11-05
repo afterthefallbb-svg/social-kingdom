@@ -344,14 +344,20 @@
   transform-origin: 50% 92%;
   transition: transform 160ms ease;
 }
-/* The pin carries its own light and shadow, so the only thing CSS adds is the
-   gold lift when the event is selected. */
-.sk-pin-active {
-  transform: translateY(-2px) scale(1.02);
-  filter: drop-shadow(0 0 7px hsl(var(--kingdom-gold) / 0.55));
+/* Each marker is its own little object, so the only thing CSS adds is the drop
+   shadow that lifts it off the map and the gold lift when it is selected. */
+.sk-pin-glyph {
+  display: block;
+  line-height: 0;
+  filter: drop-shadow(0 2px 2px rgba(5, 11, 36, 0.42));
 }
-.sk-pin-glyph { display: block; line-height: 0; }
 .sk-pin-glyph svg { display: block; overflow: visible; }
+.sk-pin-active {
+  transform: translateY(-2px) scale(1.04);
+}
+.sk-pin-active .sk-pin-glyph {
+  filter: drop-shadow(0 3px 3px rgba(5, 11, 36, 0.45)) drop-shadow(0 0 6px hsl(var(--kingdom-gold) / 0.6));
+}
 
 @media (max-width: 420px) {
   .sk-ev-thumb { width: 34px; height: 34px; }

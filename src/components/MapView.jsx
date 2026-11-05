@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { makeEventIcon } from "@/lib/mapMarker";
 import KingdomMapTiles from "@/components/map/KingdomMapTiles";
+import { basemapTiles } from "@/lib/map/basemapTiles";
 
 export const WALLA_WALLA = [46.0646, -118.3425];
 
@@ -28,10 +29,7 @@ export default function MapView({ events = [], activeId, onSelect, mode = "event
       {isEvents ? (
         <KingdomMapTiles />
       ) : (
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          maxZoom={19}
-        />
+        <TileLayer {...basemapTiles()} />
       )}
       <Recenter center={center} zoom={zoom} />
       {isEvents &&

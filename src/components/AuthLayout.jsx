@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 const LOGO_URL =
   "https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/6b7cd0149_social-kingdom-complete-crown-raised.png";

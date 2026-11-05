@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { base44 } from "@/api/base44Client";
 import { NEON } from "@/lib/neonControls";
 

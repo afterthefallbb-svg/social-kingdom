@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { isOnline, statusEmoji, lastSeenLabel, presenceBadge } from "@/lib/presence";
 import { usersByIds } from "@/lib/users";
 import PresenceBadge from "@/components/presence/PresenceBadge";

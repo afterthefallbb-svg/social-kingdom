@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Search, SlidersHorizontal } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { MARKETPLACE_CATEGORIES, getMarketplaceCategory } from "@/lib/marketplaceCategories";
 
 const FB = "#1877f2";

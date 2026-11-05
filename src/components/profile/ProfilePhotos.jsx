@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 // Three albums: profile pics, cover images, and everything added from
 // "Add Photos". The current avatar/cover always appear even when they were

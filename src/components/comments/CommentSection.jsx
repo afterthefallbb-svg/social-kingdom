@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MessageCircle, Send, Trash2, Reply, Pencil, Check, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { Input } from "@/components/ui/input";
 import KloutButton from "@/components/klout/KloutButton";
 

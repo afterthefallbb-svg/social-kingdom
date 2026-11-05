@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { Play, Video as VideoIcon, Trash2 } from "lucide-react";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import VideoComposer from "@/components/video/VideoComposer";

@@ -4,7 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { GAME_GENRES } from "@/lib/gameCategories";
 import GameRow from "@/components/games/GameRow";
 import GamePlayer from "@/components/games/GamePlayer";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { Play, Gamepad2 } from "lucide-react";
 
 const FB = "#1877f2";

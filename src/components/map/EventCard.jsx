@@ -1,7 +1,7 @@
 import React from "react";
 import { format, isValid } from "date-fns";
 import { ChevronRight, Clock, MapPin } from "lucide-react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { EVENT_SAMPLES } from "@/lib/hubSamples";
 
 /* Which example photo stands in for an event that has no picture of its own. */

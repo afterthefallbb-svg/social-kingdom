@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 export default function HubSearchResult({ result, onSelect }) {
   return (

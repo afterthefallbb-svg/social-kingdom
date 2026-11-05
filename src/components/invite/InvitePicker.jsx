@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { Input } from "@/components/ui/input";
 import { Search, Check, Loader2, Lock, Users, UserPlus } from "lucide-react";
 import { getCategory } from "@/lib/categories";

@@ -1,7 +1,7 @@
 import React from "react";
 import { format, isValid } from "date-fns";
 import { CalendarDays, MapPin, X } from "lucide-react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 const FB = "#1877f2";
 

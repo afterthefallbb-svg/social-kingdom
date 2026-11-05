@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Search, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { Play } from "lucide-react";
 import CategoryPageHeader from "@/components/category/CategoryPageHeader";
 import VideoPlayer from "@/components/video/VideoPlayer";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Camera, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { toast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
 import KloutButton from "@/components/klout/KloutButton";

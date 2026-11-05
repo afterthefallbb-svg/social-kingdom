@@ -1,6 +1,6 @@
 import React from "react";
 import { X } from "lucide-react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { presenceBadge } from "@/lib/presence";
 import PresenceBadge from "@/components/presence/PresenceBadge";
 

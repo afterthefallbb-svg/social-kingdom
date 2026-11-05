@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Share, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import KloutButton from "@/components/klout/KloutButton";
 import CommentSection from "@/components/comments/CommentSection";
 

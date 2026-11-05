@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Users, Calendar, MapPin, UserPlus, Flag, Camera, Crown, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

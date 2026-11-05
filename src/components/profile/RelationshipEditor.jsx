@@ -4,7 +4,7 @@ import { X, Search, Heart, Loader2, Check } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { toast } from "@/components/ui/use-toast";
 import { searchUsers } from "@/lib/users";
 import { RELATIONSHIP_TYPES, getRelationshipState } from "@/lib/relationships";

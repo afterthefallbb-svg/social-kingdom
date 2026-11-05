@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { toast } from "@/components/ui/use-toast";
 import CityField from "@/components/profile/CityField";
 import AvatarCropDialog from "@/components/profile/AvatarCropDialog";

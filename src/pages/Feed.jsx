@@ -6,7 +6,7 @@ import PhotoComposer from "@/components/compose/PhotoComposer";
 import PostCard from "@/components/profile/PostCard";
 import FeedPhotoNotice from "@/components/feed/FeedPhotoNotice";
 import PullToRefresh from "@/components/mobile/PullToRefresh";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 const FB = "#1877f2";
 

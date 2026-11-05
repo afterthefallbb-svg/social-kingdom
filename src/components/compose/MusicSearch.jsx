@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Search, Music2, Play, Pause, X, Check } from "lucide-react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 const FB = "#1877f2";
 

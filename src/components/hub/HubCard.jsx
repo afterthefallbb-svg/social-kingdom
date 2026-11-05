@@ -1,6 +1,6 @@
 import React from "react";
 import { MessageCircle, Play, UserRound, Users } from "lucide-react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 export default function HubCard({ item, stream, onClick }) {
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Users, ChevronRight } from "lucide-react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import ClickPresenceBadge from "@/components/presence/ClickPresenceBadge";
 import { useClickHosts } from "@/hooks/useClickHosts";
 

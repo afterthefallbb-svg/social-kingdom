@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Flag, ShieldAlert } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { usersByIds } from "@/lib/users";
 import { toast } from "@/components/ui/use-toast";
 

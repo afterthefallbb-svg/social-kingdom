@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { presenceBadge } from "@/lib/presence";
 import PresenceBadge from "@/components/presence/PresenceBadge";
 import { Check, Archive } from "lucide-react";

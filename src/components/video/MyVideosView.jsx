@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ChevronLeft, Bookmark, Play, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import VideoPlayer from "./VideoPlayer";
 
 // Full-screen view of videos the current user has saved while watching.

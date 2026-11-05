@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Play, Pause, Rewind, FastForward, Music2, MessageCircle, X } from "lucide-react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { SIZES } from "@/lib/photoEdit";
 import KloutButton from "@/components/klout/KloutButton";
 import CommentSection from "@/components/comments/CommentSection";

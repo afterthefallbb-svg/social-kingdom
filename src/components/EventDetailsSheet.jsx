@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import EventDirectionsLink from "@/components/event/EventDirectionsLink";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 function Tag({ children, color }) {
   return (

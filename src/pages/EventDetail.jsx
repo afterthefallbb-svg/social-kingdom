@@ -5,7 +5,7 @@ import EventPendingRequests from "@/components/event/EventPendingRequests";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import EventDirectionsLink from "@/components/event/EventDirectionsLink";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { useToast } from "@/components/ui/use-toast";
 import EventAttending from "@/components/event/EventAttending";
 import EventPhotos from "@/components/event/EventPhotos";

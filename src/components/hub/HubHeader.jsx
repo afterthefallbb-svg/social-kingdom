@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Eye, UserRound, Users } from "lucide-react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import HubMenu from "@/components/hub/HubMenu";
 import KingdomBrand from "@/components/hub/KingdomBrand";
 

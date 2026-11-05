@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { ChevronLeft } from "lucide-react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import EventsSection from "@/components/profile/EventsSection";
 import EventsAttendedSection from "@/components/profile/EventsAttendedSection";

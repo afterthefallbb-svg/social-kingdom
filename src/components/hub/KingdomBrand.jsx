@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 /* Crown and lettering are stacked from the same artwork at full width, so the
    crown stays perfectly centred over the K with a clear gap above it. */

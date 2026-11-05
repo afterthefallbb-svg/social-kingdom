@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Send, Ban, MoreVertical, Plus, Smile, Image as ImageIcon, User, Flag, Minimize2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { isOnline, statusEmoji, presenceBadge } from "@/lib/presence";
 import { sendMessage, sendMessageWithImage, markConversationRead, getDraft, setDraft, clearDraft } from "@/lib/messaging";
 import { canContact } from "@/lib/ageSafety";

@@ -3,7 +3,7 @@ import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, Search, Plus, SlidersHorizontal, Users, MapPin } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/groupCategories";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 
 const FB = "#1877f2";
 

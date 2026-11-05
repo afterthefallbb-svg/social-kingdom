@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import ClickInvitePicker from "@/components/invite/ClickInvitePicker";
 
 const FB = "#1877f2";

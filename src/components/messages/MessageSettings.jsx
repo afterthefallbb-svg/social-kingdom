@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { Image } from "@/components/ui/image";
+import { Image } from "@/components/ui/sk-image";
 import { Switch } from "@/components/ui/switch";
 import GlassToggle from "@/components/theme/GlassToggle";
 import ReportDialog from "@/components/messages/ReportDialog";

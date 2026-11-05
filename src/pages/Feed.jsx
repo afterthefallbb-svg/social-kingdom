@@ -92,7 +92,7 @@ export default function Feed() {
     <PullToRefresh onRefresh={load}>
     <div className="min-h-screen bg-gray-50 pb-36">
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-white border-b border-gray-100">
+      <div className="sticky top-0 z-20 bg-white border-b border-gray-100 pt-[env(safe-area-inset-top)]">
         <div className="flex items-center gap-2 px-3 py-3">
           <button type="button" onClick={() => navigate(-1)} aria-label="Back" className="flex items-center gap-1 text-sm font-semibold" style={{ color: "#000000" }}>
             <ChevronLeft size={22} /> Back

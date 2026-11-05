@@ -49,7 +49,7 @@ export default function BuySell() {
 
   return (
     <div className="min-h-screen bg-white pb-28">
-      <div className="flex items-center gap-2 px-4 pt-6">
+      <div className="flex items-center gap-2 px-4 pt-[max(1.5rem,env(safe-area-inset-top))]">
         <button onClick={() => navigate("/browse")} className="p-1">
           <ChevronLeft size={24} style={{ color: FB }} />
         </button>

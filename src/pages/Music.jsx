@@ -11,7 +11,7 @@ export default function Music() {
   const [source, setSource] = useState({ ...SPOTIFY_GENRES[0], type: "playlist" });
   return (
     <div className="min-h-screen bg-background pb-28 font-body">
-      <div className="flex items-center gap-2 px-4 pt-6">
+      <div className="flex items-center gap-2 px-4 pt-[max(1.5rem,env(safe-area-inset-top))]">
         <button type="button" onClick={() => navigate("/browse")} aria-label="Back to browse" className="p-1 text-black">
           <ChevronLeft size={24} />
         </button>

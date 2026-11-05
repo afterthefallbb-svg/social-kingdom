@@ -22,7 +22,7 @@ export default function Clicks() {
 
   return (
     <div className="min-h-screen pb-32">
-      <div className="text-white px-4 py-4 flex items-center gap-3 shadow" style={{ background: FB }}>
+      <div className="text-white px-4 pb-4 pt-[max(1rem,env(safe-area-inset-top))] flex items-center gap-3 shadow" style={{ background: FB }}>
         <Link to="/profile" aria-label="Back">
           <ArrowLeft size={22} color="#000000" />
         </Link>

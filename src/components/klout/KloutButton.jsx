@@ -110,6 +110,28 @@ export default function KloutButton({ target_type, target_id, size = "md", page,
     if (!me || busy) return;
     setBusy(true);
     setMenuOpen(false);
+
+    // Paint the change immediately, then reconcile with the server.
+    const removing = mine?.reaction === rid;
+    const before = { mine, counts, total };
+    const optimisticCounts = { ...counts };
+    if (mine?.reaction) {
+      optimisticCounts[mine.reaction] = Math.max(0, (optimisticCounts[mine.reaction] || 0) - 1);
+    }
+    if (!removing) optimisticCounts[rid] = (optimisticCounts[rid] || 0) + 1;
+    setCounts(optimisticCounts);
+    setTotal((t) => t - valueOf(mine?.reaction) + (removing ? 0 : valueOf(rid)));
+    setMine(
+      removing
+        ? null
+        : {
+            ...(mine || {}),
+            id: mine?.id || `optimistic-${rid}`,
+            reaction: rid,
+            value: valueOf(rid),
+          }
+    );
+
     try {
       if (mine && mine.reaction === rid) {
         // tapping the active reaction removes it
@@ -134,6 +156,11 @@ export default function KloutButton({ target_type, target_id, size = "md", page,
         setMine(created);
       }
       await load();
+    } catch {
+      // Roll the optimistic paint back to the last known server state.
+      setMine(before.mine);
+      setCounts(before.counts);
+      setTotal(before.total);
     } finally {
       setBusy(false);
     }

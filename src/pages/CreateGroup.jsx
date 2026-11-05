@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
+import ActionSelect from "@/components/ui/action-select";
 import { GROUP_CATEGORIES, getCategory } from "@/lib/groupCategories";
 
 const FB = "#1877f2";
@@ -76,29 +77,23 @@ export default function CreateGroup() {
 
         <div className="space-y-2">
           <Label>Category</Label>
-          <select
+          <ActionSelect
+            label="Category"
             value={category}
-            onChange={(e) => { setCategory(e.target.value); setSubcategory(""); }}
-            className="w-full h-10 rounded-md border border-input bg-background px-2 text-sm"
-          >
-            {GROUP_CATEGORIES.map((c) => (
-              <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>
-            ))}
-          </select>
+            onChange={(v) => { setCategory(v); setSubcategory(""); }}
+            options={GROUP_CATEGORIES.map((c) => ({ value: c.id, label: `${c.emoji} ${c.label}` }))}
+          />
         </div>
 
         <div className="space-y-2">
           <Label>Subcategory</Label>
-          <select
+          <ActionSelect
+            label="Subcategory"
             value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
-            className="w-full h-10 rounded-md border border-input bg-background px-2 text-sm"
-          >
-            <option value="">— Select —</option>
-            {getCategory(category).subs.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+            placeholder="— Select —"
+            onChange={setSubcategory}
+            options={[{ value: "", label: "— Select —" }, ...getCategory(category).subs.map((s) => ({ value: s, label: s }))]}
+          />
         </div>
 
         <div className="space-y-2">

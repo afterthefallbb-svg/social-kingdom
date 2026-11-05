@@ -87,20 +87,25 @@ export default function EventDetail() {
 
   async function removeAttendance() {
     if (!myAttendanceId) return;
+    const previous = myAttendance;
+    // Optimistic: the button flips instantly, the server catches up.
+    setMyAttendance(null);
     try {
       await base44.entities.Attendance.delete(myAttendanceId);
-      setMyAttendance(null);
       setAttendingVersion((v) => v + 1);
-      toast({ title: myAttendance?.status === "interested" ? "Request cancelled" : "You're no longer attending" });
+      toast({ title: previous?.status === "interested" ? "Request cancelled" : "You're no longer attending" });
     } catch (e) {
+      setMyAttendance(previous);
       toast({ title: "Could not remove", description: String(e.message || e) });
     }
   }
 
   async function requestAttendance() {
     if (!me) return;
+    const auto = !!event.auto_approve;
+    // Optimistic: show the confirmed/requested state before the round-trip.
+    setMyAttendance({ id: null, status: auto ? "confirmed" : "interested", user_id: me.id });
     try {
-      const auto = !!event.auto_approve;
       const rec = await base44.entities.Attendance.create({
         event_id: event.id,
         user_id: me.id,
@@ -126,6 +131,7 @@ export default function EventDetail() {
       }
       toast({ title: auto ? "You're attending!" : "Attendance requested — waiting for host approval" });
     } catch (e) {
+      setMyAttendance(null);
       toast({ title: "Could not request", description: String(e.message || e) });
     }
   }

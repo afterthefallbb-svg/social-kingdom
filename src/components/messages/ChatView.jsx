@@ -241,8 +241,13 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
           return (
             <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
               <div
-                className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm select-none ${mine ? "text-white" : "bg-white border border-gray-200 text-gray-900"}`}
-                style={mine ? { background: FB, WebkitTouchCallout: "none" } : { WebkitTouchCallout: "none" }}
+                className={`sk-selectable max-w-[75%] rounded-2xl px-3 py-2 text-sm ${mine ? "text-white" : "bg-white border border-gray-200 text-gray-900"}`}
+                style={{
+                  background: mine ? FB : undefined,
+                  WebkitUserSelect: "text",
+                  userSelect: "text",
+                  WebkitTouchCallout: "default",
+                }}
                 onPointerDown={() => pressStart(m)}
                 onPointerUp={pressEnd}
                 onPointerLeave={pressEnd}

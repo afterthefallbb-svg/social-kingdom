@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import PhotoComposer from "@/components/compose/PhotoComposer";
 import PostCard from "@/components/profile/PostCard";
 import FeedPhotoNotice from "@/components/feed/FeedPhotoNotice";
+import PullToRefresh from "@/components/mobile/PullToRefresh";
 import { Image } from "@/components/ui/image";
 
 const FB = "#1877f2";
@@ -88,6 +89,7 @@ export default function Feed() {
   }, []);
 
   return (
+    <PullToRefresh onRefresh={load}>
     <div className="min-h-screen bg-gray-50 pb-36">
       {/* Header */}
       <div className="sticky top-0 z-20 bg-white border-b border-gray-100">
@@ -158,5 +160,6 @@ export default function Feed() {
         </div>
       )}
     </div>
+    </PullToRefresh>
   );
 }

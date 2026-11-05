@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import PhotoEditor from "@/components/compose/PhotoEditor";
+import ActionSelect from "@/components/ui/action-select";
 import { MARKETPLACE_CATEGORIES } from "@/lib/marketplaceCategories";
 
 const FB = "#1877f2";
@@ -105,31 +106,25 @@ export default function CreateListing() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="condition">Condition</Label>
-            <select
+            <ActionSelect
               id="condition"
+              label="Condition"
               value={condition}
-              onChange={(e) => setCondition(e.target.value)}
-              className="w-full h-10 rounded-md border border-input bg-background px-2 text-sm"
-            >
-              {CONDITIONS.map((c) => (
-                <option key={c.id} value={c.id}>{c.label}</option>
-              ))}
-            </select>
+              onChange={setCondition}
+              options={CONDITIONS.map((c) => ({ value: c.id, label: c.label }))}
+            />
           </div>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
-          <select
+          <ActionSelect
             id="category"
+            label="Category"
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full h-10 rounded-md border border-input bg-background px-2 text-sm"
-          >
-            {MARKETPLACE_CATEGORIES.map((c) => (
-              <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>
-            ))}
-          </select>
+            onChange={setCategory}
+            options={MARKETPLACE_CATEGORIES.map((c) => ({ value: c.id, label: `${c.emoji} ${c.label}` }))}
+          />
         </div>
 
         <div className="space-y-2">

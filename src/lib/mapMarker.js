@@ -1,16 +1,16 @@
 import L from "leaflet";
 import { getCategory } from "./categories";
 
-// Community sales read as a classic white sign with red "FOR SALE" lettering,
+// Community sales read as a classic white sign with red "LOCAL SALE" lettering,
 // so a yard sale is unmistakable next to the other category graphics.
 const SALE_SIGN = `
   <svg class="sk-pin-svg" viewBox="0 0 40 40" aria-hidden="true">
     <rect x="18.4" y="23" width="3.2" height="15" rx="1.4" fill="#8f939b" />
     <rect x="2.5" y="4.5" width="35" height="21" rx="2.8" fill="#ffffff" stroke="#d92b2b" stroke-width="2.4" />
     <text x="20" y="14.4" text-anchor="middle" fill="#d92b2b"
-      font-family="Helvetica, Arial, sans-serif" font-size="8.4" font-weight="700" letter-spacing="0.2">FOR</text>
+      font-family="Helvetica, Arial, sans-serif" font-size="7.4" font-weight="700" letter-spacing="0.1">LOCAL</text>
     <text x="20" y="23" text-anchor="middle" fill="#d92b2b"
-      font-family="Helvetica, Arial, sans-serif" font-size="8.4" font-weight="700" letter-spacing="0.2">SALE</text>
+      font-family="Helvetica, Arial, sans-serif" font-size="7.4" font-weight="700" letter-spacing="0.1">SALE</text>
   </svg>`;
 
 // Bare category graphic on the map, floating above the ground on its own shadow

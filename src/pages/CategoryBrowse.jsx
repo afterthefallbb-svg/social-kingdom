@@ -8,6 +8,7 @@ import VideoPlayer from "@/components/video/VideoPlayer";
 import VideoComposer from "@/components/video/VideoComposer";
 import VideoCreateButton from "@/components/video/VideoCreateButton";
 import HubCard from "@/components/hub/HubCard";
+import { STREAM_SAMPLES, EVENT_SAMPLES, ARTIST_SAMPLES, CLIQ_SAMPLES, withSamples } from "@/lib/hubSamples";
 
 const TITLES = {
   events: "Events",
@@ -20,6 +21,10 @@ const TITLES = {
 };
 
 const SUPPORTED = ["events", "videos", "cliqs", "artists"];
+
+/* The same sample tiles the hub row shows, so a category never lists fewer
+   cards than the row that led into it. */
+const SAMPLE_TILES = { events: EVENT_SAMPLES, videos: STREAM_SAMPLES, cliqs: CLIQ_SAMPLES, artists: ARTIST_SAMPLES };
 
 export default function CategoryBrowse() {
   const { category } = useParams();
@@ -99,6 +104,7 @@ export default function CategoryBrowse() {
       } catch {
         its = [];
       }
+      its = withSamples(its, SAMPLE_TILES[category] || [], category);
       if (active) {
         setItems(its);
         setLoading(false);

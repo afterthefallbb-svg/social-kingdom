@@ -1,6 +1,15 @@
 // Sample tiles with realistic photos so the Social Hub rows look fully populated.
 const u = (id) => `https://images.unsplash.com/photo-${id}?w=300&h=300&fit=crop&q=80`;
 
+/* A hub row shows a full set of tiles; a category page keeps the very same
+   tiles, so both always list the same cards. */
+export const HUB_ROW_LENGTH = 10;
+
+export function withSamples(items = [], samples = [], prefix = "s") {
+  const fill = samples.slice(0, Math.max(0, HUB_ROW_LENGTH - items.length));
+  return [...items, ...fill.map((s, i) => ({ ...s, id: `${prefix}-${i}`, isSample: true }))];
+}
+
 export const STREAM_SAMPLES = [
   { label: "Live Music Tonight", image: u("1470229722913-7c0e2dbbafd3") },
   { label: "Hiking Adventure", image: u("1551632811-561732d1e306") },

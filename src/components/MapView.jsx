@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { makeEventIcon } from "@/lib/mapMarker";
 import KingdomMapTiles from "@/components/map/KingdomMapTiles";
+import MapAutoResize from "@/components/map/MapAutoResize";
 import { basemapTiles } from "@/lib/map/basemapTiles";
 
 export const WALLA_WALLA = [46.0646, -118.3425];
@@ -31,6 +32,7 @@ export default function MapView({ events = [], activeId, onSelect, mode = "event
       ) : (
         <TileLayer {...basemapTiles()} />
       )}
+      <MapAutoResize />
       <Recenter center={center} zoom={zoom} />
       {isEvents &&
         events.map((ev) => (

@@ -5,11 +5,16 @@
    paint never flash a light rectangle. */
 .dark .sk-map,
 .dark .sk-map .leaflet-container { background: hsl(var(--kingdom-ink)); }
-.sk-map .sk-street-tiles { filter: none; }
+/* Daylight tiles are lifted toward a vivid, neon-leaning palette: highways,
+   parks and water pick up colour while the white streets stay clean, so the
+   map reads brighter and more alive without turning loud. */
+.sk-map .sk-street-tiles {
+  filter: saturate(2.1) hue-rotate(-10deg) contrast(1.03) brightness(1.02);
+}
 /* Dark mode keeps the same reliable basemap and re-tones it to the night
    palette, so there is no second tile provider to fail or leave gaps. */
 .dark .sk-map .sk-street-tiles {
-  filter: invert(1) hue-rotate(180deg) brightness(.86) contrast(.94) saturate(.8);
+  filter: invert(1) hue-rotate(180deg) brightness(.9) contrast(.96) saturate(1.7);
 }
 .sk-map .sk-road-tiles { pointer-events: none; }
 /* Electric-blue glass chips that read over the daylight basemap. */

@@ -24,12 +24,16 @@ export default function HubShortcuts({ me, onOpenVideo }) {
   const queryClient = useQueryClient();
   const badgeKey = ["hub-unread", me?.id];
 
-  // Keep the bubbles live: a new message or notification refreshes the counts.
+  // Keep the bubbles live: a new message, request or invite refreshes the counts.
   useEffect(() => {
     if (!me?.id) return;
+    const refresh = () => queryClient.invalidateQueries({ queryKey: badgeKey });
     const unsubs = [
-      base44.entities.Message.subscribe(() => queryClient.invalidateQueries({ queryKey: badgeKey })),
-      base44.entities.Notification.subscribe(() => queryClient.invalidateQueries({ queryKey: badgeKey })),
+      base44.entities.Message.subscribe(refresh),
+      base44.entities.Notification.subscribe(refresh),
+      base44.entities.Friendship.subscribe(refresh),
+      base44.entities.Relationship.subscribe(refresh),
+      base44.entities.Invite.subscribe(refresh),
     ];
     return () => unsubs.forEach((unsub) => unsub?.());
   }, [me?.id]);
@@ -38,11 +42,16 @@ export default function HubShortcuts({ me, onOpenVideo }) {
     refetchInterval: 20000,
     refetchOnWindowFocus: true,
     queryFn: async () => {
-      const [messages, notifications] = await Promise.all([
+      // Count only what the Notifications screen actually lists, so the bubble
+      // clears as soon as nothing is waiting and never shows a phantom number.
+      const [messages, friendReqs, relReqs, invites, postNotifs] = await Promise.all([
         base44.entities.Message.count({ member_ids: me.id, sender_id: { $ne: me.id }, read: false }),
-        base44.entities.Notification.count({ user_id: me.id, read: false }),
+        base44.entities.Friendship.count({ friend_id: me.id, status: "pending" }).catch(() => 0),
+        base44.entities.Relationship.count({ partner_id: me.id, status: "pending" }).catch(() => 0),
+        base44.entities.Invite.count({ invitee_id: me.id, status: "pending" }).catch(() => 0),
+        base44.entities.Notification.count({ user_id: me.id, read: false, type: { $in: ["event_post", "click_post"] } }).catch(() => 0),
       ]);
-      return { messages, notifications };
+      return { messages, notifications: friendReqs + relReqs + invites + postNotifs };
     },
   });
   return (

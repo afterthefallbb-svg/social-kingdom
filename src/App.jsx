@@ -38,6 +38,7 @@ import StreamCategory from '@/pages/StreamCategory';
 import Feed from '@/pages/Feed';
 import Announcements from '@/pages/Announcements';
 import Games from '@/pages/Games';
+import Viewers from '@/pages/Viewers';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
@@ -102,6 +103,7 @@ const AuthenticatedApp = () => {
         <Route path="/feed" element={<Feed />} />
         <Route path="/announcements" element={<Announcements />} />
         <Route path="/games" element={<Games />} />
+        <Route path="/viewers" element={<Viewers />} />
         <Route path="/music" element={<Music />} />
         <Route path="/buy-sell" element={<BuySell />} />
         <Route path="/sell" element={<CreateListing />} />

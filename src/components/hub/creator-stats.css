@@ -1,0 +1,31 @@
+/* Creator-only community strip on the social hub + the viewers pill beside the menu. */
+.sk-creator {
+  padding: clamp(6px, .9dvh, 11px) 3cqw clamp(7px, 1dvh, 12px);
+  border-radius: 2.8cqw;
+  border: 1px solid hsl(var(--kingdom-gold) / .85);
+  background: radial-gradient(ellipse at 20% 0%, hsl(var(--kingdom-blue) / .7), transparent 66%),
+    linear-gradient(120deg, hsl(var(--kingdom-surface) / .95), hsl(var(--kingdom-ink) / .9));
+  box-shadow: 0 0 6px hsl(var(--kingdom-gold) / .45), inset 0 1px 0 hsl(var(--kingdom-text) / .35);
+  color: hsl(var(--kingdom-text));
+}
+.sk-creator-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: clamp(10px, 2.3cqw, 18px);
+  font-weight: 750;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: hsl(var(--kingdom-gold-bright));
+}
+.sk-creator-link { display: inline-flex; align-items: center; gap: .5cqw; color: hsl(var(--kingdom-cyan)); text-transform: none; letter-spacing: 0; }
+.sk-creator-link svg { width: 3.2cqw; height: 3.2cqw; min-width: 13px; min-height: 13px; }
+.sk-creator-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6cqw; margin-top: clamp(4px, .7dvh, 8px); }
+.sk-creator-tile { display: flex; flex-direction: column; align-items: center; gap: .1cqw; text-align: center; padding: .6cqw 0; border-radius: 2cqw; background: hsl(var(--kingdom-ink) / .45); }
+.sk-creator-tile > svg { width: 4cqw; height: 4cqw; min-width: 16px; min-height: 16px; color: hsl(var(--kingdom-cyan)); filter: drop-shadow(0 0 4px hsl(var(--kingdom-blue))); }
+.sk-creator-tile strong { font-size: clamp(16px, 4.4cqw, 32px); line-height: 1.1; text-shadow: 0 1px 3px hsl(var(--kingdom-ink)); }
+.sk-creator-tile span { font-size: clamp(8px, 1.9cqw, 13px); font-weight: 650; color: hsl(var(--kingdom-text) / .85); }
+.sk-creator-tile em { font-size: clamp(7px, 1.7cqw, 12px); font-style: normal; color: hsl(var(--kingdom-gold-bright)); }
+
+.sk-viewers-toggle { width: 6.2cqw; min-width: 30px; padding: 0; aspect-ratio: 1 / 1; }
+.sk-viewers-toggle svg { width: 3.8cqw !important; height: 3.8cqw !important; color: hsl(var(--kingdom-cyan)); }

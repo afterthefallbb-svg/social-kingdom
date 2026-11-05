@@ -1,0 +1,53 @@
+{
+  "name": "AppView",
+  "type": "object",
+  "properties": {
+    "visitor_key": {
+      "type": "string",
+      "title": "Visitor Key"
+    },
+    "views": {
+      "type": "number",
+      "default": 1,
+      "title": "Views"
+    },
+    "user_id": {
+      "type": "string",
+      "title": "User Id"
+    },
+    "last_path": {
+      "type": "string",
+      "title": "Last Path"
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Seen"
+    }
+  },
+  "required": [
+    "visitor_key"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

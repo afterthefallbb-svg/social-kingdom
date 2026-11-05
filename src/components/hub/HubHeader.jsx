@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { UserRound, Users } from "lucide-react";
+import { Eye, UserRound, Users } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import HubMenu from "@/components/hub/HubMenu";
 import KingdomBrand from "@/components/hub/KingdomBrand";
@@ -19,6 +19,11 @@ export default function HubHeader({ me }) {
       </Link>
       <KingdomBrand />
       <div className="kingdom-header-actions">
+        {me?.role === "admin" && (
+          <Link to="/viewers" className="kingdom-menu-toggle sk-viewers-toggle" aria-label="Viewers">
+            <Eye />
+          </Link>
+        )}
         <HubMenu me={me} buttonClassName="kingdom-menu-toggle" />
         <Link to="/clicks/create" className="kingdom-create-cliq"><Users /><span>CliQ +</span></Link>
       </div>

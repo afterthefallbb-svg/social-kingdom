@@ -5,11 +5,13 @@ import HubBackdrop from "@/components/hub/HubBackdrop";
 import HubHeader from "@/components/hub/HubHeader";
 import HubShortcuts from "@/components/hub/HubShortcuts";
 import HubCategoryRow from "@/components/hub/HubCategoryRow";
+import CreatorStats from "@/components/hub/CreatorStats";
 import useSocialHub from "@/components/hub/useSocialHub";
 import hubItems from "@/components/hub/hubItems";
 import "@/components/hub/kingdom.css";
 import "@/components/hub/kingdom-materials.css";
 import "@/components/hub/hub-layout.css";
+import "@/components/hub/creator-stats.css";
 
 export default function SocialHub() {
   const navigate = useNavigate();
@@ -28,6 +30,7 @@ export default function SocialHub() {
         </div>
         <div className="kingdom-feed">
           <div className="kingdom-sections">
+            <CreatorStats me={me} />
             <HubCategoryRow title="Stream" kind="stream" onTitle={() => navigate("/stream")} items={rows.stream} emptyText="No videos yet." onVideoClick={(index) => setPlayerState({ videos, index })} />
             <HubCategoryRow title="Events" kind="events" onTitle={() => navigate("/browse/events")} items={rows.events} emptyText="No events in your area yet." />
             <HubCategoryRow title="Artists" kind="artists" onTitle={() => navigate("/browse/artists")} items={rows.artists} emptyText="No local artists yet." />

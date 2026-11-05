@@ -37,7 +37,7 @@ function SheetNav() {
           </span>
         )}
       </NavLink>
-      <NavLink to="/" end aria-label="Map">
+      <NavLink to="/map" aria-label="Map">
         {() => (
           <span className={`${NAV_BOX} rounded-full`} style={{ background: FB }}>
             <Navigation size={NAV_SIZE} color="#ffffff" strokeWidth={2.25} fill="#ffffff" />

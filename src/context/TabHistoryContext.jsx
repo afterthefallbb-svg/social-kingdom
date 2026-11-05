@@ -5,19 +5,19 @@ import { useLocation, useNavigate } from "react-router-dom";
    so leaving a tab for another and coming back lands where you left off.
    Tapping the tab you are already on resets that tab to its root instead of
    stepping back through history (unpredictable inside an iOS WebView). */
-const TABS = { browse: "/browse", map: "/", create: "/create" };
+const TABS = { browse: "/", map: "/map", create: "/create" };
 
 const EMPTY = { browse: [], map: [], create: [] };
 
 function tabFor(pathname) {
-  if (pathname === TABS.browse || pathname.startsWith("/browse/")) return "browse";
+  if (pathname === "/browse" || pathname.startsWith("/browse/")) return "browse";
   if (pathname === TABS.map) return "map";
   if (pathname === TABS.create || pathname.startsWith("/create/")) return "create";
-  return null;
+  return "browse";
 }
 
 const TabHistoryContext = createContext({
-  activeTab: "map",
+  activeTab: "browse",
   restoreTab: () => {},
   historyFor: () => [],
 });
@@ -25,7 +25,7 @@ const TabHistoryContext = createContext({
 export function TabHistoryProvider({ children }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("map");
+  const [activeTab, setActiveTab] = useState("browse");
   const stacks = useRef({ ...EMPTY });
 
   useEffect(() => {

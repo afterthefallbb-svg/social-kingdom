@@ -8,6 +8,7 @@ import HubCategoryRow from "@/components/hub/HubCategoryRow";
 import CreatorStats from "@/components/hub/CreatorStats";
 import useSocialHub from "@/components/hub/useSocialHub";
 import hubItems from "@/components/hub/hubItems";
+import useGuest from "@/hooks/useGuest";
 import "@/components/hub/kingdom.css";
 import "@/components/hub/kingdom-materials.css";
 import "@/components/hub/hub-layout.css";
@@ -19,9 +20,19 @@ export default function SocialHub() {
   const { me, videos } = data;
   const [playerState, setPlayerState] = useState(null);
   const rows = hubItems(data, navigate);
+  const { guest } = useGuest();
+
+  /* A visitor can look around the hub and its example rows, but every feature
+     inside it leads to the sign-up screen. */
+  const gate = (e) => {
+    if (!guest) return;
+    e.preventDefault();
+    e.stopPropagation();
+    navigate("/register");
+  };
 
   return (
-    <div className="kingdom-hub">
+    <div className="kingdom-hub" onClickCapture={guest ? gate : undefined}>
       <HubBackdrop />
       <div className="kingdom-shell">
         <div className="kingdom-pinned">

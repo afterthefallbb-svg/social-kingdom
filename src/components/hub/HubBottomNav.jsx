@@ -23,14 +23,14 @@ export default function HubBottomNav() {
     }
   };
 
-  const onBrowse = pathname === "/browse" || pathname.startsWith("/browse/");
-  const onMap = pathname === "/";
+  const onBrowse = pathname === "/" || pathname === "/browse" || pathname.startsWith("/browse/");
+  const onMap = pathname === "/map";
   const onCreate = pathname === "/create" || pathname.startsWith("/create/");
 
   return createPortal(
     <nav className="kingdom-bottom-nav" aria-label="Main navigation">
       <NavLink
-        to="/browse"
+        to="/"
         data-tour="hub-button"
         aria-label="Browse"
         onClick={tabbed("browse", onBrowse)}
@@ -38,7 +38,7 @@ export default function HubBottomNav() {
       >
         <UserRound />
       </NavLink>
-      <NavLink to="/" aria-label="Map" onClick={tabbed("map", onMap)} className="kingdom-orb kingdom-orb-blue">
+      <NavLink to="/map" aria-label="Map" onClick={tabbed("map", onMap)} className="kingdom-orb kingdom-orb-blue">
         <Navigation fill="currentColor" />
       </NavLink>
       <NavLink

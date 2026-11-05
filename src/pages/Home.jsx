@@ -5,6 +5,9 @@ import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
 import MapToolbar from "@/components/map/MapToolbar";
 import EventPanel from "@/components/map/EventPanel";
+import ExampleEventSheet from "@/components/map/ExampleEventSheet";
+import useGuest from "@/hooks/useGuest";
+import { EXAMPLE_CITY, exampleEvents } from "@/lib/exampleEvents";
 import { getUserLocation } from "@/lib/localSeed";
 import "@/components/map/map-kingdom.css";
 import "@/components/map/map-surface.css";
@@ -32,13 +35,18 @@ export default function Home() {
   const [zoom, setZoom] = useState(13);
   const [seedTick, setSeedTick] = useState(0);
   const [locating, setLocating] = useState(false);
+  const [example, setExample] = useState(null);
   const mode = "events";
+  const { checking, guest } = useGuest();
 
+  // A visitor without an account never gets asked where they are: the map sits
+  // on one city and shows only the example gatherings.
   useEffect(() => {
+    if (checking || guest) return;
     getUserLocation().then((loc) => {
       if (loc) setCenter([loc.latitude, loc.longitude]);
     });
-  }, []);
+  }, [checking, guest]);
 
   useEffect(() => {
     function onSeeded() { setSeedTick((t) => t + 1); }
@@ -47,27 +55,37 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (checking || guest) return;
     const publicQuery = { visibility: { $ne: "personal" } };
     base44.entities.Event.count(publicQuery).then(setCount).catch(() => setCount(0));
     base44.entities.Event
       .filter(publicQuery, { sort: "-created_date", limit: 100 })
       .then((page) => setEvents(page.items))
       .catch(() => setEvents([]));
-  }, [seedTick]);
+  }, [seedTick, checking, guest]);
 
   const filtered = useMemo(() => {
-    let list = events;
+    let list = guest ? exampleEvents() : events;
     if (activeCat) list = list.filter((e) => e.category === activeCat);
     if (query.trim()) {
       const q = query.toLowerCase();
       list = list.filter((e) => e.title.toLowerCase().includes(q));
     }
     return [...list]
-      .map((e) => ({ ...e, distanceMi: kmBetween(center, [e.latitude, e.longitude]) * 0.621371 }))
+      .map((e) => ({
+        ...e,
+        distanceMi: e.distanceMi ?? kmBetween(center, [e.latitude, e.longitude]) * 0.621371,
+      }))
       .sort((a, b) => a.distanceMi - b.distanceMi);
-  }, [events, activeCat, query, center]);
+  }, [events, activeCat, query, center, guest]);
 
-  const goEvent = (ev) => navigate(`/event/${ev.id}`);
+  const goEvent = (ev) => {
+    if (guest) {
+      setExample(ev);
+      return;
+    }
+    navigate(`/event/${ev.id}`);
+  };
 
   /* Compass: jump to the user's own spot, zoomed in close enough to see
      themselves in the city and the events around them. */
@@ -89,8 +107,8 @@ export default function Home() {
         activeId={null}
         onSelect={goEvent}
         mode={mode}
-        center={center}
-        zoom={zoom}
+        center={guest ? EXAMPLE_CITY.center : center}
+        zoom={guest ? EXAMPLE_CITY.zoom : zoom}
       />
 
       <MapToolbar
@@ -100,19 +118,29 @@ export default function Home() {
         onCategorySelect={setActiveCat}
       />
 
-      <button
-        onClick={recenterMe}
-        aria-label="Center on my location"
-        className="sk-map-locate"
-      >
-        <MapCompass locating={locating} />
-      </button>
+      {!guest && (
+        <button
+          onClick={recenterMe}
+          aria-label="Center on my location"
+          className="sk-map-locate"
+        >
+          <MapCompass locating={locating} />
+        </button>
+      )}
 
       <EventPanel
         events={filtered}
-        count={activeCat || query ? filtered.length : count}
+        count={guest || activeCat || query ? filtered.length : count}
         onSelect={goEvent}
       />
+
+      {example && (
+        <ExampleEventSheet
+          event={example}
+          onClose={() => setExample(null)}
+          onSignUp={() => navigate("/register")}
+        />
+      )}
     </div>
   );
 }

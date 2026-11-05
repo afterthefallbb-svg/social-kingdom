@@ -8,6 +8,42 @@ const MI5_KM = 5 * 1.609344; // 5-mile detection radius
 const MAX_KM = 3 * 1.609344; // keep every seeded event within 3 miles
 const LOGO = "https://media.base44.com/images/public/6ac40db708d83e8619ab9efd/0d13f5955_logo.png";
 
+// Every seeded gathering carries a photo, five people already going, and one
+// post from one of them, so the map and the event page never look empty.
+const PHOTO = (id: string) => `https://images.unsplash.com/photo-${id}?w=900&h=600&fit=crop&q=80`;
+const FACE = (id: string) => `https://images.unsplash.com/photo-${id}?w=160&h=160&fit=crop&crop=faces&q=80`;
+
+const PHOTO_BY_CATEGORY: Record<string, string> = {
+  sports: PHOTO('1574629810360-7efbbe195018'),
+  barbecue: PHOTO('1555939594-58d7cb561ad1'),
+  family: PHOTO('1492684223066-81342ee5ff30'),
+  parties: PHOTO('1533174072545-7a4b6ad7a6c3'),
+  activities: PHOTO('1551632811-561732d1e306'),
+  drinks: PHOTO('1414235077428-338989a2e8c0'),
+  kids: PHOTO('1471286174890-9c112ffca5b4')
+};
+
+const POST_BY_CATEGORY: Record<string, string> = {
+  sports: 'Field is dry and the goals are up. See everyone there!',
+  barbecue: 'I am bringing the grill and a cooler of drinks. We still need buns.',
+  family: 'Bringing lawn games and lemonade for the kids table.',
+  parties: 'Got a speaker and a playlist ready for sunset.',
+  activities: 'Coming with a friend. Look for the blue blanket.',
+  drinks: 'Grabbing a table early, come find us.',
+  kids: 'My two are coming, they are excited for the playground.'
+};
+
+const PEOPLE = [
+  { id: 'sk_local_1', name: 'Maya R.', avatar: FACE('1494790108377-be9c29b29330') },
+  { id: 'sk_local_2', name: 'Andre T.', avatar: FACE('1500648767791-00dcc994a43e') },
+  { id: 'sk_local_3', name: 'Jessa L.', avatar: FACE('1534528741775-53994a69daeb') },
+  { id: 'sk_local_4', name: 'Marcus B.', avatar: FACE('1507003211169-0a1dd7228f2d') },
+  { id: 'sk_local_5', name: 'Priya N.', avatar: FACE('1517841905240-472988babdf9') },
+  { id: 'sk_local_6', name: 'Devon K.', avatar: FACE('1506794778202-cad84cf45f1d') },
+  { id: 'sk_local_7', name: 'Sofia M.', avatar: FACE('1531123897727-8f129e1688ce') },
+  { id: 'sk_local_8', name: 'Eli W.', avatar: FACE('1502685104226-ee32379fefbe') }
+];
+
 const rand = (min, max) => Math.random() * (max - min) + min;
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
@@ -114,10 +150,30 @@ export default async function (req) {
         visibility: 'public',
         auto_approve: true,
         is_seeded: true,
+        image_url: PHOTO_BY_CATEGORY[t.category] || PHOTO_BY_CATEGORY.activities,
         host_name: 'Social Kingdom',
         host_avatar: LOGO
       });
       eventIds.push(ev.id);
+
+      // Five people already going, and one of them has posted about it.
+      const going = shuffle(PEOPLE).slice(0, 5);
+      await svc.entities.Attendance.bulkCreate(
+        going.map((p) => ({
+          event_id: ev.id,
+          user_id: p.id,
+          user_name: p.name,
+          user_avatar: p.avatar,
+          status: 'confirmed'
+        }))
+      ).catch(() => {});
+      await svc.entities.Post.create({
+        content: POST_BY_CATEGORY[t.category] || POST_BY_CATEGORY.activities,
+        event_id: ev.id,
+        author_id: going[0].id,
+        author_name: going[0].name,
+        author_avatar: going[0].avatar
+      }).catch(() => {});
 
       // Auto-invite the new user.
       await svc.entities.Attendance.create({

@@ -34,7 +34,7 @@ export default function GatheringsCard({ me }) {
     <div className="bg-white rounded-2xl shadow-sm p-4">
       <div className="flex items-center justify-between">
         <h3 className="font-bold text-gray-900">My Gatherings</h3>
-        <Link to="/" className="inline-flex items-center text-sm font-semibold" style={{ color: FB }}>
+        <Link to="/map" className="inline-flex items-center text-sm font-semibold" style={{ color: FB }}>
           Explore <ChevronRight size={14} />
         </Link>
       </div>

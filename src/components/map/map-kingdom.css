@@ -351,6 +351,12 @@
 .sk-pin-emoji {
   line-height: 1;
 }
+/* Drawn category graphics (community sales) fill the marker box. */
+.sk-pin-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 
 @media (max-width: 420px) {
   .sk-ev-thumb { width: 34px; height: 34px; }

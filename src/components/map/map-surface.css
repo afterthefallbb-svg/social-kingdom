@@ -13,17 +13,15 @@
   filter: invert(1) hue-rotate(180deg) brightness(.86) contrast(.94) saturate(.8);
 }
 .sk-map .sk-road-tiles { pointer-events: none; }
-/* Electric-blue glass chips that read over the daylight basemap. */
+/* Category rims stay blue; their surface matches the see-through event cards. */
 .sk-map .sk-cat {
   --cat-a: 202 88% 66%;
   --cat-b: 217 92% 48%;
   position: relative;
   isolation: isolate;
   border-color: transparent;
-  color: rgb(234 243 255 / .92);
-  background:
-    radial-gradient(ellipse 92% 78% at 50% -12%, hsl(var(--cat-b) / .34), transparent 74%),
-    linear-gradient(170deg, hsl(219 92% 24% / .94), hsl(224 90% 13% / .95));
+  color: var(--map-text);
+  text-shadow: 0 1px 2px rgb(3 8 24 / .9);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / .2),
     inset 0 0 10px hsl(var(--cat-b) / .22);
@@ -48,9 +46,6 @@
 .sk-map .sk-cat-icon, .sk-map .sk-cat-on .sk-cat-icon { filter: none; }
 .sk-map .sk-cat-on {
   color: rgb(244 249 255);
-  background:
-    radial-gradient(ellipse 96% 82% at 50% -14%, hsl(var(--cat-b) / .62), transparent 72%),
-    linear-gradient(170deg, hsl(217 92% 38% / .95), hsl(222 90% 20% / .96));
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / .4),
     inset 0 0 12px hsl(var(--cat-a) / .22),
@@ -63,11 +58,14 @@
 /* Semi-transparent from top to bottom, so the pins sitting on the map stay
    visible behind the column instead of being wiped out by a solid slab. Only
    the card's surface is see-through — the photo inside stays fully opaque. */
-.sk-map .sk-ev-card {
+.sk-map :is(.sk-cat, .sk-ev-card) {
   background: linear-gradient(160deg, rgb(9 21 52 / .38), rgb(6 15 40 / .6));
+  -webkit-backdrop-filter: blur(3px) saturate(1.1);
+  backdrop-filter: blur(3px) saturate(1.1);
+}
+.sk-map .sk-ev-card {
   border-color: rgb(217 166 60 / .62); color: var(--map-text);
   box-shadow: inset 0 1px 0 rgb(234 243 255 / .16), 0 4px 14px rgb(5 11 36 / .28), 0 0 5px rgb(0 217 232 / .1);
-  -webkit-backdrop-filter: blur(3px) saturate(1.1); backdrop-filter: blur(3px) saturate(1.1);
 }
 .sk-map .sk-ev-thumb { border-color: rgb(217 166 60 / .6); background: var(--map-deep-blue); }
 /* Light text over a see-through surface: the shadow is what keeps it crisp. */

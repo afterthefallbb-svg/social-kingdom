@@ -2,6 +2,8 @@
 .sk-map {
   position: fixed;
   inset: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   background: hsl(var(--kingdom-ink));
   color: hsl(var(--kingdom-text));
@@ -86,11 +88,11 @@
 .sk-map-menu svg { width: 20px; height: 20px; color: hsl(var(--kingdom-gold-bright)); }
 
 /* Category pills */
+/* The header is the first layout row, not a fixed child of an animated page. */
 .sk-map-toolbar {
-  position: fixed;
-  top: max(8px, env(safe-area-inset-top));
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  flex: 0 0 auto;
+  margin: max(8px, env(safe-area-inset-top)) auto 0;
   width: calc(100% - 24px);
   max-width: 1100px;
   z-index: 630;
@@ -143,9 +145,11 @@
 
 /* Left event column */
 .sk-map-panel {
-  position: absolute;
+  position: relative;
+  align-self: flex-start;
+  flex: 0 0 auto;
   left: 10px;
-  top: calc(max(8px, env(safe-area-inset-top)) + 112px);
+  margin-top: 8px;
   /* Exactly four full cards show, then the list scrolls so the map stays in view */
   --sk-card-row: 80px;
   z-index: 620;

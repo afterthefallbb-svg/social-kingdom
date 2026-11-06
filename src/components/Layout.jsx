@@ -29,9 +29,13 @@ export default function Layout() {
     <div className={themed ? "sk-theme relative min-h-screen" : "relative min-h-screen bg-white"}>
       {themed && <KingdomBackdrop />}
       <div className={themed ? "relative z-10" : undefined}>
-        <ScreenTransition routeKey={pathname}>
+        {pathname === "/map" ? (
           <Outlet />
-        </ScreenTransition>
+        ) : (
+          <ScreenTransition routeKey={pathname}>
+            <Outlet />
+          </ScreenTransition>
+        )}
       </div>
       <BottomNav />
       <SelfieGate />

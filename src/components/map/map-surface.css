@@ -60,17 +60,21 @@
 .sk-map .sk-map-panel-head { align-self: flex-start; padding: 5px 9px; margin-bottom: 5px; border-radius: 8px; background: var(--map-day-surface); box-shadow: 0 2px 6px rgb(5 11 36 / .1); }
 .sk-map .sk-map-panel-head h2 { font-family: var(--font-heading); color: var(--map-day-text); text-shadow: none; }
 .sk-map .sk-map-panel-count { color: var(--map-road-major); }
+/* Semi-transparent from top to bottom, so the pins sitting on the map stay
+   visible behind the column instead of being wiped out by a solid slab. Only
+   the card's surface is see-through — the photo inside stays fully opaque. */
 .sk-map .sk-ev-card {
-  background: linear-gradient(145deg, rgb(var(--map-glass) / .88), rgb(5 11 36 / .84));
-  border-color: rgb(217 166 60 / .6); color: var(--map-text);
-  box-shadow: inset 0 1px 0 rgb(234 243 255 / .12), 0 4px 12px rgb(5 11 36 / .4), 0 0 5px rgb(0 217 232 / .08);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  background: linear-gradient(160deg, rgb(9 21 52 / .38), rgb(6 15 40 / .6));
+  border-color: rgb(217 166 60 / .62); color: var(--map-text);
+  box-shadow: inset 0 1px 0 rgb(234 243 255 / .16), 0 4px 14px rgb(5 11 36 / .28), 0 0 5px rgb(0 217 232 / .1);
+  -webkit-backdrop-filter: blur(3px) saturate(1.1); backdrop-filter: blur(3px) saturate(1.1);
 }
-.sk-map .sk-ev-thumb { border-color: rgb(217 166 60 / .5); background: var(--map-deep-blue); }
-.sk-map .sk-ev-title { color: var(--map-text); }
-.sk-map .sk-ev-meta { color: var(--map-muted); }
-.sk-map .sk-ev-meta svg { color: var(--map-ice); }
-.sk-map :is(.sk-ev-dist, .sk-ev-arrow) { color: var(--map-champagne); }
+.sk-map .sk-ev-thumb { border-color: rgb(217 166 60 / .6); background: var(--map-deep-blue); }
+/* Light text over a see-through surface: the shadow is what keeps it crisp. */
+.sk-map .sk-ev-title { color: #ffffff; text-shadow: 0 1px 2px rgb(3 8 24 / .95), 0 0 7px rgb(3 8 24 / .6); }
+.sk-map .sk-ev-meta { color: rgb(232 241 254 / .96); text-shadow: 0 1px 2px rgb(3 8 24 / .9); }
+.sk-map .sk-ev-meta svg { color: var(--map-ice); filter: drop-shadow(0 1px 1px rgb(3 8 24 / .8)); }
+.sk-map :is(.sk-ev-dist, .sk-ev-arrow) { color: var(--map-champagne); text-shadow: 0 1px 2px rgb(3 8 24 / .9); filter: drop-shadow(0 1px 1px rgb(3 8 24 / .7)); }
 .sk-map .sk-ev-empty { color: var(--map-muted); background: rgb(var(--map-glass) / .78); border-color: rgb(22 139 255 / .4); }
 .sk-map .sk-map-search {
   background: var(--map-day-surface); border-color: var(--map-day-border);
@@ -78,14 +82,34 @@
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 .sk-map .sk-map-search:focus-within { border-color: var(--map-road-major); box-shadow: 0 0 0 2px var(--map-day-active); }
-/* A search field keeps the browser's own dark bezel and inner shadow unless its
-   native look is switched off — that is what read as a shadow over the box. */
+/* The pill is the whole field: the input itself is only text, with no native
+   bezel, inner shadow, dark-mode fill or autofill tint of its own. */
 .sk-map .sk-map-search input {
   -webkit-appearance: none;
   appearance: none;
+  border: 0;
+  outline: none;
   box-shadow: none;
-  border-radius: inherit;
+  background: transparent;
   background-clip: padding-box;
+  color-scheme: light;
+  border-radius: inherit;
+  -webkit-text-fill-color: var(--map-day-text);
+}
+.sk-map .sk-map-search input::-webkit-search-decoration,
+.sk-map .sk-map-search input::-webkit-search-cancel-button,
+.sk-map .sk-map-search input::-webkit-search-results-button,
+.sk-map .sk-map-search input::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  display: none;
+}
+/* Chrome tints a filled field it remembers; the pill stays white. */
+.sk-map .sk-map-search input:-webkit-autofill,
+.sk-map .sk-map-search input:-webkit-autofill:hover,
+.sk-map .sk-map-search input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--map-day-text);
+  -webkit-box-shadow: 0 0 0 100px var(--map-day-surface) inset;
+  box-shadow: 0 0 0 100px var(--map-day-surface) inset;
 }
 .sk-map .sk-map-search svg { color: var(--map-road-major); }
 .sk-map .sk-map-search input { color: var(--map-day-text); }

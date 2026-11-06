@@ -6,7 +6,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
 // user, and flag them as onboarded.
 const MI5_KM = 5 * 1.609344; // 5-mile detection radius
 const MAX_KM = 3 * 1.609344; // keep every seeded event within 3 miles
-const LOGO = "https://media.base44.com/images/public/6ac40db708d83e8619ab9efd/0d13f5955_logo.png";
+const LOGO = "https://media.base44.com/images/public/6ac40db708d83e8619ab9efd/d60843e62_logo.jpg";
 
 // Every seeded gathering carries a photo, five people already going, and one
 // post from one of them, so the map and the event page never look empty.
@@ -50,6 +50,19 @@ const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 // Varied distances so a couple are walkable / bikeable without a car.
 const DIST_MI = [0.4, 0.9, 1.5, 2.2, 2.8];
 
+// The five gatherings land on different days at different times over the next
+// two weeks — tomorrow, 3 days, 5 days, a week and two weeks — so there is
+// always something coming up for the people who join later.
+const DAY_OFFSETS = [1, 3, 5, 7, 14];
+const LOCAL_HOURS = [11, 17.5, 12, 18, 10];
+
+// A local hour on a given day offset, returned as an instant.
+function localStart(dayOffset, hour, tzMinutes) {
+  const base = new Date();
+  const utcMidnight = Date.UTC(base.getUTCFullYear(), base.getUTCMonth(), base.getUTCDate() + dayOffset);
+  return new Date(utcMidnight + (hour * 60 - tzMinutes) * 60000).toISOString();
+}
+
 const TEMPLATES = [
   { category: 'sports', title: 'Pickup Soccer at the Park', desc: 'Friendly pickup game at a public park. All skill levels welcome — bring water.' },
   { category: 'barbecue', title: 'Community BBQ at the Park', desc: 'Bring something to grill and a side to share. A relaxed afternoon with good people.' },
@@ -86,8 +99,23 @@ export default async function (req) {
     if (!isFinite(lat) || !isFinite(lng)) {
       return Response.json({ error: 'Invalid coordinates' }, { status: 400 });
     }
+    const tzMinutes = Number.isFinite(Number(body.timezone_offset)) ? Number(body.timezone_offset) : 0;
 
     const svc = base44.asServiceRole;
+
+    // The invitation a newcomer gets: sent by the crown, one per gathering.
+    const invite = (userId, event) => svc.entities.Notification.create({
+      user_id: userId,
+      type: 'event_invite',
+      title: `You're invited: ${event.title}`,
+      body: `${event.address || 'Nearby'} — tap to see who's going.`,
+      target_type: 'event',
+      target_id: event.id,
+      actor_id: 'social_kingdom',
+      actor_name: 'Social Kingdom',
+      actor_avatar: LOGO,
+      read: false
+    });
     const full = await svc.entities.User.get(user.id).catch((e) => (e.status === 404 ? null : Promise.reject(e)));
     if (!full) return Response.json({ seeded: false, firstInArea: false });
     if (full.sk_onboarded) return Response.json({ seeded: false, firstInArea: false });
@@ -119,6 +147,25 @@ export default async function (req) {
       nearbyEvents = (existing?.items || []).length;
     } catch {}
 
+    // Anyone new who lands near gatherings that already exist gets those
+    // invitations too — once each, never a duplicate.
+    try {
+      const latDelta = MI5_KM / 111;
+      const lngDelta = MI5_KM / (111 * Math.cos((lat * Math.PI) / 180));
+      const nearby = await svc.entities.Event.filter({
+        visibility: 'public',
+        is_seeded: true,
+        latitude: { $gte: lat - latDelta, $lte: lat + latDelta },
+        longitude: { $gte: lng - lngDelta, $lte: lng + lngDelta }
+      }, { limit: 10 });
+      const sent = await svc.entities.Notification.filter({ user_id: user.id, type: 'event_invite' }, { limit: 50 });
+      const already = new Set((sent?.items || []).map((n: any) => n.target_id));
+      for (const ev of nearby?.items || []) {
+        if (already.has(ev.id)) continue;
+        await invite(user.id, ev).catch(() => {});
+      }
+    } catch {}
+
     const need = Math.max(0, 5 - nearbyEvents);
     if (need === 0) {
       await svc.entities.User.update(user.id, { sk_onboarded: true }).catch(() => {});
@@ -128,7 +175,6 @@ export default async function (req) {
     // Seed the missing Social Kingdom hosted gatherings near this person.
     const templates = shuffle(TEMPLATES).slice(0, need);
     const parks = shuffle(PARKS);
-    const now = Date.now();
     const eventIds = [];
 
     for (let i = 0; i < need; i++) {
@@ -137,7 +183,7 @@ export default async function (req) {
       const dKm = Math.min(DIST_MI[i] * 1.609344, MAX_KM);
       const dLat = (dKm / 111) * Math.cos(bearing);
       const dLng = (dKm / (111 * Math.cos((lat * Math.PI) / 180))) * Math.sin(bearing);
-      const start = new Date(now + (7 + i * 2) * 86400000 + rand(-2, 2) * 86400000).toISOString();
+      const start = localStart(DAY_OFFSETS[i] ?? 7 + i * 2, LOCAL_HOURS[i] ?? 12, tzMinutes);
 
       const ev = await svc.entities.Event.create({
         title: t.title,
@@ -184,6 +230,7 @@ export default async function (req) {
         user_city: full.location || '',
         status: 'confirmed'
       }).catch(() => {});
+      await invite(user.id, ev).catch(() => {});
     }
 
     await svc.entities.User.update(user.id, { sk_onboarded: true }).catch(() => {});

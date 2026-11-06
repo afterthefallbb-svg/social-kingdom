@@ -39,7 +39,7 @@ export default function SocialHub() {
           <HubHeader me={me} />
           <HubShortcuts me={me} onOpenVideo={(video) => setPlayerState({ videos: [video], index: 0 })} />
         </div>
-        <div className="kingdom-feed">
+        <div className="kingdom-feed" data-tour="hub-feed">
           <div className="kingdom-sections">
             <CreatorStats me={me} />
             <HubCategoryRow title="Stream" kind="stream" onTitle={() => navigate("/stream")} items={rows.stream} emptyText="No videos yet." onVideoClick={(index) => setPlayerState({ videos, index })} />

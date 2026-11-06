@@ -6,6 +6,7 @@ import BottomNav from "@/components/BottomNav";
 import SelfieGate from "@/components/onboarding/SelfieGate";
 import KingdomBackdrop from "@/components/theme/KingdomBackdrop";
 import ScreenTransition from "@/components/mobile/ScreenTransition";
+import GuidedTour from "@/components/tour/GuidedTour";
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -34,6 +35,7 @@ export default function Layout() {
       </div>
       <BottomNav />
       <SelfieGate />
+      <GuidedTour />
     </div>
   );
 }

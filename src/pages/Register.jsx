@@ -85,6 +85,8 @@ export default function Register() {
 
   const handleApple = () => startProvider("apple", "Apple");
 
+  const handleFacebook = () => startProvider("facebook", "Facebook");
+
   const [selfieError, setSelfieError] = useState("");
 
   async function handleSelfie(fileUri) {
@@ -197,11 +199,21 @@ export default function Register() {
       </Button>
       <Button
         variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
+        className="w-full h-12 text-sm font-medium mb-3"
         onClick={handleApple}
       >
         <AppleIcon className="w-5 h-5 mr-2" />
         Continue with Apple
+      </Button>
+      <Button
+        variant="outline"
+        className="w-full h-12 text-sm font-medium mb-6"
+        onClick={handleFacebook}
+      >
+        <svg viewBox="0 0 24 24" className="w-5 h-5 mr-2" fill="#1877f2" aria-hidden="true">
+          <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12Z" />
+        </svg>
+        Continue with Facebook
       </Button>
 
       {embedded && (

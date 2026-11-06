@@ -35,6 +35,19 @@
 .kingdom-menu-toggle, .kingdom-create-cliq { display: inline-flex; align-items: center; justify-content: center; gap: .65cqw; min-height: 28px; height: 6.2cqw; border-radius: 999px; padding: .6cqw 1.8cqw; color: hsl(var(--kingdom-text)); border: 1px solid hsl(var(--kingdom-gold)); background: linear-gradient(hsl(var(--kingdom-blue) / .75), hsl(var(--kingdom-ink)) 68%); box-shadow: inset 0 0 5px hsl(var(--kingdom-cyan) / .65), 0 0 8px hsl(var(--kingdom-gold) / .6); font-size: clamp(10px, 2.5cqw, 23px); font-weight: 700; }
 /* Native touch target: at least 44px tall on every screen size. */
 .kingdom-menu-toggle { height: 44px; min-height: 44px; }
+/* "Profile" sits directly left of the menu, so nobody has to guess that the
+   photo opens their own page. */
+.kingdom-view-profile { gap: .6cqw; padding-inline: 1.5cqw; font-size: clamp(10px, 2.4cqw, 20px); font-weight: 700; }
+/* The crown logo is the default face; a soft gold pulse marks a profile that
+   still needs a real photo. */
+.kingdom-avatar-new { animation: kingdom-avatar-nudge 2.4s ease-in-out infinite; }
+@keyframes kingdom-avatar-nudge {
+  50% { box-shadow: 0 0 0 1px hsl(var(--kingdom-gold-bright)), 0 0 16px hsl(var(--kingdom-gold) / .95), inset 0 0 0 1px hsl(var(--kingdom-ink)); }
+}
+.kingdom-profile-name.is-reminder { color: hsl(var(--kingdom-gold-bright)); }
+@media (max-width: 420px) {
+  .kingdom-view-profile span { display: none; }
+}
 .kingdom-menu-toggle svg { width: 3.8cqw; min-width: 18px; height: 3.8cqw; min-height: 18px; }
 .kingdom-create-cliq svg { width: 3.4cqw; height: 3.4cqw; min-width: 16px; min-height: 16px; color: hsl(var(--kingdom-gold-bright)); }
 .kingdom-shortcuts { margin: 0 3.5cqw; }

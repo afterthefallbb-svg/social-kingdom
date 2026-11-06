@@ -1,0 +1,100 @@
+/* Guided tour: dims everything but the one element being explained, draws a
+   pulsing golden ring around it and a hand pointing at it. */
+.sk-tour { position: fixed; inset: 0; z-index: 100000; pointer-events: none; }
+.sk-tour-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  background: hsl(var(--kingdom-ink) / 0.62);
+}
+.sk-tour-veil.is-cutout { background: transparent; }
+.sk-tour-spot {
+  position: fixed;
+  border-radius: 16px;
+  border: 2px solid hsl(var(--kingdom-gold-bright));
+  box-shadow: 0 0 0 9999px hsl(var(--kingdom-ink) / 0.62), 0 0 20px hsl(var(--kingdom-gold) / 0.85);
+  transition: top 220ms ease, left 220ms ease, width 220ms ease, height 220ms ease;
+  pointer-events: none;
+  animation: sk-tour-pulse 1.7s ease-in-out infinite;
+}
+@keyframes sk-tour-pulse {
+  50% { box-shadow: 0 0 0 9999px hsl(var(--kingdom-ink) / 0.62), 0 0 30px hsl(var(--kingdom-gold-bright) / 0.95); }
+}
+.sk-tour-hand {
+  position: fixed;
+  font-size: 30px;
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px hsl(var(--kingdom-ink) / 0.6));
+  animation: sk-tour-bounce 1.1s ease-in-out infinite;
+}
+@keyframes sk-tour-bounce {
+  50% { transform: translateY(7px); }
+}
+.sk-tour-card {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom) + 108px);
+  z-index: 3;
+  width: min(100% - 26px, 430px);
+  padding: 15px 17px 12px;
+  border-radius: 18px;
+  border: 1px solid hsl(var(--kingdom-gold));
+  background: linear-gradient(165deg, hsl(var(--kingdom-surface)), hsl(var(--kingdom-ink)));
+  box-shadow: 0 18px 40px hsl(var(--kingdom-ink) / 0.6), 0 0 0 1px hsl(var(--kingdom-gold) / 0.35);
+  color: hsl(var(--kingdom-text));
+  pointer-events: auto;
+}
+.sk-tour-step {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: hsl(var(--kingdom-cyan));
+}
+.sk-tour-card h2 {
+  margin-top: 3px;
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1.2;
+  color: hsl(var(--kingdom-gold-bright));
+}
+.sk-tour-body {
+  margin-top: 5px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: hsl(var(--kingdom-muted));
+}
+.sk-tour-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.sk-tour-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid hsl(var(--kingdom-gold-bright));
+  background: linear-gradient(180deg, hsl(var(--kingdom-blue)), hsl(var(--kingdom-ink)));
+  box-shadow: 0 0 10px hsl(var(--kingdom-gold) / 0.55), inset 0 0 8px hsl(var(--kingdom-cyan) / 0.35);
+  color: hsl(var(--kingdom-text));
+  font-size: 13.5px;
+  font-weight: 750;
+}
+.sk-tour-next:active { transform: scale(0.97); }
+.sk-tour-skip {
+  margin-left: auto;
+  padding: 8px 6px;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: hsl(var(--kingdom-muted));
+  text-decoration: underline;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sk-tour-spot, .sk-tour-hand { animation: none; }
+}

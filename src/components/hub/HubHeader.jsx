@@ -4,6 +4,7 @@ import { Eye, UserRound, Users } from "lucide-react";
 import { Image } from "@/components/ui/sk-image";
 import HubMenu from "@/components/hub/HubMenu";
 import KingdomBrand from "@/components/hub/KingdomBrand";
+import { SK_LOGO } from "@/lib/brand";
 
 export default function HubHeader({ me }) {
   return (
@@ -12,10 +13,14 @@ export default function HubHeader({ me }) {
         <Image src="https://media.base44.com/images/public/6ac40db708d83e8619ab9efd/347f80081_generated_image.png" alt="" className="kingdom-skyline-image" focalPointX={0.5} focalPointY={1} quality={100} loading="eager" />
       </div>
       <Link to={me ? "/profile" : "/login?returnTo=" + encodeURIComponent("/profile")} className="kingdom-profile" data-tour="profile-link" aria-label={me ? "My Profile" : "Log in"}>
-        <span className="kingdom-avatar">
-          <span className="kingdom-avatar-image">{me?.avatar_url ? <Image src={me.avatar_url} alt="" className="h-full w-full" /> : <UserRound className="kingdom-avatar-placeholder" />}</span>
+        <span className={`kingdom-avatar${me && !me.avatar_url ? " kingdom-avatar-new" : ""}`}>
+          <span className="kingdom-avatar-image">
+            <Image src={me?.avatar_url || SK_LOGO} alt="" className="h-full w-full" fittingType="fill" />
+          </span>
         </span>
-        <span className="kingdom-profile-name">{me ? me.full_name || "My Profile" : "Log In"}</span>
+        <span className={`kingdom-profile-name${me && !me.avatar_url ? " is-reminder" : ""}`}>
+          {me ? (me.avatar_url ? me.full_name || "My Profile" : "Add a photo") : "Log In"}
+        </span>
       </Link>
       <KingdomBrand />
       <div className="kingdom-header-actions">
@@ -24,6 +29,15 @@ export default function HubHeader({ me }) {
             <Eye />
           </Link>
         )}
+        <Link
+          to={me ? "/profile" : "/login?returnTo=" + encodeURIComponent("/profile")}
+          className="kingdom-menu-toggle kingdom-view-profile"
+          aria-label="View my profile"
+          data-tour="view-profile"
+        >
+          <UserRound />
+          <span>Profile</span>
+        </Link>
         <HubMenu me={me} buttonClassName="kingdom-menu-toggle" />
         <Link to="/clicks/create" className="kingdom-create-cliq"><Users /><span>CliQ +</span></Link>
       </div>

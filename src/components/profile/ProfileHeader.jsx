@@ -10,6 +10,7 @@ import KloutButton from "@/components/klout/KloutButton";
 import FriendMessageActions from "@/components/profile/FriendMessageActions";
 import { presenceBadge } from "@/lib/presence";
 import { checkProfilePhoto } from "@/lib/faceCheck";
+import { SK_LOGO } from "@/lib/brand";
 
 const FB = "#1877f2";
 
@@ -20,7 +21,6 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
   const avatarInputRef = useRef(null);
 
   const name = user?.full_name || user?.friend_name || "CliQ Member";
-  const initial = (name || "?").charAt(0).toUpperCase();
   const city = user?.location || user?.friend_city || "";
   const aboutPath = isMe ? "/profile/about" : `/profile/${user?.id}/about`;
 
@@ -86,16 +86,10 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
           onClick={() => isMe && avatarInputRef.current?.click()}
           className="relative w-24 h-24 rounded-full bg-white p-1 shadow shrink-0"
           aria-label="Upload profile photo"
+          data-tour="avatar-upload"
         >
-          <div
-            className="w-full h-full rounded-full overflow-hidden bg-blue-100 flex items-center justify-center text-3xl font-bold"
-            style={{ color: FB }}
-          >
-            {user?.avatar_url ? (
-              <Image src={user.avatar_url} fittingType="fill" className="w-full h-full" />
-            ) : (
-              initial
-            )}
+          <div className="w-full h-full rounded-full overflow-hidden bg-blue-100 flex items-center justify-center">
+            <Image src={user?.avatar_url || SK_LOGO} fittingType="fill" className="w-full h-full" />
           </div>
           {isMe && (
             <span className="absolute bottom-1 right-1 w-7 h-7 rounded-full bg-white flex items-center justify-center shadow">
@@ -121,6 +115,21 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
           </button>
         </div>
       </div>
+
+      {/* A new profile shows the crown logo until a real photo is added, so the
+          nudge to upload one sits right under it. */}
+      {isMe && !user?.avatar_url && (
+        <div className="px-4 pt-3">
+          <button
+            onClick={() => avatarInputRef.current?.click()}
+            data-tour="upload-photo"
+            className="w-full inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold"
+            style={{ background: "#fff6dc", color: "#7a4b00", border: "1px solid #e8b73a" }}
+          >
+            <Camera size={16} /> Add your profile photo — tap here
+          </button>
+        </div>
+      )}
 
       {/* Name + city/state */}
       <div className="px-4 pt-2">

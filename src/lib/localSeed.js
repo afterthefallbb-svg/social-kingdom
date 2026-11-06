@@ -15,7 +15,10 @@ export async function seedLocalEventsForUser() {
   const loc = await getUserLocation();
   if (!loc) return { seeded: false, firstInArea: false };
   try {
-    const res = await base44.functions.invoke("seedLocalEvents", loc);
+    const res = await base44.functions.invoke("seedLocalEvents", {
+      ...loc,
+      timezone_offset: -new Date().getTimezoneOffset(),
+    });
     return res?.data || { seeded: false, firstInArea: false };
   } catch {
     return { seeded: false, firstInArea: false };

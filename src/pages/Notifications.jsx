@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import NotifList from "@/components/NotifList";
 import { NOTIF_CATS } from "@/lib/notifications";
+import { base44 } from "@/api/base44Client";
 
 const FB = "#1877f2";
 const TOP = 5;
@@ -11,6 +12,13 @@ const TOP = 5;
 export default function Notifications() {
   const navigate = useNavigate();
   const n = useNotifications();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Only the creator sees the audience troubleshooting card.
+  useEffect(() => {
+    base44.auth.me().then((me) => setIsAdmin(me?.role === "admin")).catch(() => {});
+  }, []);
+
   const itemsFor = (cat) =>
     cat === "friends" ? n.friends
       : cat === "relationship" ? n.relationships
@@ -29,6 +37,24 @@ export default function Notifications() {
       <div className="h-[3px] w-12 bg-gray-900 ml-4 mt-2 rounded-full" />
 
       <div className="px-4 mt-5 space-y-6">
+        {isAdmin && (
+          <button
+            onClick={() => navigate("/viewers")}
+            className="w-full flex items-center gap-3 rounded-2xl border border-gray-200 p-3 text-left"
+          >
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full" style={{ background: "#e8f0fe" }}>
+              <BarChart3 size={18} style={{ color: FB }} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-bold text-gray-900">Where visitors leave</span>
+              <span className="block text-[11px] text-gray-500 leading-tight">
+                See the last page people were on before leaving, and where they came from.
+              </span>
+            </span>
+            <ChevronRight size={16} style={{ color: FB }} />
+          </button>
+        )}
+
         {n.loading ? (
           <div className="w-6 h-6 border-2 border-gray-200 border-t-gray-400 rounded-full animate-spin" />
         ) : (

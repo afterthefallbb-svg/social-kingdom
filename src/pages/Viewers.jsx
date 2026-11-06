@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Eye, UserPlus, Users } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import VisitorInsights from "@/components/admin/VisitorInsights";
 
 const FB = "#1877f2";
 
@@ -59,6 +60,8 @@ export default function Viewers() {
           </div>
         ))}
       </div>
+
+      <VisitorInsights />
     </div>
   );
 }

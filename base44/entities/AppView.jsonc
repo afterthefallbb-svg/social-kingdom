@@ -15,9 +15,21 @@
       "type": "string",
       "title": "User Id"
     },
+    "entry_path": {
+      "type": "string",
+      "title": "Entry Path"
+    },
     "last_path": {
       "type": "string",
       "title": "Last Path"
+    },
+    "exit_path": {
+      "type": "string",
+      "title": "Exit Path"
+    },
+    "referrer": {
+      "type": "string",
+      "title": "Referrer"
     },
     "last_seen": {
       "type": "string",

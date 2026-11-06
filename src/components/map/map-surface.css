@@ -74,10 +74,19 @@
 .sk-map .sk-ev-empty { color: var(--map-muted); background: rgb(var(--map-glass) / .78); border-color: rgb(22 139 255 / .4); }
 .sk-map .sk-map-search {
   background: var(--map-day-surface); border-color: var(--map-day-border);
-  box-shadow: 0 3px 14px rgb(5 11 36 / .18);
+  box-shadow: none;
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
-.sk-map .sk-map-search:focus-within { border-color: var(--map-road-major); box-shadow: 0 0 0 2px var(--map-day-active), 0 3px 14px rgb(5 11 36 / .18); }
+.sk-map .sk-map-search:focus-within { border-color: var(--map-road-major); box-shadow: 0 0 0 2px var(--map-day-active); }
+/* A search field keeps the browser's own dark bezel and inner shadow unless its
+   native look is switched off — that is what read as a shadow over the box. */
+.sk-map .sk-map-search input {
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none;
+  border-radius: inherit;
+  background-clip: padding-box;
+}
 .sk-map .sk-map-search svg { color: var(--map-road-major); }
 .sk-map .sk-map-search input { color: var(--map-day-text); }
 .sk-map .sk-map-search input::placeholder { color: var(--map-day-muted); }

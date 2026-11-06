@@ -7,9 +7,9 @@ export default function MapToolbar({ query, onQueryChange, activeCategory, onCat
     <div className="sk-map-toolbar">
       <div className="sk-map-search" role="search">
         <Search aria-hidden="true" />
-        {/* A plain text field: the browser's own search widget paints a dark
-            box inside the white pill, so the field is drawn entirely by CSS. */}
+        {/* Opt out of the shared dark form-field surface inside this pill. */}
         <input
+          className="sk-map-search-input bg-transparent"
           type="text"
           inputMode="search"
           autoComplete="off"

@@ -162,7 +162,7 @@
   color: hsl(var(--kingdom-text));
   border-radius: 0.75rem;
 }
-.sk-theme input:not([type="checkbox"]):not([type="radio"]):focus,
+.sk-theme input:not([type="checkbox"]):not([type="radio"]):not(.sk-map-search-input):focus,
 .sk-theme textarea:focus,
 .sk-theme select:focus {
 

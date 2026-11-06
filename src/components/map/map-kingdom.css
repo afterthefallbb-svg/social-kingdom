@@ -87,8 +87,8 @@
 
 /* Category pills */
 .sk-map-toolbar {
-  position: absolute;
-  top: max(12px, env(safe-area-inset-top));
+  position: fixed;
+  top: max(8px, env(safe-area-inset-top));
   left: 50%;
   transform: translateX(-50%);
   width: calc(100% - 24px);
@@ -145,7 +145,7 @@
 .sk-map-panel {
   position: absolute;
   left: 10px;
-  top: calc(max(12px, env(safe-area-inset-top)) + 112px);
+  top: calc(max(8px, env(safe-area-inset-top)) + 112px);
   /* Exactly four full cards show, then the list scrolls so the map stays in view */
   --sk-card-row: 80px;
   z-index: 620;

@@ -1,24 +1,24 @@
 /* Guided tour: dims everything but the one element being explained, draws a
    pulsing golden ring around it and a hand pointing at it. */
-.sk-tour { position: fixed; inset: 0; z-index: 100000; pointer-events: none; }
+.sk-tour { position: fixed; inset: 0; z-index: 2147483100; pointer-events: none; }
 .sk-tour-veil {
   position: absolute;
   inset: 0;
   pointer-events: auto;
-  background: hsl(var(--kingdom-ink) / 0.62);
+  background: hsl(var(--kingdom-ink) / 0.18);
 }
 .sk-tour-veil.is-cutout { background: transparent; }
 .sk-tour-spot {
   position: fixed;
   border-radius: 16px;
   border: 2px solid hsl(var(--kingdom-gold-bright));
-  box-shadow: 0 0 0 9999px hsl(var(--kingdom-ink) / 0.62), 0 0 20px hsl(var(--kingdom-gold) / 0.85);
+  box-shadow: 0 0 0 9999px hsl(var(--kingdom-ink) / 0.18), 0 0 20px hsl(var(--kingdom-gold) / 0.85);
   transition: top 220ms ease, left 220ms ease, width 220ms ease, height 220ms ease;
   pointer-events: none;
   animation: sk-tour-pulse 1.7s ease-in-out infinite;
 }
 @keyframes sk-tour-pulse {
-  50% { box-shadow: 0 0 0 9999px hsl(var(--kingdom-ink) / 0.62), 0 0 30px hsl(var(--kingdom-gold-bright) / 0.95); }
+  50% { box-shadow: 0 0 0 9999px hsl(var(--kingdom-ink) / 0.18), 0 0 30px hsl(var(--kingdom-gold-bright) / 0.95); }
 }
 .sk-tour-hand {
   position: fixed;

@@ -27,16 +27,28 @@ export default function GuidedTour() {
 
   useEffect(() => {
     if (!open || !step) return undefined;
-    if (step.route && pathname !== step.route) navigate(step.route);
     setRect(null);
+    if (step.route && pathname !== step.route) {
+      navigate(step.route);
+      return undefined;
+    }
     if (!step.target) return undefined;
 
     let alive = true;
     let retry = null;
+    let target = null;
+    const observer = new ResizeObserver(() => measure());
     const measure = () => {
+      if (!alive) return false;
       const el = document.querySelector(step.target);
       if (!el) return false;
       const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return false;
+      if (target !== el) {
+        observer.disconnect();
+        target = el;
+        observer.observe(el);
+      }
       setRect({ top: r.top, left: r.left, width: r.width, height: r.height });
       return true;
     };
@@ -44,7 +56,8 @@ export default function GuidedTour() {
       if (!alive) return;
       if (!measure()) retry = setTimeout(find, 140);
     };
-    find();
+    // Measure the real page after its entrance transition, not the loading shell.
+    retry = setTimeout(find, 300);
 
     const remeasure = () => measure();
     window.addEventListener("resize", remeasure);
@@ -52,6 +65,7 @@ export default function GuidedTour() {
     return () => {
       alive = false;
       clearTimeout(retry);
+      observer.disconnect();
       window.removeEventListener("resize", remeasure);
       window.removeEventListener("scroll", remeasure, true);
     };
@@ -86,7 +100,7 @@ export default function GuidedTour() {
   const pointerBelow = rect ? rect.top + rect.height / 2 < window.innerHeight * 0.55 : true;
 
   return createPortal(
-    <div className="sk-tour" role="dialog" aria-modal="true" aria-label="App tour">
+    <div className="sk-tour">
       <div className={`sk-tour-veil${rect ? " is-cutout" : ""}`} />
       {rect && (
         <div
@@ -114,10 +128,10 @@ export default function GuidedTour() {
         </span>
       )}
 
-      <div className="sk-tour-card">
+      <div className="sk-tour-card" role="dialog" aria-modal="true" aria-labelledby="sk-tour-title" aria-describedby="sk-tour-description">
         <p className="sk-tour-step">Step {index + 1} of {TOUR_STEPS.length}</p>
-        <h2>{step.title}</h2>
-        <p className="sk-tour-body">{step.body}</p>
+        <h2 id="sk-tour-title">{step.title}</h2>
+        <p id="sk-tour-description" className="sk-tour-body">{step.body}</p>
         <div className="sk-tour-actions">
           <button type="button" className="sk-tour-next" onClick={primary}>
             {step.cta || "Next"}

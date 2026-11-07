@@ -51,11 +51,6 @@
 .kingdom-menu-toggle svg { width: 3.8cqw; min-width: 18px; height: 3.8cqw; min-height: 18px; }
 .kingdom-create-cliq svg { width: 3.4cqw; height: 3.4cqw; min-width: 16px; min-height: 16px; color: hsl(var(--kingdom-gold-bright)); }
 .kingdom-shortcuts { margin: 0 3.5cqw; }
-.kingdom-planning { display: grid; grid-template-columns: 1fr 1fr; gap: 2.8cqw; margin: .8cqw 1.7cqw 1.4cqw; }
-.kingdom-planning-link { display: flex; align-items: center; justify-content: center; gap: 3.5cqw; position: relative; height: clamp(38px, 5.1dvh, 54px); border: 1.5px solid hsl(var(--kingdom-gold)); border-radius: 999px; background: radial-gradient(ellipse at 70% 0%, hsl(var(--kingdom-blue) / .9), transparent 62%), linear-gradient(hsl(var(--kingdom-blue) / .8), hsl(var(--kingdom-surface)) 60%, hsl(var(--kingdom-blue) / .5)); box-shadow: 0 0 5px hsl(var(--kingdom-text) / .7), 0 0 11px hsl(var(--kingdom-gold) / .5), inset 0 0 9px hsl(var(--kingdom-cyan)); font-size: clamp(15px, 3.5cqw, 32px); font-weight: 700; text-shadow: 0 1px 3px hsl(var(--kingdom-ink)); }
-.kingdom-planning-link > svg:first-of-type { width: 6.4cqw; height: 6.4cqw; color: hsl(var(--kingdom-cyan)); filter: drop-shadow(0 0 5px hsl(var(--kingdom-cyan))); }
-.kingdom-planning-link:first-child > svg:first-of-type { fill: hsl(var(--kingdom-blue) / .8); }
-.kingdom-planning-link > svg:last-child { position: absolute; right: 2cqw; width: 3.5cqw; height: 3.5cqw; }
 .kingdom-apps { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 9cqw) / 6); gap: 1.8cqw; overflow-x: auto; scroll-snap-type: x mandatory; /* top padding leaves room for the unread bubble riding the tile's top edge */ padding: 3.2cqw 2.4cqw 1.6cqw; margin-inline: -.1cqw; }
 .kingdom-app { --tile-glow: var(--kingdom-blue); position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .65cqw;   min-width: 0; height: clamp(54px, 6.9dvh, 72px); border-radius: 2.7cqw; border: 1px solid hsl(var(--kingdom-cyan) / .8); background: radial-gradient(ellipse at 50% 0%, hsl(var(--tile-glow)), transparent 85%), linear-gradient(140deg, hsl(var(--tile-glow) / .9), hsl(var(--kingdom-ink)) 85%); box-shadow: inset 0 0 8px hsl(var(--tile-glow)), 0 0 5px hsl(var(--tile-glow) / .85); scroll-snap-align: start; font-weight: 650; font-size: clamp(9px, 2.2cqw, 19px); line-height: 1.1; text-shadow: 0 1px 3px hsl(var(--kingdom-ink)); }
 .kingdom-app > svg { width: 5.5cqw; height: 5.5cqw; min-width: 24px; min-height: 24px; color: hsl(var(--kingdom-cyan)); filter: drop-shadow(0 0 4px hsl(var(--tile-glow))); stroke-width: 2.3; }
@@ -121,7 +116,6 @@
 .kingdom-grid .kingdom-card-picture { height: clamp(62px, 12cqw, 104px); }
 @media (max-width: 420px) {
   .kingdom-header-actions { top: 1.8cqw; }
-  .kingdom-planning { margin-bottom: 1.6cqw; }
 }
 @media (prefers-reduced-motion: reduce) {
   .kingdom-bolt, .kingdom-panel::after, .kingdom-skyline::before { animation: none; }

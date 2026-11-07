@@ -46,6 +46,7 @@ export default function SocialHub() {
             <HubCategoryRow title="Events" kind="events" onTitle={() => navigate("/browse/events")} items={rows.events} emptyText="No events in your area yet." />
             <HubCategoryRow title="Artists" kind="artists" onTitle={() => navigate("/browse/artists")} items={rows.artists} emptyText="No local artists yet." />
             <HubCategoryRow title="CliQs" kind="cliqs" onTitle={() => navigate("/browse/cliqs")} items={rows.cliqs} emptyText="No CliQs yet." />
+            <HubCategoryRow title="Recommended Friends" kind="friends" items={rows.people} emptyText="No one else here yet." />
           </div>
         </div>
       </div>

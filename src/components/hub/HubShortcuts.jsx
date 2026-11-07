@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, CalendarDays, ChevronRight, Folder, Gamepad2, Megaphone, MessageSquare, Music2, Newspaper, ShoppingBag, UserRound, Users } from "lucide-react";
+import { Bell, CalendarDays, Folder, Gamepad2, Megaphone, MessageSquare, Music2, Newspaper, ShoppingBag, UserRound, Users } from "lucide-react";
 import FriendsBrowserDialog from "@/components/friends/FriendsBrowserDialog";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
@@ -17,6 +17,8 @@ const links = [
   { label: "Music", to: "/music", icon: Music2, tone: "violet" },
   { label: "Games", to: "/games", icon: Gamepad2, tone: "blue" },
   { label: "Announcements", to: "/announcements", icon: Megaphone, tone: "gold" },
+  { label: "Projects", to: "/projects", icon: Folder, tone: "indigo" },
+  { label: "Planner", to: "/planner", icon: CalendarDays, tone: "magenta" },
 ];
 
 export default function HubShortcuts({ me, onOpenVideo }) {
@@ -56,11 +58,6 @@ export default function HubShortcuts({ me, onOpenVideo }) {
   });
   return (
     <div className="kingdom-shortcuts">
-      <div className="kingdom-planning">
-        {[{ label: "Projects", to: "/projects", icon: Folder }, { label: "Planner", to: "/planner", icon: CalendarDays }].map(({ label, to, icon: Icon }) => (
-          <Link key={to} to={to} className="kingdom-planning-link"><KingdomSurface /><Icon /><span>{label}</span><ChevronRight /></Link>
-        ))}
-      </div>
       <nav className="kingdom-apps no-scrollbar" aria-label="Social hub shortcuts">
         {links.map(({ label, to, icon: Icon, tone, badge, action }) => {
           const inner = <><KingdomSurface /><Icon /><span>{label}</span>{badges[badge] > 0 && <b className="kingdom-unread">{badges[badge] > 99 ? "99+" : badges[badge]}</b>}</>;

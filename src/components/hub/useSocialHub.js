@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { listUsers } from "@/lib/users";
 
 export default function useSocialHub() {
   const [me, setMe] = useState(null);
@@ -7,6 +8,7 @@ export default function useSocialHub() {
   const [artists, setArtists] = useState([]);
   const [videos, setVideos] = useState([]);
   const [clicks, setClicks] = useState([]);
+  const [people, setPeople] = useState([]);
   useEffect(() => {
     let active = true;
     (async () => {
@@ -48,8 +50,14 @@ export default function useSocialHub() {
       } catch {
         if (active) setClicks([]);
       }
+      try {
+        const list = await listUsers();
+        if (active) setPeople(list);
+      } catch {
+        if (active) setPeople([]);
+      }
     })();
     return () => { active = false; };
   }, []);
-  return { me, events, artists, videos, clicks };
+  return { me, events, artists, videos, clicks, people };
 }

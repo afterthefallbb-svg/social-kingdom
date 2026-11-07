@@ -69,10 +69,8 @@ html.sk-white .kingdom-avatar {
 html.sk-white .kingdom-avatar-new {
   animation: none;
 }
-html.sk-white .kingdom-brand-crown,
-html.sk-white .kingdom-brand-word {
-  filter: brightness(0) saturate(100%) opacity(0.88);
-}
+/* The Social Kingdom wordmark and crown keep their own artwork on both
+   backdrops: blue lettering, gold crown, untouched. */
 html.sk-white .kingdom-menu-toggle,
 html.sk-white .kingdom-create-cliq {
   background: #ffffff;

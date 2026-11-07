@@ -7,12 +7,22 @@ import SelfieGate from "@/components/onboarding/SelfieGate";
 import KingdomBackdrop from "@/components/theme/KingdomBackdrop";
 import ScreenTransition from "@/components/mobile/ScreenTransition";
 import GuidedTour from "@/components/tour/GuidedTour";
+import { useBackdrop } from "@/context/BackdropContext";
+import "@/components/theme/white-backdrop.css";
 
 export default function Layout() {
   const { pathname } = useLocation();
-  // The hub is the landing page now, so every screen sits on the kingdom theme.
-  const themed = true;
   const { checking, guest } = useGuest();
+  const { mode } = useBackdrop();
+
+  /* The owner's backdrop switch: white puts a plain shell behind every screen.
+     The events map always keeps its own chrome. */
+  const white = mode === "white" && pathname !== "/map";
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("sk-white", white);
+    return () => document.documentElement.classList.remove("sk-white");
+  }, [white]);
 
   // Count each visitor once per session for the creator's viewers numbers.
   useEffect(() => {
@@ -31,9 +41,9 @@ export default function Layout() {
   }
 
   return (
-    <div className={themed ? "sk-theme relative min-h-screen" : "relative min-h-screen bg-white"}>
-      {themed && <KingdomBackdrop />}
-      <div className={themed ? "relative z-10" : undefined}>
+    <div className={white ? "relative min-h-screen bg-white" : "sk-theme relative min-h-screen"}>
+      {!white && <KingdomBackdrop />}
+      <div className={white ? "relative z-10" : "relative z-10"}>
         {pathname === "/map" ? (
           <Outlet />
         ) : (

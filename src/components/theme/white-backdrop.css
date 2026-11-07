@@ -1,0 +1,205 @@
+/* Owner option: a plain white app shell across every screen except the events
+   map. Only active while html.sk-white is set, so the designed kingdom look is
+   exactly what everyone sees until the switch is turned on. */
+
+html.sk-white {
+  color-scheme: light;
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 222 47% 11%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 42%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 47% 11%;
+  --border: 214 25% 90%;
+  --input: 214 25% 90%;
+  --ring: 221 83% 53%;
+
+  /* The hub reads its colours from these, so the same tokens turn the whole
+     page light without touching its layout. */
+  --kingdom-ink: 0 0% 100%;
+  --kingdom-surface: 0 0% 100%;
+  --kingdom-text: 222 47% 11%;
+  --kingdom-muted: 215 16% 42%;
+  --kingdom-cyan: 199 89% 36%;
+  --kingdom-blue: 221 83% 53%;
+  --kingdom-gold: 38 78% 40%;
+  --kingdom-gold-bright: 32 85% 36%;
+  --kingdom-violet-light: 262 83% 45%;
+}
+
+html.sk-white body {
+  background: #ffffff;
+}
+
+/* ---- hub shell ---- */
+html.sk-white .kingdom-backdrop,
+html.sk-white .kingdom-skyline,
+html.sk-white .kingdom-hub::after {
+  display: none;
+}
+html.sk-white .kingdom-hub,
+html.sk-white .kingdom-hub .kingdom-shell {
+  background: #ffffff;
+}
+html.sk-white .kingdom-header::after {
+  height: 1px;
+  background: #e5e7eb;
+  box-shadow: none;
+}
+html.sk-white .kingdom-profile-name {
+  color: #0f172a;
+  text-shadow: none;
+}
+html.sk-white .kingdom-profile-name.is-reminder {
+  color: #92400e;
+}
+html.sk-white .kingdom-avatar {
+  background: radial-gradient(circle at 40% 30%, #1e3a8a, #0b1736 78%);
+  border-color: #c8a23c;
+  box-shadow: none;
+}
+html.sk-white .kingdom-avatar-new {
+  animation: none;
+}
+html.sk-white .kingdom-brand-crown,
+html.sk-white .kingdom-brand-word {
+  filter: brightness(0) saturate(100%) opacity(0.88);
+}
+html.sk-white .kingdom-menu-toggle,
+html.sk-white .kingdom-create-cliq {
+  background: #ffffff;
+  border: 1px solid #dbe2ec;
+  color: #0f172a;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+html.sk-white .kingdom-menu-toggle svg,
+html.sk-white .kingdom-create-cliq svg {
+  color: #334155;
+}
+
+/* ---- shortcut tiles ---- */
+html.sk-white .kingdom-app {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  text-shadow: none;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.07);
+}
+html.sk-white .kingdom-app > svg {
+  color: #2563eb;
+  filter: none;
+}
+html.sk-white .kingdom-app-gold > svg {
+  color: #b45309;
+  fill: none;
+}
+html.sk-white .kingdom-app-violet > svg {
+  color: #6d28d9;
+}
+html.sk-white .kingdom-app-teal > svg {
+  color: #0f766e;
+}
+html.sk-white .kingdom-app-magenta > svg {
+  color: #be185d;
+}
+
+/* ---- search + panels ---- */
+html.sk-white .kingdom-search {
+  background: #ffffff;
+  border: 1px solid #dbe2ec;
+  color: #475569;
+  box-shadow: none;
+}
+html.sk-white .kingdom-search svg {
+  color: #475569;
+}
+html.sk-white .kingdom-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+html.sk-white .kingdom-panel::before,
+html.sk-white .kingdom-panel::after {
+  display: none;
+}
+html.sk-white .kingdom-panel-title,
+html.sk-white .kingdom-panel-artists .kingdom-panel-title,
+html.sk-white .kingdom-panel-events .kingdom-panel-title {
+  color: #0f172a;
+  text-shadow: none;
+}
+html.sk-white .kingdom-panel-title > svg,
+html.sk-white .kingdom-panel-artists .kingdom-panel-title > svg {
+  color: #2563eb;
+  fill: none;
+  filter: none;
+}
+html.sk-white .kingdom-see-all,
+html.sk-white .kingdom-see-all svg {
+  color: #2563eb;
+  text-shadow: none;
+}
+
+/* ---- cards ---- */
+html.sk-white .kingdom-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+html.sk-white .kingdom-card-title {
+  color: #0f172a;
+}
+html.sk-white .kingdom-card-meta,
+html.sk-white .kingdom-author-name,
+html.sk-white .kingdom-card-time {
+  color: #64748b;
+}
+html.sk-white .kingdom-card-meta > svg,
+html.sk-white .kingdom-card-footer svg {
+  color: #64748b;
+  fill: none;
+}
+html.sk-white .kingdom-mini-avatar {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+html.sk-white .kingdom-scroll-arrow {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+html.sk-white .kingdom-empty {
+  color: #64748b;
+}
+html.sk-white .kingdom-hub .kingdom-feed {
+  box-shadow: none;
+}
+
+/* ---- bottom orbs ---- */
+html.sk-white .kingdom-bottom-nav::before {
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.94) 62%);
+}
+html.sk-white .kingdom-orb {
+  background: #ffffff;
+  border: 1px solid #dbe2ec;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.16);
+  color: #0f172a;
+}
+html.sk-white .kingdom-orb svg {
+  filter: none;
+}
+html.sk-white .kingdom-orb-blue {
+  color: #ffffff;
+  border-color: #2563eb;
+  background: radial-gradient(circle at 40% 20%, #38bdf8, #2563eb 45%, #1e3a8a);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}

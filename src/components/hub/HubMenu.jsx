@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu, MessageSquare, LifeBuoy, LogOut, Trash2 } from "lucide-react";
+import { Menu, MessageSquare, LifeBuoy, LogOut, Trash2, Sun } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import DeleteAccountDialog from "@/components/account/DeleteAccountDialog";
+import { Switch } from "@/components/ui/switch";
+import { useBackdrop } from "@/context/BackdropContext";
 
 const FB = "#1877f2";
 
@@ -11,6 +13,7 @@ export default function HubMenu({ me: meProp, buttonClassName }) {
   const [me, setMe] = useState(meProp || null);
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const { mode, setMode } = useBackdrop();
   const ref = useRef(null);
 
   // The menu always knows who is signed in, even before the page finishes loading.
@@ -60,7 +63,7 @@ export default function HubMenu({ me: meProp, buttonClassName }) {
         <Menu size={24} className={buttonClassName ? "text-kingdom-text" : "text-foreground"} />
       </button>
       {open && (
-        <div className="absolute right-0 top-11 z-50 w-44 rounded-xl border border-gray-200 bg-white shadow-lg py-1">
+        <div className="absolute right-0 top-11 z-50 w-52 rounded-xl border border-gray-200 bg-white shadow-lg py-1">
           <button
             onClick={() => go("/contact")}
             className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50"
@@ -73,6 +76,21 @@ export default function HubMenu({ me: meProp, buttonClassName }) {
           >
             <LifeBuoy size={18} style={{ color: FB }} /> Support
           </button>
+          {me?.role === "admin" && (
+            <>
+              <div className="my-1 h-px bg-gray-100" />
+              <div className="flex items-center justify-between gap-3 px-4 py-2">
+                <span className="flex items-center gap-3 text-sm text-gray-800">
+                  <Sun size={18} style={{ color: FB }} /> White backdrop
+                </span>
+                <Switch
+                  checked={mode === "white"}
+                  onCheckedChange={(on) => setMode(on ? "white" : "kingdom")}
+                  aria-label="White backdrop for the whole app"
+                />
+              </div>
+            </>
+          )}
           {me && (
             <>
               <div className="my-1 h-px bg-gray-100" />

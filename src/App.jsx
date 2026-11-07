@@ -7,6 +7,7 @@ import PageNotFound from './lib/PageNotFound';
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import { TabHistoryProvider } from '@/context/TabHistoryContext';
+import { BackdropProvider } from '@/context/BackdropContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 // Add page imports here
@@ -133,8 +134,10 @@ function App() {
         <QueryClientProvider client={queryClientInstance}>
           <Router>
             <TabHistoryProvider>
-              <ScrollToTop />
-              <AuthenticatedApp />
+              <BackdropProvider>
+                <ScrollToTop />
+                <AuthenticatedApp />
+              </BackdropProvider>
             </TabHistoryProvider>
           </Router>
           <Toaster />

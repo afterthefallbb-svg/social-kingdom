@@ -113,6 +113,86 @@ const RAW = [
   },
 ];
 
+/* ---------------------------------------------------------------- */
+/* On-demand examples: one gathering per ~5 square miles around whoever is
+   looking, so any city in the country looks lived-in the moment a visitor
+   shares their location. Nothing is stored — the same point always yields the
+   same gatherings, and real events always take their place. */
+
+const CELL_MI = Math.sqrt(5); // a 2.24-mile square is about five square miles
+const PARK_NAMES = [
+  "Riverside Park", "Central Community Park", "Sunset Valley Park", "Heritage Park",
+  "Lakeside Park", "Green Meadow Park", "Maple Grove Park", "Liberty Park",
+  "Cedar Hill Park", "Willow Creek Park",
+];
+
+const CATALOG = [
+  { category: "sports", label: "Pickup Soccer", photo: "1574629810360-7efbbe195018", post: "Field is dry and the goals are up. See everyone there!" },
+  { category: "barbecue", label: "Community BBQ", photo: "1555939594-58d7cb561ad1", post: "I am bringing the grill and a cooler of drinks. We still need buns." },
+  { category: "family", label: "Family Fun Day", photo: "1492684223066-81342ee5ff30", post: "Bringing lawn games and lemonade for the kids table." },
+  { category: "parties", label: "Sunset Get-Together", photo: "1533174072545-7a4b6ad7a6c3", post: "Got a speaker and a playlist ready for sunset." },
+  { category: "activities", label: "Park Meet & Greet", photo: "1551632811-561732d1e306", post: "Coming with a friend. Look for the blue blanket." },
+  { category: "drinks", label: "Evening Social", photo: "1414235077428-338989a2e8c0", post: "Grabbing a table early, come find us." },
+  { category: "kids", label: "Kids Playgroup", photo: "1471286174890-9c112ffca5b4", post: "My two are coming, they are excited for the playground." },
+  { category: "artists", label: "Local Music Set", photo: "1514525253161-7a46d19cd819", post: "Our set starts at seven — come early for the opener." },
+  { category: "local_sale", label: "Pop-Up Market", photo: "1504674900247-0877df9cc836", post: "Fresh produce and baked goods are in this week." },
+];
+
+function seedOf(text) {
+  let h = 2166136261;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+export function exampleEventsAround(lat, lng) {
+  const dLat = CELL_MI / 69;
+  const dLng = CELL_MI / (69 * Math.max(0.2, Math.cos((lat * Math.PI) / 180)));
+  const baseLat = Math.round(lat / dLat);
+  const baseLng = Math.round(lng / dLng);
+  const out = [];
+
+  for (let i = -2; i <= 2; i++) {
+    for (let j = -2; j <= 2; j++) {
+      // Corners of the outer ring sit too far away to be worth a pin.
+      if (Math.abs(i) === 2 && Math.abs(j) === 2) continue;
+      const cellLat = baseLat + i;
+      const cellLng = baseLng + j;
+      const seed = seedOf(`${cellLat}:${cellLng}`);
+      const cat = CATALOG[seed % CATALOG.length];
+      const park = PARK_NAMES[(seed >>> 4) % PARK_NAMES.length];
+      const spread = 0.55;
+      const jLat = (((seed >>> 9) % 100) / 100 - 0.5) * spread;
+      const jLng = (((seed >>> 16) % 100) / 100 - 0.5) * spread;
+      const attendees = [0, 1, 2, 3, 4].map(
+        (n) => EXAMPLE_PEOPLE[(seed + n * 3) % EXAMPLE_PEOPLE.length]
+      );
+      const author = attendees[0];
+
+      out.push({
+        id: `example-${cellLat}-${cellLng}`,
+        title: `${cat.label} at ${park}`,
+        description: `A ${cat.label.toLowerCase()} nearby, open to anyone in the area. Come say hello.`,
+        category: cat.category,
+        latitude: (cellLat + jLat) * dLat,
+        longitude: (cellLng + jLng) * dLng,
+        address: `${park} · Public Park`,
+        start_time: inDays(1 + ((seed >>> 6) % 12), 10 + ((seed >>> 12) % 10)),
+        image_url: photo(cat.photo),
+        is_example: true,
+        host_name: "Social Kingdom",
+        host_avatar: SK_LOGO,
+        attendees,
+        post: { author_name: author.name, author_avatar: author.avatar, content: cat.post },
+      });
+    }
+  }
+
+  return out;
+}
+
 /* Five example gatherings, each hosted by Social Kingdom with five people
    attending and one post from one of them. */
 export function exampleEvents() {

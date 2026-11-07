@@ -6,8 +6,8 @@ import { Image } from "@/components/ui/sk-image";
 export default function KingdomBrand() {
   return (
     <h1 className="kingdom-brand">
-      <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/176e89ee7_social-kingdom-crown-v2.png" alt="" aria-hidden="true" className="kingdom-brand-crown" fittingType="fit" width={453} height={61} quality={100} loading="eager" />
-      <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/973003b5b_social-kingdom-wordmark-v2.png" alt="Social Kingdom" className="kingdom-brand-word" fittingType="fit" width={453} height={70} quality={100} loading="eager" />
+      <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/1c94a1256_social-kingdom-crown-crisp.png" alt="" aria-hidden="true" className="kingdom-brand-crown" fittingType="fit" width={453} height={69} quality={100} loading="eager" />
+      <Image src="https://base44.app/api/apps/6ac40db708d83e8619ab9efd/files/mp/public/6ac40db708d83e8619ab9efd/a2def5eb8_social-kingdom-wordmark-crisp.png" alt="Social Kingdom" className="kingdom-brand-word" fittingType="fit" width={453} height={84} quality={100} loading="eager" />
     </h1>
   );
 }

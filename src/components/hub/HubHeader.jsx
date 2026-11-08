@@ -5,6 +5,7 @@ import { Image } from "@/components/ui/sk-image";
 import HubMenu from "@/components/hub/HubMenu";
 import KingdomBrand from "@/components/hub/KingdomBrand";
 import { SK_LOGO } from "@/lib/brand";
+import VerifiedBadge from "@/components/VerifiedBadge";
 
 export default function HubHeader({ me }) {
   return (
@@ -19,7 +20,8 @@ export default function HubHeader({ me }) {
           </span>
         </span>
         <span className={`kingdom-profile-name${me && !me.avatar_url ? " is-reminder" : ""}`}>
-          {me ? (me.avatar_url ? me.full_name || "My Profile" : "Add a photo") : "Log In"}
+          <span>{me ? (me.avatar_url ? me.full_name || "My Profile" : "Add a photo") : "Log In"}</span>
+          {me && <VerifiedBadge user={me} compact className="ml-1" />}
         </span>
       </Link>
       <KingdomBrand />

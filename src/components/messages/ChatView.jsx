@@ -8,6 +8,7 @@ import { sendMessage, sendMessageWithImage, markConversationRead, getDraft, setD
 import { canContact } from "@/lib/ageSafety";
 import EmojiPicker from "@/components/messages/EmojiPicker";
 import PresenceBadge from "@/components/presence/PresenceBadge";
+import VerifiedBadge from "@/components/VerifiedBadge";
 import { toast } from "@/components/ui/use-toast";
 import ReportDialog from "@/components/messages/ReportDialog";
 import MessageActions from "@/components/messages/MessageActions";
@@ -254,7 +255,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
                 onPointerCancel={pressEnd}
                 onContextMenu={(e) => { e.preventDefault(); pressEnd(); setActionMsg(m); }}
               >
-                {!mine && conversation?.is_group && <p className="text-[10px] font-semibold mb-0.5" style={{ color: FB }}>{m.sender_name?.split(" ")[0]}</p>}
+                {!mine && conversation?.is_group && <p className="text-[10px] font-semibold mb-0.5 flex items-center gap-1" style={{ color: FB }}><span>{m.sender_name?.split(" ")[0]}</span><VerifiedBadge id={m.sender_id} name={m.sender_name} compact /></p>}
                 {m.image_url && <Image src={m.image_url} fittingType="fit" className="rounded-xl mb-1 max-h-60 w-full" />}
                 {m.content && <p className="break-words">{m.content}</p>}
               </div>

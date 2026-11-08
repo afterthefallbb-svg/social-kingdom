@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Image } from "@/components/ui/sk-image";
 import { presenceBadge } from "@/lib/presence";
 import PresenceBadge from "@/components/presence/PresenceBadge";
+import VerifiedBadge from "@/components/VerifiedBadge";
 import { Check, Archive } from "lucide-react";
 import "@/components/messages/conversation-row.css";
 
@@ -117,7 +118,10 @@ export default function ConversationRow({
         </span>
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-center">
-            <p className={`truncate ${showUnread ? "font-bold text-gray-900" : "font-semibold text-gray-900"}`}>{title}</p>
+            <p className={`truncate flex items-center gap-1 ${showUnread ? "font-bold text-gray-900" : "font-semibold text-gray-900"}`}>
+              <span className="truncate">{title}</span>
+              {!conv.is_group && <VerifiedBadge user={peer} name={title} compact />}
+            </p>
             <span
               className={`text-[10px] shrink-0 ${showUnread ? "font-bold" : "text-gray-400"}`}
               style={showUnread ? { color: FB } : undefined}

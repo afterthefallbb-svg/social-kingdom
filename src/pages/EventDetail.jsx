@@ -9,6 +9,7 @@ import { Image } from "@/components/ui/sk-image";
 import { eventCover } from "@/lib/coverPhotos";
 import { useToast } from "@/components/ui/use-toast";
 import EventAttending from "@/components/event/EventAttending";
+import VerifiedBadge from "@/components/VerifiedBadge";
 import EventPhotos from "@/components/event/EventPhotos";
 import EventPosts from "@/components/event/EventPosts";
 import VideoGallery from "@/components/video/VideoGallery";
@@ -242,6 +243,7 @@ export default function EventDetail() {
                     Host
                   </span>
                   <span className="font-bold text-gray-900 truncate">{showHost.full_name}</span>
+                  <VerifiedBadge user={showHost} name={showHost.full_name} compact />
                 </div>
                 {showHost.location && <p className="text-sm text-gray-500 truncate">{showHost.location}</p>}
               </div>

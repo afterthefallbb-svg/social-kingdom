@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/sk-image";
 import KloutButton from "@/components/klout/KloutButton";
 import CommentSection from "@/components/comments/CommentSection";
+import VerifiedBadge from "@/components/VerifiedBadge";
 
 const FB = "#1877f2";
 
@@ -85,6 +86,7 @@ export default function PostCard({ post, me, onDeleted }) {
           className="text-sm font-semibold text-gray-800"
         >
           {post.author_name}
+          <VerifiedBadge id={post.author_id} name={post.author_name} compact className="ml-1" />
         </button>
         <span className="ml-auto text-[10px] text-gray-400">{time}</span>
         {canDelete && (

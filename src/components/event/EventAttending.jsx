@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/sk-image";
 import { Crown } from "lucide-react";
+import VerifiedBadge from "@/components/VerifiedBadge";
 
 const FB = "#1877f2";
 
@@ -58,8 +59,9 @@ export default function EventAttending({ eventId, hostId, refreshKey }) {
                     </span>
                   )}
                 </span>
-                <span className="text-[10px] text-gray-600 truncate w-full text-center">
-                  {a.user_name?.split(" ")[0]}
+                <span className="text-[10px] text-gray-600 truncate w-full flex items-center justify-center gap-0.5">
+                  <span className="truncate">{a.user_name?.split(" ")[0]}</span>
+                  <VerifiedBadge id={a.user_id} name={a.user_name} compact />
                 </span>
                 {isHost && (
                   <span className="text-[9px] font-bold uppercase tracking-wide" style={{ color: FB }}>

@@ -4,6 +4,7 @@ import { Image } from "@/components/ui/sk-image";
 import { SIZES } from "@/lib/photoEdit";
 import KloutButton from "@/components/klout/KloutButton";
 import CommentSection from "@/components/comments/CommentSection";
+import VerifiedBadge from "@/components/VerifiedBadge";
 import EmbedFrame from "./EmbedFrame";
 
 function fmt(s) {
@@ -149,6 +150,7 @@ export default function VideoSlide({ video, active }) {
               </span>
             )}
             <span className="text-white font-semibold text-sm drop-shadow">{video.user_name || "Unknown"}</span>
+            <VerifiedBadge id={video.user_id} name={video.user_name} compact className="text-white/90" />
           </div>
           {video.caption && <p className="text-white text-sm leading-snug drop-shadow mb-1">{video.caption}</p>}
           {hasMusic && (

@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/sk-image";
 import { Input } from "@/components/ui/input";
 import KloutButton from "@/components/klout/KloutButton";
+import VerifiedBadge from "@/components/VerifiedBadge";
 
 const FB = "#1877f2";
 
@@ -133,7 +134,10 @@ export default function CommentSection({ postId, videoId }) {
         <Avatar c={c} />
         <div className="flex-1 min-w-0">
           <div className="rounded-2xl bg-gray-100 px-3 py-1.5">
-            <p className="text-xs font-semibold text-gray-800">{c.user_name?.split(" ")[0]}</p>
+            <p className="text-xs font-semibold text-gray-800 flex items-center gap-1">
+              {c.user_name?.split(" ")[0]}
+              <VerifiedBadge id={c.user_id} name={c.user_name} compact />
+            </p>
             {editId === c.id ? (
               <div className="flex gap-1 mt-1">
                 <Input

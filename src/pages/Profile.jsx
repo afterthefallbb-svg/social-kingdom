@@ -9,6 +9,7 @@ import EventsAttendedSection from "@/components/profile/EventsAttendedSection";
 import CliQsSection from "@/components/profile/CliQsSection";
 import FriendsSection from "@/components/profile/FriendsSection";
 import EditProfileDialog from "@/components/profile/EditProfileDialog";
+import GetVerifiedCard from "@/components/profile/GetVerifiedCard";
 import VideoGallery from "@/components/video/VideoGallery";
 import ProfilePhotos from "@/components/profile/ProfilePhotos";
 import KingdomBackdrop from "@/components/theme/KingdomBackdrop";
@@ -154,6 +155,16 @@ export default function Profile() {
           onEdit={() => setEditing(true)}
           onMessages={() => navigate("/messages")}
         />
+
+        {isMe && (
+          <GetVerifiedCard
+            me={me}
+            onUpdated={(u) => {
+              setMe(u);
+              setUser(u);
+            }}
+          />
+        )}
 
         <div className="space-y-3">
           <div className="space-y-3">

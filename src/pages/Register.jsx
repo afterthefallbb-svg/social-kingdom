@@ -9,7 +9,6 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import AppleIcon from "@/components/AppleIcon";
-import SelfieCapture from "@/components/auth/SelfieCapture";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
@@ -21,7 +20,6 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
-  const [showSelfie, setShowSelfie] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +47,7 @@ export default function Register() {
       if (result?.access_token) {
         base44.auth.setToken(result.access_token);
       }
-      setShowSelfie(true);
+      window.location.href = safeReturnTo();
     } catch (err) {
       setError(err.message || "Invalid verification code");
     } finally {
@@ -86,37 +84,6 @@ export default function Register() {
   const handleApple = () => startProvider("apple", "Apple");
 
   const handleFacebook = () => startProvider("facebook", "Facebook");
-
-  const [selfieError, setSelfieError] = useState("");
-
-  async function handleSelfie(fileUri) {
-    try {
-      await base44.auth.updateMe({ selfie_verified: true, selfie_uri: fileUri });
-    } catch {
-      setSelfieError("We couldn't save your verification. Please try again.");
-      return;
-    }
-    window.location.href = safeReturnTo();
-  }
-
-  if (showSelfie) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-4">
-        <div className="w-full max-w-md">
-          <SelfieCapture
-            onCaptured={handleSelfie}
-            subtitle="A selfie is required to finish creating your account. It proves you're a real person and stays private on your account."
-          />
-          {selfieError && (
-            <p className="mt-4 text-center text-sm text-destructive">{selfieError}</p>
-          )}
-          <p className="mt-3 text-center text-xs text-muted-foreground">
-            Selfie verification is required — your account can't be completed without it.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   if (showOtp) {
     return (

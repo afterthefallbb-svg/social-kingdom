@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
 import EventDirectionsLink from "@/components/event/EventDirectionsLink";
+import VerifiedBadge from "@/components/VerifiedBadge";
 import { Image } from "@/components/ui/sk-image";
 
 function Tag({ children, color }) {
@@ -159,7 +160,10 @@ export default function EventDetailsSheet({ event, onClose }) {
                           </div>
                         )}
                       </div>
-                      <span className="text-[10px] text-gray-500 max-w-[48px] truncate">{a.user_name?.split(" ")[0]}</span>
+                      <span className="text-[10px] text-gray-500 max-w-[48px] truncate flex items-center gap-0.5">
+                        <span className="truncate">{a.user_name?.split(" ")[0]}</span>
+                        <VerifiedBadge id={a.user_id} name={a.user_name} compact />
+                      </span>
                     </div>
                   ))}
                 </div>

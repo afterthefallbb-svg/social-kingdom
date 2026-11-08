@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { Image } from "@/components/ui/sk-image";
+import VerifiedBadge from "@/components/VerifiedBadge";
 
 const FB = "#1877f2";
 
@@ -47,8 +48,9 @@ export default function FriendsSection({ friends }) {
                       (f.friend_name || "?").charAt(0)
                     )}
                   </span>
-                  <span className="text-[10px] text-gray-600 text-center leading-tight truncate w-full">
-                    {f.friend_name?.split(" ")[0]}
+                  <span className="text-[10px] text-gray-600 text-center leading-tight flex items-center justify-center gap-0.5 w-full">
+                    <span className="truncate">{f.friend_name?.split(" ")[0]}</span>
+                    <VerifiedBadge id={f.friend_id} name={f.friend_name} compact />
                   </span>
                 </button>
               ))}

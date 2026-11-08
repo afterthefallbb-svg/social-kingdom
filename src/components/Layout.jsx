@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import useGuest from "@/hooks/useGuest";
 import { trackAppView, notePath } from "@/lib/viewTracking";
 import BottomNav from "@/components/BottomNav";
-import SelfieGate from "@/components/onboarding/SelfieGate";
+import AreaSeeder from "@/components/onboarding/AreaSeeder";
 import KingdomBackdrop from "@/components/theme/KingdomBackdrop";
 import ScreenTransition from "@/components/mobile/ScreenTransition";
 import GuidedTour from "@/components/tour/GuidedTour";
@@ -53,7 +53,7 @@ export default function Layout() {
         )}
       </div>
       <BottomNav />
-      <SelfieGate />
+      <AreaSeeder />
       <GuidedTour />
     </div>
   );

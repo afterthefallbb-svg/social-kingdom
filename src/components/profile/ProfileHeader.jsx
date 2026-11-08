@@ -8,6 +8,7 @@ import PhotoEditor from "@/components/compose/PhotoEditor";
 import AvatarCropDialog from "@/components/profile/AvatarCropDialog";
 import KloutButton from "@/components/klout/KloutButton";
 import FriendMessageActions from "@/components/profile/FriendMessageActions";
+import VerifiedBadge from "@/components/VerifiedBadge";
 import { presenceBadge } from "@/lib/presence";
 import { checkProfilePhoto } from "@/lib/faceCheck";
 import { SK_LOGO } from "@/lib/brand";
@@ -145,13 +146,11 @@ export default function ProfileHeader({ user, isMe, onUserUpdated, onEdit, onMes
               🎬 Content Creator
             </span>
           )}
-          {user?.selfie_verified && (
-            <span className="inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[11px] font-semibold" style={{ background: "#dcfce7", color: "#15803d" }}>
-              ✓ Verified
-            </span>
-          )}
         </div>
         {city && <p className="text-sm text-gray-500">{city}</p>}
+        <div className="mt-1">
+          <VerifiedBadge user={user} name={name} />
+        </div>
       </div>
 
       {/* Klout (like + crown) — centered under the avatar with a clean gap */}

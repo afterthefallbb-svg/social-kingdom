@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Image } from "@/components/ui/sk-image";
 import { presenceBadge } from "@/lib/presence";
 import PresenceBadge from "@/components/presence/PresenceBadge";
+import VerifiedBadge from "@/components/VerifiedBadge";
 import ClickPresenceBadge from "@/components/presence/ClickPresenceBadge";
 import { useClickHosts } from "@/hooks/useClickHosts";
 import { usersByIds, searchUsers } from "@/lib/users";
@@ -99,7 +100,10 @@ export default function MessageSearchResults({ me, query, scope, filters, onSele
               <PresenceBadge badge={presenceBadge(u)} className="-top-1 -right-1 text-xs" />
             </span>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-gray-900 truncate">{u.full_name || "User"}</p>
+              <p className="font-semibold text-gray-900 truncate flex items-center gap-1">
+                <span className="truncate">{u.full_name || "User"}</span>
+                <VerifiedBadge id={u.id} name={u.full_name} compact />
+              </p>
               <p className="text-xs text-gray-500 truncate">{[u.location, u.job, u.company].filter(Boolean).join(" · ")}</p>
             </div>
           </button>

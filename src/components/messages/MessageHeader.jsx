@@ -4,6 +4,7 @@ import { Settings, Crown, ChevronLeft } from "lucide-react";
 import { Image } from "@/components/ui/sk-image";
 import { isOnline, statusEmoji, presenceBadge } from "@/lib/presence";
 import PresenceBadge from "@/components/presence/PresenceBadge";
+import VerifiedBadge from "@/components/VerifiedBadge";
 
 const FB = "#1877f2";
 
@@ -24,7 +25,10 @@ export default function MessageHeader({ me, onOpenSettings }) {
         <PresenceBadge badge={presenceBadge(me)} className="-top-1 -right-1 text-base" />
       </div>
       <div className="flex-1 min-w-0 text-white">
-        <p className="font-bold truncate">{name}</p>
+        <p className="font-bold truncate flex items-center gap-1">
+          <span className="truncate">{name}</span>
+          <VerifiedBadge user={me} name={name} compact />
+        </p>
         <p className="text-xs text-white/80 truncate">
           {online ? "Active now" : city || "Offline"}
         </p>

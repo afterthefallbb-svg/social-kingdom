@@ -92,13 +92,13 @@
 .sk-map-toolbar {
   position: relative;
   flex: 0 0 auto;
-  margin: max(8px, env(safe-area-inset-top)) auto 0;
+  margin: 0 auto;
   width: calc(100% - 24px);
   max-width: 1100px;
   z-index: 630;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 .sk-map-cats {
   position: relative;
@@ -147,13 +147,16 @@
 .sk-map-panel {
   position: relative;
   align-self: flex-start;
-  flex: 0 0 auto;
+  /* Fills whatever height is left under the top bar and scrolls inside it, so
+     no screen ever clips a card at the bottom. */
+  flex: 1 1 auto;
   left: 10px;
-  margin-top: 8px;
-  /* Exactly four full cards show, then the list scrolls so the map stays in view */
-  --sk-card-row: 80px;
+  margin-top: 6px;
+  --sk-card-row: 76px;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 74px);
   z-index: 620;
-  width: clamp(140px, 27vw, 224px);
+  /* Narrower than before: the list gives a little map back on every screen. */
+  width: clamp(130px, 24vw, 200px);
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -182,11 +185,9 @@
   flex-direction: column;
   gap: 7px;
   overflow-y: auto;
+  flex: 1 1 auto;
   min-height: 0;
   padding: 2px 4px 8px 2px;
-  /* Room for four rows plus their gaps and top padding — and not one pixel
-     of a fifth card, which is what used to peek out below the fourth. */
-  max-height: calc(4 * var(--sk-card-row) + 3 * 7px + 8px);
 }
 .sk-ev-card {
   display: flex;
@@ -260,22 +261,23 @@
 }
 
 /* Floating search over the map */
+/* Identical to the hub's search pill, except this one filters the map. */
 .sk-map-search {
   position: relative;
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12px;
-  height: 54px;
-  padding: 0 18px;
+  gap: 10px;
+  height: 46px;
+  padding: 0 14px;
   border-radius: 999px;
-  border: 1px solid hsl(var(--kingdom-gold) / 0.65);
-  background: hsl(var(--kingdom-ink) / 0.82);
+  border: 1px solid hsl(var(--kingdom-text) / 0.9);
+  background: linear-gradient(180deg, hsl(var(--kingdom-blue) / 0.24), hsl(var(--kingdom-ink) / 0.8));
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  box-shadow: 0 0 10px hsl(var(--kingdom-gold) / 0.28), inset 0 0 9px hsl(var(--kingdom-blue) / 0.4);
+  box-shadow: inset 0 0 9px hsl(var(--kingdom-cyan) / 0.5), 0 0 7px hsl(var(--kingdom-blue));
 }
-.sk-map-search svg { width: 21px; height: 21px; flex: 0 0 auto; color: hsl(var(--kingdom-gold-bright)); }
+.sk-map-search svg { width: 19px; height: 19px; flex: 0 0 auto; color: hsl(var(--kingdom-text)); }
 .sk-map-search input {
   flex: 1;
   min-width: 0;

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MapCompass from "@/components/map/MapCompass";
 import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
+import MapTopBar from "@/components/map/MapTopBar";
 import MapToolbar from "@/components/map/MapToolbar";
 import EventPanel from "@/components/map/EventPanel";
 import ExampleEventSheet from "@/components/map/ExampleEventSheet";
@@ -121,6 +122,8 @@ export default function Home() {
         center={center}
         zoom={guest && !located ? EXAMPLE_CITY.zoom : zoom}
       />
+
+      <MapTopBar />
 
       <MapToolbar
         query={query}

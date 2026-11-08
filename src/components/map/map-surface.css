@@ -74,12 +74,15 @@
 .sk-map .sk-ev-meta svg { color: var(--map-ice); filter: drop-shadow(0 1px 1px rgb(3 8 24 / .8)); }
 .sk-map :is(.sk-ev-dist, .sk-ev-arrow) { color: var(--map-champagne); text-shadow: 0 1px 2px rgb(3 8 24 / .9); filter: drop-shadow(0 1px 1px rgb(3 8 24 / .7)); }
 .sk-map .sk-ev-empty { color: var(--map-muted); background: rgb(var(--map-glass) / .78); border-color: rgb(22 139 255 / .4); }
+/* The pill keeps the hub's dark sapphire glass even over the daylight map, so
+   the two main screens' search bars are the same object. */
 .sk-map .sk-map-search {
-  background: var(--map-day-surface); border-color: var(--map-day-border);
-  box-shadow: none;
+  background: linear-gradient(180deg, hsl(var(--kingdom-blue) / .24), hsl(var(--kingdom-ink) / .8));
+  border-color: hsl(var(--kingdom-text) / .9);
+  box-shadow: inset 0 0 9px hsl(var(--kingdom-cyan) / .5), 0 0 7px hsl(var(--kingdom-blue));
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
-.sk-map .sk-map-search:focus-within { border-color: var(--map-road-major); box-shadow: 0 0 0 2px var(--map-day-active); }
+.sk-map .sk-map-search:focus-within { border-color: hsl(var(--kingdom-gold-bright)); box-shadow: inset 0 0 9px hsl(var(--kingdom-cyan) / .6), 0 0 10px hsl(var(--kingdom-gold) / .8); }
 /* The pill is the whole field: the input itself is only text, with no native
    bezel, inner shadow, dark-mode fill or autofill tint of its own. */
 .sk-map .sk-map-search input {
@@ -90,9 +93,9 @@
   box-shadow: none;
   background: transparent;
   background-clip: padding-box;
-  color-scheme: light;
+  color-scheme: dark;
   border-radius: inherit;
-  -webkit-text-fill-color: var(--map-day-text);
+  -webkit-text-fill-color: hsl(var(--kingdom-text));
 }
 .sk-map .sk-map-search input::-webkit-search-decoration,
 .sk-map .sk-map-search input::-webkit-search-cancel-button,
@@ -105,13 +108,13 @@
 .sk-map .sk-map-search input:-webkit-autofill,
 .sk-map .sk-map-search input:-webkit-autofill:hover,
 .sk-map .sk-map-search input:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--map-day-text);
-  -webkit-box-shadow: 0 0 0 100px var(--map-day-surface) inset;
-  box-shadow: 0 0 0 100px var(--map-day-surface) inset;
+  -webkit-text-fill-color: hsl(var(--kingdom-text));
+  -webkit-box-shadow: 0 0 0 100px hsl(var(--kingdom-ink)) inset;
+  box-shadow: 0 0 0 100px hsl(var(--kingdom-ink)) inset;
 }
-.sk-map .sk-map-search svg { color: var(--map-road-major); }
-.sk-map .sk-map-search input { color: var(--map-day-text); }
-.sk-map .sk-map-search input::placeholder { color: var(--map-day-muted); }
+.sk-map .sk-map-search svg { color: hsl(var(--kingdom-text)); }
+.sk-map .sk-map-search input { color: hsl(var(--kingdom-text)); }
+.sk-map .sk-map-search input::placeholder { color: hsl(var(--kingdom-muted)); }
 /* The compass carries no surface of its own — only its mark and its glow. */
 .sk-map .sk-map-locate { background: none; border: 0; box-shadow: none; }
 .sk-map .sk-map-locate:hover .sk-compass,

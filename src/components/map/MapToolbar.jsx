@@ -1,13 +1,13 @@
 import React from "react";
-import { Search } from "lucide-react";
+import { Search, SlidersHorizontal } from "lucide-react";
 import MapCategoryBar from "@/components/map/MapCategoryBar";
 
+/* Same search pill as the hub, wired to the map's own event filter. */
 export default function MapToolbar({ query, onQueryChange, activeCategory, onCategorySelect }) {
   return (
     <div className="sk-map-toolbar">
       <div className="sk-map-search" role="search">
         <Search aria-hidden="true" />
-        {/* Opt out of the shared dark form-field surface inside this pill. */}
         <input
           className="sk-map-search-input bg-transparent"
           type="text"
@@ -20,6 +20,7 @@ export default function MapToolbar({ query, onQueryChange, activeCategory, onCat
           placeholder="Search Events..."
           aria-label="Search events"
         />
+        <SlidersHorizontal aria-hidden="true" />
       </div>
       <MapCategoryBar active={activeCategory} onSelect={onCategorySelect} />
     </div>

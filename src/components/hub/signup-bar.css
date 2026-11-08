@@ -1,0 +1,18 @@
+.sk-signup {
+  display: block;
+  width: calc(100% - 24px);
+  margin: 4px 12px 2px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1.5px solid hsl(var(--kingdom-gold-bright));
+  background: linear-gradient(180deg, hsl(var(--kingdom-gold)), hsl(var(--kingdom-amber)));
+  color: hsl(var(--kingdom-ink));
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 0 12px hsl(var(--kingdom-gold) / 0.7), inset 0 1px 0 hsl(var(--kingdom-text) / 0.65);
+  transition: transform 140ms ease;
+}
+.sk-signup:active { transform: scale(0.99); }

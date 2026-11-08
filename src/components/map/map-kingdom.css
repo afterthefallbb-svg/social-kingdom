@@ -98,7 +98,7 @@
   z-index: 630;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 .sk-map-cats {
   position: relative;
@@ -107,7 +107,7 @@
   align-items: center;
   gap: 7px;
   overflow-x: auto;
-  padding: 2px 0 8px;
+  padding: 0 0 4px;
   scroll-snap-type: x proximity;
   -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent);
   mask-image: linear-gradient(90deg, #000 88%, transparent);
@@ -117,8 +117,8 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  height: 34px;
-  padding: 0 13px;
+  height: 31px;
+  padding: 0 12px;
   border-radius: 999px;
   border: 1px solid hsl(var(--kingdom-gold) / 0.5);
   background: hsl(var(--kingdom-surface) / 0.72);
@@ -151,7 +151,7 @@
      no screen ever clips a card at the bottom. */
   flex: 1 1 auto;
   left: 10px;
-  margin-top: 6px;
+  margin-top: 3px;
   --sk-card-row: 76px;
   padding-bottom: calc(env(safe-area-inset-bottom) + 74px);
   z-index: 620;
@@ -268,7 +268,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 46px;
+  height: 43px;
   padding: 0 14px;
   border-radius: 999px;
   border: 1px solid hsl(var(--kingdom-text) / 0.9);

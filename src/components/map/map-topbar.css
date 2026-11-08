@@ -5,8 +5,9 @@
   z-index: 630;
   flex: 0 0 auto;
   container-type: inline-size;
-  padding-top: max(2px, env(safe-area-inset-top));
-  background: linear-gradient(180deg, hsl(var(--kingdom-ink) / 0.9), hsl(var(--kingdom-ink) / 0.55) 62%, transparent);
+  /* The avatar sits right at the top of the screen — no dead band above it. */
+  padding-top: 0;
+  background: linear-gradient(180deg, hsl(var(--kingdom-ink) / 0.42), hsl(var(--kingdom-ink) / 0.16) 60%, transparent);
   color: hsl(var(--kingdom-text));
 }
 .sk-map-top-row {
@@ -72,6 +73,6 @@
 }
 .sk-map-cliq svg { width: 14px; height: 14px; color: hsl(var(--kingdom-gold-bright)); }
 .sk-map-icons { margin: 0 2px; }
-/* A tighter icon strip than the hub's — same tiles, less air around them. */
-.sk-map-icons .kingdom-apps { padding: 7px 2.4cqw 1px; }
-.sk-map-icons .kingdom-app { height: clamp(44px, 5.4dvh, 54px); }
+/* The hub's own tiles at their full size; only the air above them is trimmed
+   to what the unread bubble needs, so the strip stays compact. */
+.sk-map-icons .kingdom-apps { padding: 9px 2.4cqw 2px; }

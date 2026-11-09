@@ -1,0 +1,52 @@
+/* Location nudge on the map — a single glass strip under the categories. */
+.sk-loc-banner {
+  position: relative;
+  flex: 0 0 auto;
+  width: calc(100% - 24px);
+  max-width: 1100px;
+  margin: 2px auto 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px 7px 10px;
+  border-radius: 12px;
+  border: 1px solid hsl(var(--kingdom-gold) / 0.55);
+  background: linear-gradient(160deg, hsl(var(--kingdom-surface) / 0.94), hsl(var(--kingdom-ink) / 0.94));
+  box-shadow: inset 0 0 9px hsl(var(--kingdom-blue) / 0.3);
+  color: hsl(var(--kingdom-text));
+  z-index: 625;
+}
+.sk-loc-pin {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  color: hsl(var(--kingdom-gold-bright));
+}
+.sk-loc-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+.sk-loc-enable {
+  flex: 0 0 auto;
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid hsl(var(--kingdom-gold-bright));
+  background: linear-gradient(180deg, hsl(var(--kingdom-gold)), hsl(var(--kingdom-amber)));
+  color: hsl(var(--kingdom-ink));
+  font-size: 11.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.sk-loc-enable:disabled { opacity: 0.7; }
+.sk-loc-close {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  color: hsl(var(--kingdom-muted));
+}

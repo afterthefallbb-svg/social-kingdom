@@ -17,10 +17,14 @@ export default function GuidedTour() {
   const [index, setIndex] = useState(0);
   const [rect, setRect] = useState(null);
 
+  // Nothing opens on its own: the walk starts from the small "?" help button.
   useEffect(() => {
-    if (localStorage.getItem(TOUR_KEY)) return undefined;
-    const timer = setTimeout(() => setOpen(true), 700);
-    return () => clearTimeout(timer);
+    const start = () => {
+      setIndex(0);
+      setOpen(true);
+    };
+    window.addEventListener("sk:start_tour", start);
+    return () => window.removeEventListener("sk:start_tour", start);
   }, []);
 
   const step = TOUR_STEPS[index];

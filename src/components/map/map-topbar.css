@@ -54,6 +54,20 @@
   gap: 6px;
   flex: 0 0 auto;
 }
+/* The guided walk lives behind this small help mark — it never opens by itself. */
+.sk-map-help {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid hsl(var(--kingdom-gold) / 0.7);
+  background: hsl(var(--kingdom-surface) / 0.7);
+  color: hsl(var(--kingdom-gold-bright));
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+}
 .sk-map-menu { color: hsl(var(--kingdom-text)); padding: 4px; }
 .sk-map-menu svg { width: 22px; height: 22px; color: hsl(var(--kingdom-gold-bright)); }
 .sk-map-cliq {

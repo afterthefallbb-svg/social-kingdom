@@ -11,14 +11,14 @@ export const TOUR_STEPS = [
   },
   {
     id: "profile",
-    route: "/",
+    route: "/browse",
     target: '[data-tour="profile-link"]',
     title: "This is you",
     body: "Tap your photo any time to open your personal profile — your photos, events and videos all live there.",
   },
   {
     id: "feed",
-    route: "/",
+    route: "/browse",
     target: '[data-tour="hub-feed"]',
     title: "Your stream",
     body: "Videos, events, artists and CliQs from people near you, all in one feed.",

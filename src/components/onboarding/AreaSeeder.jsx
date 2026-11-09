@@ -11,6 +11,10 @@ export default function AreaSeeder() {
       const user = await base44.auth.me().catch(() => null);
       if (!alive || !user) return;
 
+      // Only after the person chose to share their location on the map: nothing
+      // may ask the browser for it on page load.
+      if (localStorage.getItem("sk:location_granted") !== "1") return;
+
       const seedKey = `seed_run_v3_${user.id}`;
       if (sessionStorage.getItem(seedKey)) return;
       sessionStorage.setItem(seedKey, "1");

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { NavLink, useLocation } from "react-router-dom";
 import { Navigation, Plus, UserRound } from "lucide-react";
 import { useTabHistory } from "@/context/TabHistoryContext";
+import useGuest from "@/hooks/useGuest";
+import SignUpSheet from "@/components/auth/SignUpSheet";
 import "@/components/hub/kingdom.css";
 import "@/components/hub/kingdom-materials.css";
 
@@ -12,6 +14,8 @@ import "@/components/hub/kingdom-materials.css";
 export default function HubBottomNav() {
   const { pathname } = useLocation();
   const { restoreTab } = useTabHistory();
+  const { checking, guest } = useGuest();
+  const [join, setJoin] = useState(null);
 
   if (typeof document === "undefined") return null;
 
@@ -23,14 +27,14 @@ export default function HubBottomNav() {
     }
   };
 
-  const onBrowse = pathname === "/" || pathname === "/browse" || pathname.startsWith("/browse/");
-  const onMap = pathname === "/map";
+  const onBrowse = pathname === "/browse" || pathname.startsWith("/browse/");
+  const onMap = pathname === "/map" || pathname === "/";
   const onCreate = pathname === "/create" || pathname.startsWith("/create/");
 
   return createPortal(
     <nav className="kingdom-bottom-nav" aria-label="Main navigation">
       <NavLink
-        to="/"
+        to="/browse"
         data-tour="hub-button"
         aria-label="Browse"
         onClick={tabbed("browse", onBrowse)}
@@ -45,11 +49,20 @@ export default function HubBottomNav() {
         to="/create"
         data-tour="create-button"
         aria-label="Create event"
-        onClick={tabbed("create", onCreate)}
+        onClick={(e) => {
+          // Creating is an action: a visitor is asked to join right here.
+          if (!checking && guest) {
+            e.preventDefault();
+            setJoin("Start your own gathering");
+            return;
+          }
+          tabbed("create", onCreate)(e);
+        }}
         className="kingdom-orb kingdom-orb-gold"
       >
         <Plus />
       </NavLink>
+      <SignUpSheet open={!!join} intent={join} onClose={() => setJoin(null)} />
     </nav>,
     document.body
   );

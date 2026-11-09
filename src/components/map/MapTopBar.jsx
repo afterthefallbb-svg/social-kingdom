@@ -8,6 +8,7 @@ import VerifiedBadge from "@/components/VerifiedBadge";
 import HubMenu from "@/components/hub/HubMenu";
 import HubIconRow from "@/components/hub/HubIconRow";
 import SignUpBar from "@/components/hub/SignUpBar";
+import SignUpSheet from "@/components/auth/SignUpSheet";
 import "@/components/hub/kingdom.css";
 import "@/components/hub/kingdom-materials.css";
 import "@/components/map/map-topbar.css";
@@ -17,6 +18,7 @@ import "@/components/map/map-topbar.css";
    two main screens read as one app. The map stays visible behind it. */
 export default function MapTopBar() {
   const [me, setMe] = useState(undefined);
+  const [join, setJoin] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -46,11 +48,30 @@ export default function MapTopBar() {
           </span>
         </Link>
         <div className="sk-map-actions">
+          <button
+            type="button"
+            className="sk-map-help"
+            aria-label="How Social Kingdom works"
+            onClick={() => window.dispatchEvent(new Event("sk:start_tour"))}
+          >
+            ?
+          </button>
           <HubMenu me={me || null} buttonClassName="sk-map-menu" />
-          <Link to={signedIn ? "/clicks/create" : "/register"} className="sk-map-cliq">
-            <Users />
-            <span>CliQ +</span>
-          </Link>
+          {signedIn ? (
+            <Link to="/clicks/create" className="sk-map-cliq">
+              <Users />
+              <span>CliQ +</span>
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setJoin("Start a CliQ and invite people near you")}
+              className="sk-map-cliq"
+            >
+              <Users />
+              <span>CliQ +</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -59,6 +80,8 @@ export default function MapTopBar() {
       <div className="sk-map-icons">
         <HubIconRow me={me || null} />
       </div>
+
+      <SignUpSheet open={!!join} intent={join} onClose={() => setJoin(null)} />
     </header>
   );
 }

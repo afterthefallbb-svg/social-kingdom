@@ -5,15 +5,19 @@ import { base44 } from "@/api/base44Client";
 import MapView from "@/components/MapView";
 import MapTopBar from "@/components/map/MapTopBar";
 import MapToolbar from "@/components/map/MapToolbar";
+import LocationBanner from "@/components/map/LocationBanner";
 import EventPanel from "@/components/map/EventPanel";
 import ExampleEventSheet from "@/components/map/ExampleEventSheet";
+import SignUpSheet from "@/components/auth/SignUpSheet";
 import useGuest from "@/hooks/useGuest";
 import { EXAMPLE_CITY, exampleEvents, exampleEventsAround } from "@/lib/exampleEvents";
-import { getUserLocation } from "@/lib/localSeed";
+import { getUserLocation, seedLocalEventsForUser } from "@/lib/localSeed";
+import { geocodeCity } from "@/lib/geocodeCity";
 import "@/components/map/map-kingdom.css";
 import "@/components/map/map-surface.css";
 
 const DEFAULT_CENTER = [46.0646, -118.3425];
+const LOCATION_ASKED = "sk:location_prompt";
 
 const kmBetween = (a, b) => {
   const toRad = (d) => (d * Math.PI) / 180;
@@ -37,20 +41,14 @@ export default function Home() {
   const [seedTick, setSeedTick] = useState(0);
   const [locating, setLocating] = useState(false);
   const [located, setLocated] = useState(false);
+  const [denied, setDenied] = useState(false);
+  const [banner, setBanner] = useState(() => localStorage.getItem(LOCATION_ASKED) !== "done");
+  const [notice, setNotice] = useState("");
+  const [searching, setSearching] = useState(false);
   const [example, setExample] = useState(null);
+  const [signUp, setSignUp] = useState(null);
   const mode = "events";
   const { checking, guest } = useGuest();
-
-  // Wherever someone is — signed in or not — the map asks once for their
-  // location and fills their own area with gatherings at that moment.
-  useEffect(() => {
-    if (checking) return;
-    getUserLocation().then((loc) => {
-      if (!loc) return;
-      setCenter([loc.latitude, loc.longitude]);
-      setLocated(true);
-    });
-  }, [checking]);
 
   useEffect(() => {
     function onSeeded() { setSeedTick((t) => t + 1); }
@@ -68,12 +66,18 @@ export default function Home() {
       .catch(() => setEvents([]));
   }, [seedTick, checking, guest]);
 
-  // Once a visitor shares their location, their own area gets populated: one
-  // example gathering per five square miles around them.
-  const examples = useMemo(
-    () => (located ? exampleEventsAround(center[0], center[1]) : exampleEvents()),
-    [located, center]
-  );
+  /* Nobody's area is requested until they ask for it: five local gatherings,
+     centered on their own spot once they share it. */
+  const examples = useMemo(() => {
+    if (!located) return exampleEvents();
+    return exampleEventsAround(center[0], center[1])
+      .map((e) => ({
+        ...e,
+        distanceMi: kmBetween(center, [e.latitude, e.longitude]) * 0.621371,
+      }))
+      .sort((a, b) => a.distanceMi - b.distanceMi)
+      .slice(0, 5);
+  }, [located, center]);
 
   const filtered = useMemo(() => {
     let list = guest ? examples : events;
@@ -98,6 +102,60 @@ export default function Home() {
     navigate(`/event/${ev.id}`);
   };
 
+  const hideBanner = () => {
+    localStorage.setItem(LOCATION_ASKED, "done");
+    setBanner(false);
+  };
+
+  /* A member's own area is filled with five gatherings the moment they share
+     their location — never before. */
+  const fillArea = () => {
+    localStorage.setItem("sk:location_granted", "1");
+    if (guest) return;
+    seedLocalEventsForUser().then((res) => {
+      if (res?.seeded) window.dispatchEvent(new CustomEvent("sk:area_seeded"));
+    });
+  };
+
+  function enableLocation() {
+    setLocating(true);
+    getUserLocation().then((loc) => {
+      setLocating(false);
+      if (!loc) {
+        setDenied(true);
+        return;
+      }
+      hideBanner();
+      fillArea();
+      setDenied(false);
+      setCenter([loc.latitude, loc.longitude]);
+      setZoom(14);
+      setLocated(true);
+    });
+  }
+
+  /* A city or zip code typed into the search bar moves the map there and fills
+     it with that area's gatherings — the fallback when location is off. */
+  async function onSearchKey(event) {
+    if (event.key !== "Enter") return;
+    const q = query.trim();
+    if (q.length < 2) return;
+    event.preventDefault();
+    setSearching(true);
+    const place = await geocodeCity(q);
+    setSearching(false);
+    if (!place) {
+      setNotice(`No place found for “${q}”`);
+      return;
+    }
+    setNotice(`Showing events near ${place.label}`);
+    setCenter([place.lat, place.lng]);
+    setZoom(13);
+    setLocated(true);
+    setQuery("");
+    hideBanner();
+  }
+
   /* Compass: jump to the user's own spot, zoomed in close enough to see
      themselves in the city and the events around them. */
   function recenterMe() {
@@ -105,8 +163,11 @@ export default function Home() {
     getUserLocation().then((loc) => {
       setLocating(false);
       if (loc) {
+        hideBanner();
+        fillArea();
         setCenter([loc.latitude, loc.longitude]);
         setLocated(true);
+        setDenied(false);
         setZoom(14);
       }
     });
@@ -128,9 +189,21 @@ export default function Home() {
       <MapToolbar
         query={query}
         onQueryChange={setQuery}
+        onSearchKey={onSearchKey}
+        searching={searching}
+        notice={notice}
         activeCategory={activeCat}
         onCategorySelect={setActiveCat}
       />
+
+      {banner && (
+        <LocationBanner
+          denied={denied}
+          locating={locating}
+          onEnable={enableLocation}
+          onDismiss={hideBanner}
+        />
+      )}
 
       <button
         onClick={recenterMe}
@@ -150,9 +223,11 @@ export default function Home() {
         <ExampleEventSheet
           event={example}
           onClose={() => setExample(null)}
-          onSignUp={() => navigate("/register")}
+          onSignUp={() => setSignUp("Sign up to join this gathering")}
         />
       )}
+
+      <SignUpSheet open={!!signUp} intent={signUp} onClose={() => setSignUp(null)} />
     </div>
   );
 }

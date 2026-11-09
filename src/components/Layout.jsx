@@ -17,7 +17,7 @@ export default function Layout() {
 
   /* The owner's backdrop switch: white puts a plain shell behind every screen.
      The events map always keeps its own chrome. */
-  const white = mode === "white" && pathname !== "/map";
+  const white = mode === "white" && pathname !== "/map" && pathname !== "/";
 
   useEffect(() => {
     document.documentElement.classList.toggle("sk-white", white);
@@ -44,7 +44,7 @@ export default function Layout() {
     <div className={white ? "relative min-h-screen bg-white" : "sk-theme relative min-h-screen"}>
       {!white && <KingdomBackdrop />}
       <div className={white ? "relative z-10" : "relative z-10"}>
-        {pathname === "/map" ? (
+        {pathname === "/map" || pathname === "/" ? (
           <Outlet />
         ) : (
           <ScreenTransition routeKey={pathname}>

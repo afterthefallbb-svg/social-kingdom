@@ -16,7 +16,9 @@ import { geocodeCity } from "@/lib/geocodeCity";
 import "@/components/map/map-kingdom.css";
 import "@/components/map/map-surface.css";
 
-const DEFAULT_CENTER = [46.0646, -118.3425];
+// Opened before anyone shares a location: a city that always has gatherings,
+// so the very first screen is never an empty map.
+const DEFAULT_CENTER = [47.6062, -122.3321];
 const LOCATION_ASKED = "sk:location_prompt";
 
 const kmBetween = (a, b) => {

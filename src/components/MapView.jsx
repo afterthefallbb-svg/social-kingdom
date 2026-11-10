@@ -2,6 +2,7 @@ import React from "react";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { makeEventIcon } from "@/lib/mapMarker";
+import { spreadPositions } from "@/components/map/pinSpread";
 import KingdomMapTiles from "@/components/map/KingdomMapTiles";
 import MapAutoResize from "@/components/map/MapAutoResize";
 import { basemapTiles } from "@/lib/map/basemapTiles";
@@ -14,6 +15,28 @@ function Recenter({ center, zoom }) {
     map.setView(center, zoom ?? map.getZoom(), { animate: true });
   }, [center, zoom, map]);
   return null;
+}
+
+/* Every gathering gets its own pin, even when several share a venue. */
+function EventMarkers({ events, activeId, onSelect }) {
+  const map = useMap();
+  const [positions, setPositions] = React.useState([]);
+
+  React.useEffect(() => {
+    const update = () => setPositions(spreadPositions(map, events));
+    update();
+    map.on("zoomend", update);
+    return () => map.off("zoomend", update);
+  }, [map, events]);
+
+  return events.map((ev, index) => (
+    <Marker
+      key={ev.id}
+      position={positions[index] || [ev.latitude, ev.longitude]}
+      icon={makeEventIcon(ev.category, ev.id === activeId)}
+      eventHandlers={{ click: () => onSelect && onSelect(ev) }}
+    />
+  ));
 }
 
 export default function MapView({ events = [], activeId, onSelect, mode = "events", center = WALLA_WALLA, zoom = 13 }) {
@@ -34,15 +57,7 @@ export default function MapView({ events = [], activeId, onSelect, mode = "event
       )}
       <MapAutoResize />
       <Recenter center={center} zoom={zoom} />
-      {isEvents &&
-        events.map((ev) => (
-          <Marker
-            key={ev.id}
-            position={[ev.latitude, ev.longitude]}
-            icon={makeEventIcon(ev.category, ev.id === activeId)}
-            eventHandlers={{ click: () => onSelect && onSelect(ev) }}
-          />
-        ))}
+      {isEvents && <EventMarkers events={events} activeId={activeId} onSelect={onSelect} />}
     </MapContainer>
   );
 }

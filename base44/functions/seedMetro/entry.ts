@@ -283,6 +283,75 @@ export default async function (req: Request): Promise<Response> {
 
     const seeded = await allPages(client, 'Event', { is_seeded: true });
 
+    // Give every seeded gathering a post and a few people going — including the
+    // ones that were already on the map before this pass.
+    if (mode === 'backfill') {
+      const from = Math.max(0, Number(body.from) || 0);
+      const to = Math.min(seeded.length, Number(body.to) || seeded.length);
+      const personas = await allPages(client, 'Persona', {});
+      const posts = await allPages(client, 'Post', {});
+      const attendance = await allPages(client, 'Attendance', {});
+      const hasPost = new Set(posts.map((p) => p.event_id).filter(Boolean));
+      const going = {};
+      attendance.forEach((a) => {
+        going[a.event_id] = going[a.event_id] || new Set();
+        going[a.event_id].add(a.user_id);
+      });
+
+      let newPosts = 0;
+      let newAttendance = 0;
+      const postRows = [];
+      const attRows = [];
+
+      for (let i = from; i < to; i++) {
+        const ev = seeded[i];
+        const author = pick(personas, i * 7 + 3);
+        if (!hasPost.has(ev.id)) {
+          postRows.push({
+            content: pick(POST_LINES[ev.category] || POST_LINES.parties, i),
+            image_url: photo(ev.category, i * 3 + 2),
+            author_id: author.id,
+            author_name: author.name,
+            author_avatar: author.avatar_url,
+            event_id: ev.id,
+            likes: 4 + (i % 27),
+            music_url: '',
+            music_title: '',
+            music_artist: '',
+            music_artwork: '',
+          });
+          hasPost.add(ev.id);
+        }
+        const already = going[ev.id] || new Set();
+        const want = 3 + (i % 3);
+        for (let g = 0; already.size < want && g < 24; g++) {
+          const p = pick(personas, i * 11 + g * 7);
+          if (already.has(p.id)) continue;
+          already.add(p.id);
+          attRows.push({
+            event_id: ev.id,
+            user_id: p.id,
+            user_name: p.name,
+            user_avatar: p.avatar_url,
+            user_city: p.city,
+            status: 'confirmed',
+          });
+        }
+        going[ev.id] = already;
+      }
+
+      for (let i = 0; i < postRows.length; i += 100) {
+        await bulkCreate(client, 'Post', postRows.slice(i, i + 100));
+        newPosts += Math.min(100, postRows.length - i);
+      }
+      for (let i = 0; i < attRows.length; i += 100) {
+        await bulkCreate(client, 'Attendance', attRows.slice(i, i + 100));
+        newAttendance += Math.min(100, attRows.length - i);
+        await wait(300);
+      }
+      return Response.json({ ok: true, from, to, posts: newPosts, attendance: newAttendance });
+    }
+
     if (mode === 'respread') {
       const groups = new Map();
       seeded.forEach((ev) => {

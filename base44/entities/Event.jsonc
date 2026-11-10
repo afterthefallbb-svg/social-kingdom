@@ -95,6 +95,10 @@
       "type": "string",
       "title": "Host Avatar"
     },
+    "host_persona_id": {
+      "type": "string",
+      "title": "Host Persona Id"
+    },
     "auto_approve": {
       "type": "boolean",
       "default": false,

@@ -10,7 +10,7 @@ import ChatView from "@/components/messages/ChatView";
 import ChatBubble from "@/components/messages/ChatBubble";
 import { markOnline } from "@/lib/presence";
 import { getOrCreateDirectConversation, createGroupConversation } from "@/lib/messaging";
-import { getUser } from "@/lib/users";
+import { getChatPeer } from "@/lib/peers";
 import { toast } from "@/components/ui/use-toast";
 import GlassToggle from "@/components/theme/GlassToggle";
 
@@ -57,7 +57,7 @@ export default function Messages() {
     if (!chatId) return;
     (async () => {
       try {
-        const user = (await getUser(chatId)) || { id: chatId };
+        const user = (await getChatPeer(chatId)) || { id: chatId };
         const conv = await getOrCreateDirectConversation(me, user);
         setActivePeer(user);
         setActiveConv(conv);

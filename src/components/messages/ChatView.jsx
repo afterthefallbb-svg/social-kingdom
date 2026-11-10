@@ -111,6 +111,13 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
         await sendMessage(conversation, me, content);
       }
       setMessages((m) => [...m, { id: Date.now(), sender_id: me.id, content, image_url: pendingImage, created_date: new Date().toISOString(), sender_name: me.full_name }]);
+      // Host profiles answer with a short, friendly line of their own.
+      if (peer?.is_persona && content) {
+        base44.functions
+          .invoke("personaReply", { conversation_id: conversation.id, persona_id: peer.id, text: content })
+          .catch(() => {})
+          .finally(() => setTimeout(() => load(), 700));
+      }
       load();
     } catch (e) {
       setText(wasText);
@@ -198,7 +205,7 @@ export default function ChatView({ me, conversation, peer, onBack, onBlocked, bu
           {conversation?.is_group && <p className="text-[10px] text-white/80 -mt-0.5">{conversation.member_ids?.length} members</p>}
         </div>
         <div className="flex-1" />
-        {!conversation?.is_group && peer?.id && (
+        {!conversation?.is_group && peer?.id && !peer?.is_persona && (
           <button onClick={() => navigate(`/profile/${peer.id}`)} className="shrink-0 flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1.5 rounded-full border border-white/70 bg-white/10 active:bg-white/20">
             <User size={13} /> Profile
           </button>

@@ -1,0 +1,79 @@
+{
+  "name": "Persona",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "persona_key": {
+      "type": "string",
+      "title": "Persona Key"
+    },
+    "avatar_url": {
+      "type": "string",
+      "title": "Avatar Url"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Photos"
+    },
+    "bio": {
+      "type": "string",
+      "title": "Bio"
+    },
+    "job": {
+      "type": "string",
+      "title": "Job"
+    },
+    "city": {
+      "type": "string",
+      "title": "City"
+    },
+    "state": {
+      "type": "string",
+      "title": "State"
+    },
+    "age": {
+      "type": "number",
+      "title": "Age"
+    },
+    "interests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Interests"
+    },
+    "greeting": {
+      "type": "string",
+      "title": "Greeting"
+    }
+  },
+  "required": [
+    "name",
+    "city",
+    "state"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

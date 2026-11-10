@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, MapPin, Globe, Lock, UserPlus, UserCheck, Clock, Camera, Trash2 } from "lucide-react";
+import { ArrowLeft, MapPin, Globe, Lock, UserPlus, UserCheck, Clock, Camera, Trash2, MessageCircle } from "lucide-react";
 import EventPendingRequests from "@/components/event/EventPendingRequests";
 import { base44 } from "@/api/base44Client";
 import { getCategory } from "@/lib/categories";
@@ -246,6 +246,15 @@ export default function EventDetail() {
                   <VerifiedBadge user={showHost} name={showHost.full_name} compact />
                 </div>
                 {showHost.location && <p className="text-sm text-gray-500 truncate">{showHost.location}</p>}
+                {seededHost && event.host_persona_id && (
+                  <Link
+                    to={`/messages?chat=${event.host_persona_id}`}
+                    className="mt-1 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold text-white"
+                    style={{ background: FB }}
+                  >
+                    <MessageCircle size={12} /> Message host
+                  </Link>
+                )}
               </div>
             </div>
           )}

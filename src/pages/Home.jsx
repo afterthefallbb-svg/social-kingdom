@@ -56,15 +56,22 @@ export default function Home() {
     return () => window.removeEventListener("sk:area_seeded", onSeeded);
   }, []);
 
+  /* Gatherings are loaded for the area on screen, so the town someone opens the
+     map in already has its own events — wherever that is in the country. */
   useEffect(() => {
     if (checking || guest) return;
-    const publicQuery = { visibility: { $ne: "personal" } };
-    base44.entities.Event.count(publicQuery).then(setCount).catch(() => setCount(0));
+    const REACH = located ? 1.1 : 8; // a tight box once they pick a place, a regional one before that
+    const areaQuery = {
+      visibility: { $ne: "personal" },
+      latitude: { $gte: center[0] - REACH, $lte: center[0] + REACH },
+      longitude: { $gte: center[1] - REACH, $lte: center[1] + REACH },
+    };
+    base44.entities.Event.count(areaQuery).then(setCount).catch(() => setCount(0));
     base44.entities.Event
-      .filter(publicQuery, { sort: "-created_date", limit: 100 })
+      .filter(areaQuery, { sort: "-created_date", limit: 200 })
       .then((page) => setEvents(page.items))
       .catch(() => setEvents([]));
-  }, [seedTick, checking, guest]);
+  }, [seedTick, checking, guest, center[0], center[1], located]);
 
   /* Nobody's area is requested until they ask for it: five local gatherings,
      centered on their own spot once they share it. */

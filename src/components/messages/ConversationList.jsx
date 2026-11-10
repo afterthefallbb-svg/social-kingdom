@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { getAllDrafts, createGroupConversation } from "@/lib/messaging";
 import { usersByIds } from "@/lib/users";
+import { personaToPeer } from "@/lib/peers";
 import { toast } from "@/components/ui/use-toast";
 import ConversationRow from "@/components/messages/ConversationRow";
 import ConversationSelectBar from "@/components/messages/ConversationSelectBar";
@@ -32,6 +33,14 @@ export default function ConversationList({ me, onOpen, refreshKey, scope = "all"
       mine.forEach((c) => { if (!c.is_group) c.member_ids.forEach((id) => id !== me.id && ids.add(id)); });
 
       const peerMap = ids.size ? await usersByIds([...ids]) : {};
+      // Host profiles hold conversations too — fill in anyone the user table missed.
+      const unresolved = [...ids].filter((id) => !peerMap[id]);
+      if (unresolved.length) {
+        const found = await base44.entities.Persona
+          .filter({ id: { $in: unresolved } }, { limit: 100 })
+          .catch(() => ({ items: [] }));
+        (found.items || []).forEach((p) => { peerMap[p.id] = personaToPeer(p); });
+      }
       const fr = await base44.entities.Friendship.filter({ user_id: me.id, status: "accepted" }, { limit: 200 }).catch(() => ({ items: [] }));
       (fr.items || []).forEach((f) => {
         if (!peerMap[f.friend_id]) {
